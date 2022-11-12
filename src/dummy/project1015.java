@@ -1,3 +1,5 @@
+package dummy;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -34,15 +36,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.ListSelectionModel;
 
 
-public class Main {
+public class project1015 {
 
 	private JFrame frame;
 	private JTextField ID;
@@ -51,7 +47,6 @@ public class Main {
 	private JPasswordField passwordField_1;
 	private JTextField textField;
 	private JTextField textField_1;
-	private JTable table;
 
 	
 	/**
@@ -62,7 +57,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main window = new Main();
+					project1015 window = new project1015();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -74,7 +69,7 @@ public class Main {
 	/**
 	 * Create the application.
 	 */
-	public Main() {
+	public project1015() {
 		initialize();
 	}
 
@@ -99,7 +94,6 @@ public class Main {
 			Home.add(mainuser);
 			
 			JPanel panel_1 = new JPanel();
-			panel_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 			panel_1.setBounds(0, 0, 176, 184);
 			Home.add(panel_1);
 			panel_1.setLayout(null);
@@ -113,7 +107,6 @@ public class Main {
 			Home.add(lblNewLabel_5);
 			
 			JPanel panel = new JPanel();
-			panel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 			panel.setBounds(10, 194, 166, 277);
 			Home.add(panel);
 			
@@ -152,7 +145,7 @@ public class Main {
 			
 			JList list = new JList();
 			list.setModel(new AbstractListModel() {
-				String[] values = new String[] {"학생1", "학생2", "학생3", "학생4"};
+				String[] values = new String[] {"학생A", "학생B"};
 				public int getSize() {
 					return values.length;
 				}
@@ -162,76 +155,6 @@ public class Main {
 			});
 			scrollPane.setViewportView(list);
 			panel.setLayout(gl_panel);
-			
-			JPanel panel_2 = new JPanel();
-			panel_2.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-			panel_2.setBounds(188, 77, 584, 404);
-			Home.add(panel_2);
-			panel_2.setLayout(null);
-			
-			JScrollPane scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(12, 17, 560, 367);
-			panel_2.add(scrollPane_1);
-			
-			table = new JTable();
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setRowSelectionAllowed(false);
-			scrollPane_1.setViewportView(table);
-			table.setCellSelectionEnabled(true);
-			table.setRowHeight(50);
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"09:00", null, null, null, null, null, null, null},
-					{"09:30", null, null, null, null, null, null, null},
-					{"10:00", null, null, null, null, null, null, null},
-					{"10:30", null, null, null, null, null, null, null},
-					{"11:00", null, null, null, null, null, null, null},
-					{"11:30", null, null, null, null, null, null, null},
-					{"12:00", null, null, null, null, null, null, null},
-					{"12:30", null, null, null, null, null, null, null},
-					{"13:00", null, null, null, null, null, null, null},
-					{"13:30", null, null, null, null, null, null, null},
-					{"14:00", null, null, null, null, null, null, null},
-					{"14:30", null, null, null, null, null, null, null},
-					{"15:00", null, null, null, null, null, null, null},
-					{"15:30", null, null, null, null, null, null, null},
-					{"16:00", null, null, null, null, null, null, null},
-					{"16:30", null, null, null, null, null, null, null},
-					{"17:00", null, null, null, null, null, null, null},
-					{"17:30", null, null, null, null, null, null, null},
-					{"18:00", null, null, null, null, null, null, null},
-					{"18:30", null, null, null, null, null, null, null},
-					{"19:00", null, null, null, null, null, null, null},
-					{"19:30", null, null, null, null, null, null, null},
-					{"20:00", null, null, null, null, null, null, null},
-					{"20:30", null, null, null, null, null, null, null},
-					{"21:00", null, null, null, null, null, null, null},
-					{"21:30", null, null, null, null, null, null, null},
-					{"22:00", null, null, null, null, null, null, null},
-					{"22:30", null, null, null, null, null, null, null},
-					{"23:00", null, null, null, null, null, null, null},
-					{"23:30", null, null, null, null, null, null, null},
-					{"24:00", null, null, null, null, null, null, null},
-				},
-				new String[] {
-					"\uC2DC\uAC04", "11/07", "11/08", "11/09", "11/10", "11/11", "11/12", "11/13"
-				}
-			) {
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			});
-			
-			JButton btnNewButton_4 = new JButton("일정 추가");
-			btnNewButton_4.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			btnNewButton_4.setBounds(521, 49, 95, 23);
-			Home.add(btnNewButton_4);
 			lblNewLabel_5.setVisible(true);
 			
 			JPanel LoginPanel = new JPanel();
