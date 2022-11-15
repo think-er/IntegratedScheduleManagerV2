@@ -1,4 +1,4 @@
-package User;
+package ui;
 
 public class User {
 
