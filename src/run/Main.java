@@ -1,10 +1,9 @@
 package run;
 
-import ui.LoginUI;
+import ui.MainFrame;
 
 public class Main {
 	public static void main(String[] args) {
-		LoginUI run = new LoginUI();
-		run.setVisible(true);
+		new MainFrame();
 	}
 }

@@ -12,9 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
-public class RegisterUI extends JFrame {
+public class RegisterUI {
 	
-	private JPanel registerPanel;
+	public JPanel registerPanel;
 	private JLabel registerTitleLabel; // 제목
 	private JLabel registerImgLabel; // 프로그램 아이콘 이미지
 	private JLabel registerIdLabel;
@@ -93,7 +93,7 @@ public class RegisterUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			LoginUI loginPanel = new LoginUI();
 			registerPanel.setVisible(false);
-			loginPanel.setVisible(true);
+			loginPanel.loginPanel.setVisible(true);
 		}
 	});
 		registerPanel.add(toLoginBtn);
@@ -111,11 +111,11 @@ public class RegisterUI extends JFrame {
 		registerPanel.add(registerManagerAuthCheck);
 		
 		
-		getContentPane().add(registerPanel);
-		setTitle("로그인");
-		setSize(LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_WIDTH);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
+		MainFrame.frame.getContentPane().add(registerPanel);
+		MainFrame.frame.setTitle("로그인");
+		MainFrame.frame.setSize(LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_WIDTH);
+		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainFrame.frame.setResizable(false);
 		
 	}
 }

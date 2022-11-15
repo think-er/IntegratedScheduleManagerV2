@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class LoginUI extends JFrame {
+public class LoginUI {
 	
 	public JPanel loginPanel;
 	private JLabel loginTitleLabel; // 프로그램 제목
@@ -97,15 +97,15 @@ public class LoginUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			RegisterUI registerPanel = new RegisterUI();
 			loginPanel.setVisible(false);
-			registerPanel.setVisible(true);
+			registerPanel.registerPanel.setVisible(true);
 		}
 	});
 		loginPanel.add(toRegisterBtn);
 		
-		getContentPane().add(loginPanel);
-		setTitle("로그인");
-		setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
+		MainFrame.frame.add(loginPanel);
+		MainFrame.frame.setTitle("로그인");
+		MainFrame.frame.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
+		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainFrame.frame.setResizable(false);
 	}
 }
