@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -13,6 +14,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 
 public class RegisterUI {
+	
+	static String ID;
+	static String Pw;
+	static boolean TF;
+	static String Admin = "1234";
 	
 	public JPanel registerPanel;
 	private JLabel registerTitleLabel; // 제목
@@ -82,6 +88,42 @@ public class RegisterUI {
 		registerPanel.add(registerManagerAuthField);
 			
 		registerBtn = new JButton("회원가입");
+		registerBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(registerManagerAuthField.getText().length()==0 && registerManagerAuthCheck.isSelected())
+				{
+					JOptionPane.showMessageDialog(null,"관리자 인증번호를 확인하세요.");
+				}
+				else if(registerManagerAuthField.getText().length()>0)
+				{
+					if(registerManagerAuthField.getText().equals(Admin))
+					{
+						ID = registerIdField.getText();
+						Pw = registerPwField.getText();
+						TF = true;
+						JOptionPane.showMessageDialog(null,"관리자 회원가입 되었습니다.");
+					}
+					else if(!registerManagerAuthField.getText().equals(Admin))
+					{
+						JOptionPane.showMessageDialog(null,"관리자 인증번호를 확인하세요.");
+					}
+				}
+				else if(!registerManagerAuthCheck.isSelected() && registerManagerAuthField.getText().length()==0)
+				{
+					if(registerIdField.getText().length() ==0 || registerPwField.getText().length() ==0)
+					{
+						JOptionPane.showMessageDialog(null,"아이디 또는 비밀번호를 입력하세요.");
+					}
+					else if(registerIdField.getText().length() >0 && registerPwField.getText().length() >0)
+					{
+						ID = registerIdField.getText();
+						Pw = registerPwField.getText();
+						TF = false;
+						
+					}
+			}
+			}
+		});
 		registerBtn.setBounds(LoginUI.LOGIN_BTN_X, LoginUI.LOGIN_BTN_Y, 
 				LoginUI.LOGIN_BTN_WIDTH, LoginUI.LOGIN_BTN_HEIGHT);
 		registerPanel.add(registerBtn);

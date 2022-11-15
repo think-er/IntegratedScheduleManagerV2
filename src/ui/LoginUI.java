@@ -1,6 +1,7 @@
 package ui;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
@@ -86,6 +87,21 @@ public class LoginUI {
 		loginPanel.add(loginPwField);
 				
 		loginBtn = new JButton("로그인");
+		loginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(loginIdField.getText().equals("1234") && loginPwField.getText().equals("1234"))
+				{
+					JOptionPane.showMessageDialog(null,"로그인되었습니다.");
+					
+					loginPanel.setVisible(false);
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,"로그인실패.");
+				}
+			}
+		});
 		loginBtn.setBounds(LOGIN_BTN_X, LOGIN_BTN_Y, 
 				LOGIN_BTN_WIDTH, LOGIN_BTN_HEIGHT);
 		loginPanel.add(loginBtn);
@@ -102,7 +118,7 @@ public class LoginUI {
 	});
 		loginPanel.add(toRegisterBtn);
 		
-		MainFrame.frame.add(loginPanel);
+		MainFrame.frame.getContentPane().add(loginPanel);
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

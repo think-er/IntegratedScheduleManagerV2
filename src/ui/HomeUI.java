@@ -36,8 +36,8 @@ public class HomeUI extends JFrame {
 	
 	public static final int HOME_CALENDAR_PANEL_X = 0; 
 	public static final int HOME_CALENDAR_PANEL_Y = 0; 
-	public static final int HOME_CALENDAR_PANEL_WIDTH = 0; 
-	public static final int HOME_CALENDAR_PANEL_HEIGHT = 0; 
+	public static final int HOME_CALENDAR_PANEL_WIDTH = 128; 
+	public static final int HOME_CALENDAR_PANEL_HEIGHT = 161; 
 	
 	public static final int HOME_SCHEDULE_PANEL_X = 0; 
 	public static final int HOME_SCHEDULE_PANEL_Y = 0; 
@@ -50,6 +50,33 @@ public class HomeUI extends JFrame {
 	public static final int HOME_SCHEDULELIST_PANEL_HEIGHT = 0; 
 	
 	public HomeUI() {
+		getContentPane().setLayout(null);
+		homeCalendarPanel = new JPanel();
+		homeCalendarPanel.setBounds(HOME_CALENDAR_PANEL_X,HOME_CALENDAR_PANEL_Y,HOME_CALENDAR_PANEL_WIDTH,HOME_CALENDAR_PANEL_HEIGHT);
+		homeCalendarPanel.setLayout(null);
+		
+		homeCalendar = new JCalendar();
+		homeCalendar.setBounds(0, 0, 128, 161);
+		homeCalendarPanel.add(homeCalendar);
+		
+		getContentPane().add(homeCalendarPanel);
+		
+		homeUserLabel = new JLabel("201XXXXX");
+		homeUserLabel.setBounds(364, 30, 58, 15);
+		getContentPane().add(homeUserLabel);
+		
+		homeManagerAuthLabel = new JLabel("관리자");
+		homeManagerAuthLabel.setBounds(316, 30, 36, 15);
+		getContentPane().add(homeManagerAuthLabel);
+		boolean TF = false;
+		if(TF = true)
+		{
+			homeManagerAuthLabel.setVisible(true);
+		}
+		else
+		{
+			homeManagerAuthLabel.setVisible(false);
+		}
 	}
 	
 	private void init() {
