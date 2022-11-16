@@ -29,7 +29,6 @@ public class HomeUI {
 	// homeSchedulePanel
 	private JPanel homeSchedulePanel;
 	private JTable homeScheduleTable;
-	private JTable homeScheduleTable_1;
 	private JScrollPane homeScheduleScrollPane;
 	
 	public static final int HOME_FRAME_X = 0;
@@ -76,6 +75,7 @@ public class HomeUI {
 		homePanel.setBounds(HOME_FRAME_X, HOME_FRAME_Y, 
 				HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
 		homePanel.setLayout(null);
+		MainFrame.frame.getContentPane().add(homePanel);
 		
 		// 홈 패널: 학번
 		homeUserLabel = new JLabel(String.format("학번: %s", RegisterUI.ID));
@@ -115,9 +115,6 @@ public class HomeUI {
 		
 		
 		// 홈 패널: 일정표 패널
-		homeScheduleTable = new JTable();
-		MainFrame.frame.getContentPane().add(homePanel);
-		
 		homeSchedulePanel = new JPanel();
 		homeSchedulePanel.setLayout(null);
 		homeSchedulePanel.setBackground(new Color(128, 128, 128));
@@ -125,17 +122,21 @@ public class HomeUI {
 				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
 		homePanel.add(homeSchedulePanel);
 		
+		// 일정표 패널: 일정표 스크롤 팬
 		homeScheduleScrollPane = new JScrollPane();
 		homeScheduleScrollPane.setBounds(HOME_SCHEDULE_SCROLLPANE_X, HOME_SCHEDULE_SCROLLPANE_Y,
 				HOME_SCHEDULE_SCROLLPANE_WIDTH, HOME_SCHEDULE_SCROLLPANE_HEIGHT);
 		homeSchedulePanel.add(homeScheduleScrollPane);
 		
-		homeScheduleTable_1 = new JTable();
-		homeScheduleTable_1.setRowSelectionAllowed(false);
-		homeScheduleTable_1.setCellSelectionEnabled(true);
+		// 일정표 패널: 일정표 테이블
+		homeScheduleTable = new JTable();
+		homeScheduleTable.setRowHeight(60);
+		homeScheduleTable.setRowSelectionAllowed(false);
+		homeScheduleTable.setCellSelectionEnabled(true);
 		String[] homeScheduleWeek = new String[] {"", "", "", "", "", "", ""};
-		homeScheduleScrollPane.setViewportView(homeScheduleTable_1);
-		homeScheduleTable_1.setModel(new DefaultTableModel(
+		homeScheduleScrollPane.setViewportView(homeScheduleTable);
+		homeScheduleTable.setModel(new DefaultTableModel(
+				// 값
 			new Object[][] {
 				{null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null},
@@ -168,6 +169,7 @@ public class HomeUI {
 				{null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null},
 			},
+			// 열
 			new String[] {
 				"", "", "", "", "", "", ""
 			}
