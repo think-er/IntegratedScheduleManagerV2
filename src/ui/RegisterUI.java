@@ -15,10 +15,11 @@ import javax.swing.JFrame;
 
 public class RegisterUI {
 	
-	static String ID;
-	static String Pw;
-	static boolean TF;
-	static String Admin = "1234";
+	// 임의 테스트용 변수
+	public static String ID;
+	public static String PW;
+	public static boolean TF;
+	public static String Admin = "1234";
 	
 	public JPanel registerPanel;
 	private JLabel registerTitleLabel; // 제목
@@ -99,9 +100,12 @@ public class RegisterUI {
 					if(registerManagerAuthField.getText().equals(Admin))
 					{
 						ID = registerIdField.getText();
-						Pw = registerPwField.getText();
+						PW = registerPwField.getText();
 						TF = true;
 						JOptionPane.showMessageDialog(null,"관리자 회원가입 되었습니다.");
+						registerPanel.setVisible(false);
+						LoginUI loginPanel = new LoginUI();
+						loginPanel.loginPanel.setVisible(true);
 					}
 					else if(!registerManagerAuthField.getText().equals(Admin))
 					{
@@ -117,9 +121,11 @@ public class RegisterUI {
 					else if(registerIdField.getText().length() >0 && registerPwField.getText().length() >0)
 					{
 						ID = registerIdField.getText();
-						Pw = registerPwField.getText();
+						PW = registerPwField.getText();
 						TF = false;
-						
+						registerPanel.setVisible(false);
+						LoginUI loginPanel = new LoginUI();
+						loginPanel.loginPanel.setVisible(true);
 					}
 			}
 			}

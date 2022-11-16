@@ -89,7 +89,8 @@ public class LoginUI {
 		loginBtn = new JButton("로그인");
 		loginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(loginIdField.getText().equals("1234") && loginPwField.getText().equals("1234"))
+				if(loginIdField.getText().equals(RegisterUI.ID) && 
+						loginPwField.getText().equals(RegisterUI.PW))
 				{
 					JOptionPane.showMessageDialog(null,"로그인되었습니다.");
 					
