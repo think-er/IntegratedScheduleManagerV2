@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 public class RegisterUI {
 	
 	// 임의 테스트용 변수
-	public static String ID;
-	public static String PW;
+	public static String ID = "";
+	public static String PW = "";
 	public static boolean TF;
 	public static String Admin = "1234";
 	

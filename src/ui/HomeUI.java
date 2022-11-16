@@ -11,15 +11,15 @@ import com.toedter.calendar.JYearChooser;
 import javax.swing.JTable;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JScrollBar;
+import javax.swing.table.DefaultTableModel;
 
-public class HomeUI extends JFrame {
+public class HomeUI {
+	
 	// homePanel
-	private JPanel homePanel;
+	public JPanel homePanel;
 	private JLabel homeUserLabel;
 	private JLabel homeManagerAuthLabel;
-
-	// homeCalendarPanel
-	private JPanel homeCalendarPanel;
 	private JCalendar homeCalendar;
 	
 	// homeScheduleListPanel
@@ -31,71 +31,74 @@ public class HomeUI extends JFrame {
 	
 	public static final int HOME_FRAME_X = 0;
 	public static final int HOME_FRAME_Y = 0;
-	public static final int HOME_FRAME_WIDTH = 0;
-	public static final int HOME_FRAME_HEIGHT = 0;
-	
-	public static final int HOME_CALENDAR_PANEL_X = 0; 
-	public static final int HOME_CALENDAR_PANEL_Y = 0; 
-	public static final int HOME_CALENDAR_PANEL_WIDTH = 128; 
-	public static final int HOME_CALENDAR_PANEL_HEIGHT = 161; 
-	
-	public static final int HOME_SCHEDULE_PANEL_X = 0; 
-	public static final int HOME_SCHEDULE_PANEL_Y = 0; 
-	public static final int HOME_SCHEDULE_PANEL_WIDTH = 0; 
-	public static final int HOME_SCHEDULE_PANEL_HEIGHT = 0; 
+	public static final int HOME_FRAME_WIDTH = 1000;
+	public static final int HOME_FRAME_HEIGHT = 600;
 	
 	public static final int HOME_SCHEDULELIST_PANEL_X = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_Y = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_WIDTH = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_HEIGHT = 0; 
 	
+	public static final int HOME_SCHEDULE_PANEL_X = 0; 
+	public static final int HOME_SCHEDULE_PANEL_Y = 0; 
+	public static final int HOME_SCHEDULE_PANEL_WIDTH = 0; 
+	public static final int HOME_SCHEDULE_PANEL_HEIGHT = 0; 
+	
+	public static final int HOME_USER_LABEL_X = 850;
+	public static final int HOME_USER_LABEL_Y = 30;
+	public static final int HOME_USER_LABEL_WIDTH = 100;
+	public static final int HOME_USER_LABEL_HEIGHT = 30;
+	
+	public static final int HOME_CALENDAR_X = 0;
+	public static final int HOME_CALENDAR_Y = 0;
+	public static final int HOME_CALENDAR_WIDTH = 200;
+	public static final int HOME_CALENDAR_HEIGHT = 200;
+	private JTable table;
+	
 	public HomeUI() {
-		getContentPane().setLayout(null);
-		homeCalendarPanel = new JPanel();
-		homeCalendarPanel.setBounds(HOME_CALENDAR_PANEL_X,HOME_CALENDAR_PANEL_Y,HOME_CALENDAR_PANEL_WIDTH,HOME_CALENDAR_PANEL_HEIGHT);
-		homeCalendarPanel.setLayout(null);
-		
-		homeCalendar = new JCalendar();
-		homeCalendar.setBounds(0, 0, 128, 161);
-		homeCalendarPanel.add(homeCalendar);
-		
-		getContentPane().add(homeCalendarPanel);
-		
-		homeUserLabel = new JLabel("201XXXXX");
-		homeUserLabel.setBounds(364, 30, 58, 15);
-		getContentPane().add(homeUserLabel);
-		
-		homeManagerAuthLabel = new JLabel("관리자");
-		homeManagerAuthLabel.setBounds(316, 30, 36, 15);
-		getContentPane().add(homeManagerAuthLabel);
-		boolean TF = false;
-		if(TF = true)
-		{
-			homeManagerAuthLabel.setVisible(true);
-		}
-		else
-		{
-			homeManagerAuthLabel.setVisible(false);
-		}
+		init();
 	}
 	
 	private void init() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainFrame.frame.getContentPane().setLayout(null);
+		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// 홈 패널 (화면 전환을 위한)
 		homePanel = new JPanel();
 		homePanel.setBounds(HOME_FRAME_X, HOME_FRAME_Y, 
 				HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
 		homePanel.setLayout(null);
 		
-		homeUserLabel = new JLabel("학번");
-		homeManagerAuthLabel = new JLabel("등급");
-		homeCalendarPanel = new JCalendar();
+		// 홈 패널: 학번
+		homeUserLabel = new JLabel(String.format("학번: %s", RegisterUI.ID));
+		homeUserLabel.setBounds(HOME_USER_LABEL_X, HOME_USER_LABEL_Y, 
+				HOME_USER_LABEL_WIDTH, HOME_USER_LABEL_HEIGHT);
+		homePanel.add(homeUserLabel);
 		
-		homeCalendarPanel = new JPanel();
-		homeCalendarPanel.setBounds(HOME_CALENDAR_PANEL_X, HOME_CALENDAR_PANEL_Y,
-				HOME_CALENDAR_PANEL_WIDTH, HOME_CALENDAR_PANEL_HEIGHT);
-		homeCalendarPanel.setLayout(null);
+		// 홈 패널: 권한 
+		String userManagerAuthstr = new String();
+		if(RegisterUI.TF = true)
+		{
+			userManagerAuthstr = "(관리자)";
+		}
+		else
+		{
+			userManagerAuthstr = "(일반)";
+		}
+		homeManagerAuthLabel = new JLabel(String.format("등급: %s", userManagerAuthstr));
+		homeManagerAuthLabel.setBounds(HOME_USER_LABEL_X, HOME_USER_LABEL_Y+20, 
+				HOME_USER_LABEL_WIDTH, HOME_USER_LABEL_HEIGHT);
+		homePanel.add(homeManagerAuthLabel);
 		
+		
+		// 홈 패널: 달력
+		homeCalendar = new JCalendar();
+		homeCalendar.setBounds(HOME_CALENDAR_X, HOME_CALENDAR_Y, 
+				HOME_CALENDAR_WIDTH, HOME_CALENDAR_HEIGHT);
+		homePanel.add(homeCalendar);
+		
+		
+		// 홈 패널: 홈 일정 목록 패널
 		homeScheduleListPanel = new JPanel();
 		homeScheduleListPanel.setBounds(HOME_SCHEDULELIST_PANEL_X,
 				HOME_SCHEDULELIST_PANEL_Y, HOME_SCHEDULELIST_PANEL_WIDTH,
@@ -103,29 +106,42 @@ public class HomeUI extends JFrame {
 		homeScheduleListPanel.setLayout(null);
 		
 		
-		
+		// 홈 패널: 일정표 패널
 		homeScheduleTable = new JTable();
+		MainFrame.frame.getContentPane().add(homePanel);
+		
+		JPanel homeSchedulePanel = new JPanel();
+		homeSchedulePanel.setBounds(963, 86, -723, 486);
+		homePanel.add(homeSchedulePanel);
+		
+		JScrollPane homeScheduleScrollPane = new JScrollPane();
+		homeScheduleScrollPane.setBounds(371, 118, 374, 311);
+		homePanel.add(homeScheduleScrollPane);
+		
+		table = new JTable();
+		homeScheduleScrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+				{null, null, null, null, null, null},
+			},
+			new String[] {
+				"New column", "New column", "New column", "New column", "New column", "New column"
+			}
+		));
+		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
+		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
+		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainFrame.frame.setResizable(false);
 	}
-//	Home.setBounds(0, 0, 784, 481);
-//	frame.getContentPane().add(Home);
-//	Home.setLayout(null);
-//	Home.setVisible(false);
-//	
-//	mainuser.setToolTipText("");
-//	mainuser.setBounds(676, 49, 96, 23);
-//	Home.add(mainuser);
-//	
-//	panel_1.setBounds(0, 0, 176, 184);
-//	Home.add(panel_1);
-//	panel_1.setLayout(null);
-//	
-//	calendar = new JCalendar();
-//	calendar.setBounds(0, 0, 176, 184);
-//	panel_1.add(calendar);
-//	
-//	JLabel lblNewLabel_5 = new JLabel("(관리자)");
-//	lblNewLabel_5.setBounds(628, 49, 46, 23);
-//	Home.add(lblNewLabel_5);
+}
 //	
 //	JPanel panel = new JPanel();
 //	panel.setBounds(10, 194, 166, 277);
@@ -177,4 +193,3 @@ public class HomeUI extends JFrame {
 //	scrollPane.setViewportView(list);
 //	panel.setLayout(gl_panel);
 //	lblNewLabel_5.setVisible(true);
-}
