@@ -26,20 +26,4 @@ public class DB_Conn_Query {
          System.out.println("DB 연결 성공");
      } catch (SQLException e) {         System.out.println("Connection Fail");      }
    }
-   private void sqlRun() throws SQLException{   // 단순 검색
-    String query = "select 고객아이디, 고객이름, 적립금 from 고객";
-
-    try { DB_Connect();
-    	  Statement stmt = con.createStatement();
-          ResultSet rs = stmt.executeQuery(query);
-          while (rs.next()) {
-              System.out.print("\t" + rs.getString("고객아이디"));
-              System.out.print("\t" + rs.getString("고객이름"));
-              System.out.print("\t" + rs.getInt(3) + "\n");         
-           }
-          stmt.close();    rs.close();
-    } catch (SQLException e) { e.printStackTrace(); 
-    } finally {   con.close(); }
-    
-   }
 }
