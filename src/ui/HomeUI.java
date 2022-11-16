@@ -14,6 +14,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JButton;
+import javax.swing.ListSelectionModel;
+import javax.swing.AbstractListModel;
 
 public class HomeUI {
 	
@@ -22,6 +30,9 @@ public class HomeUI {
 	private JLabel homeUserLabel;
 	private JLabel homeManagerAuthLabel;
 	private JCalendar homeCalendar;
+	
+	// homeIntegrationPanel
+	private JPanel homeIntegrationPanel;
 	
 	// homeScheduleListPanel
 	private JPanel homeScheduleListPanel;
@@ -61,6 +72,11 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_WIDTH = 200;
 	public static final int HOME_CALENDAR_HEIGHT = 200;
 	private JTable table;
+	private JTextField IntegrationSearch;
+	private JScrollPane IntegrationscrollPane;
+	private JList IntegrationStudentsList;
+	private JButton IntegrationButton_edit;
+	private JButton IntegrationButton_add;
 	
 	public HomeUI() {
 		init();
@@ -174,6 +190,67 @@ public class HomeUI {
 				"", "", "", "", "", "", ""
 			}
 		));
+		
+		homeIntegrationPanel = new JPanel();
+		homeIntegrationPanel.setBounds(0, 210, 200, 332);
+		homePanel.add(homeIntegrationPanel);
+		
+		IntegrationSearch = new JTextField();
+		IntegrationSearch.setText("");
+		IntegrationSearch.setColumns(10);
+		
+		IntegrationscrollPane = new JScrollPane();
+		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		JButton IntegrationButton_delete = new JButton("삭제");
+		
+		IntegrationButton_edit = new JButton("수정");
+		
+		IntegrationButton_add = new JButton("추가");
+		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
+		gl_homeIntegrationPanel.setHorizontalGroup(
+			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(IntegrationButton_add, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(IntegrationButton_edit, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(IntegrationButton_delete)
+					.addContainerGap())
+				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(IntegrationSearch, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+						.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_homeIntegrationPanel.setVerticalGroup(
+			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+					.addGap(8)
+					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(IntegrationButton_delete)
+						.addComponent(IntegrationButton_edit)
+						.addComponent(IntegrationButton_add))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(IntegrationSearch, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
+		);
+		
+		IntegrationStudentsList = new JList();
+		IntegrationStudentsList.setModel(new AbstractListModel() {
+			String[] values = new String[] {"학생A", "학생B", "학생C"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		IntegrationscrollPane.setViewportView(IntegrationStudentsList);
+		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
+		
 		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
 		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
