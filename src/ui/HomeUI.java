@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
 
 public class HomeUI {
 	
@@ -28,6 +29,8 @@ public class HomeUI {
 	// homeSchedulePanel
 	private JPanel homeSchedulePanel;
 	private JTable homeScheduleTable;
+	private JTable homeScheduleTable_1;
+	private JScrollPane homeScheduleScrollPane;
 	
 	public static final int HOME_FRAME_X = 0;
 	public static final int HOME_FRAME_Y = 0;
@@ -39,10 +42,15 @@ public class HomeUI {
 	public static final int HOME_SCHEDULELIST_PANEL_WIDTH = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_HEIGHT = 0; 
 	
-	public static final int HOME_SCHEDULE_PANEL_X = 0; 
-	public static final int HOME_SCHEDULE_PANEL_Y = 0; 
-	public static final int HOME_SCHEDULE_PANEL_WIDTH = 0; 
-	public static final int HOME_SCHEDULE_PANEL_HEIGHT = 0; 
+	public static final int HOME_SCHEDULE_PANEL_X = 212; 
+	public static final int HOME_SCHEDULE_PANEL_Y = 86; 
+	public static final int HOME_SCHEDULE_PANEL_WIDTH = 734; 
+	public static final int HOME_SCHEDULE_PANEL_HEIGHT = 456; 
+	
+	public static final int HOME_SCHEDULE_SCROLLPANE_X = 100;
+	public static final int HOME_SCHEDULE_SCROLLPANE_Y = 10;
+	public static final int HOME_SCHEDULE_SCROLLPANE_WIDTH = 595;
+	public static final int HOME_SCHEDULE_SCROLLPANE_HEIGHT = 436;
 	
 	public static final int HOME_USER_LABEL_X = 850;
 	public static final int HOME_USER_LABEL_Y = 30;
@@ -110,30 +118,58 @@ public class HomeUI {
 		homeScheduleTable = new JTable();
 		MainFrame.frame.getContentPane().add(homePanel);
 		
-		JPanel homeSchedulePanel = new JPanel();
-		homeSchedulePanel.setBounds(963, 86, -723, 486);
+		homeSchedulePanel = new JPanel();
+		homeSchedulePanel.setLayout(null);
+		homeSchedulePanel.setBackground(new Color(128, 128, 128));
+		homeSchedulePanel.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
+				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
 		homePanel.add(homeSchedulePanel);
 		
-		JScrollPane homeScheduleScrollPane = new JScrollPane();
-		homeScheduleScrollPane.setBounds(371, 118, 374, 311);
-		homePanel.add(homeScheduleScrollPane);
+		homeScheduleScrollPane = new JScrollPane();
+		homeScheduleScrollPane.setBounds(HOME_SCHEDULE_SCROLLPANE_X, HOME_SCHEDULE_SCROLLPANE_Y,
+				HOME_SCHEDULE_SCROLLPANE_WIDTH, HOME_SCHEDULE_SCROLLPANE_HEIGHT);
+		homeSchedulePanel.add(homeScheduleScrollPane);
 		
-		table = new JTable();
-		homeScheduleScrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
+		homeScheduleTable_1 = new JTable();
+		homeScheduleTable_1.setRowSelectionAllowed(false);
+		homeScheduleTable_1.setCellSelectionEnabled(true);
+		String[] homeScheduleWeek = new String[] {"", "", "", "", "", "", ""};
+		homeScheduleScrollPane.setViewportView(homeScheduleTable_1);
+		homeScheduleTable_1.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column"
+				"", "", "", "", "", "", ""
 			}
 		));
 		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
