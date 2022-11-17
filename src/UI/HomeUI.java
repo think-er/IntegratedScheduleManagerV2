@@ -8,6 +8,9 @@ import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
+
+import Control.Show_Schedule;
+
 import javax.swing.JTable;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -173,7 +176,6 @@ public class HomeUI {
 	      homeScheduleTable.setRowSelectionAllowed(false);
 	      homeScheduleTable.setCellSelectionEnabled(true);
 	      homeScheduleScrollPane.setViewportView(homeScheduleTable);
-	      
 		
 		//----------------------------------------------
 		
@@ -187,7 +189,6 @@ public class HomeUI {
 		}
 		
 		//----------------------------------------------
-		
 		
 		
 		
