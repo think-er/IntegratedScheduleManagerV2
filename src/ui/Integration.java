@@ -36,7 +36,7 @@ import javax.swing.AbstractListModel;
 
 public class Integration {
 
-	private JFrame Integration;
+	JFrame Integration;
 	private JTextField Integration_textField;
 
 	/**
@@ -132,7 +132,9 @@ public class Integration {
 		btnNewButton.setBounds(247, 418, 100, 28);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				Integration.setVisible(false);
+				HomeUI homePanel = new HomeUI();
+				homePanel.homePanel.setVisible(true);
 			}
 		});
 		Integration.getContentPane().add(btnNewButton);

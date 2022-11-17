@@ -22,6 +22,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HomeUI {
 	
@@ -71,12 +73,14 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_Y = 0;
 	public static final int HOME_CALENDAR_WIDTH = 200;
 	public static final int HOME_CALENDAR_HEIGHT = 200;
+	
 	private JTable table;
 	private JTextField IntegrationSearch;
 	private JScrollPane IntegrationscrollPane;
 	private JList IntegrationStudentsList;
 	private JButton IntegrationButton_edit;
 	private JButton IntegrationButton_add;
+	private JButton IntegrationButton_delete;
 	
 	public HomeUI() {
 		init();
@@ -191,6 +195,7 @@ public class HomeUI {
 			}
 		));
 		
+		// 홈 통합 일정 패널: 통합 일정 패널
 		homeIntegrationPanel = new JPanel();
 		homeIntegrationPanel.setBounds(0, 210, 200, 332);
 		homePanel.add(homeIntegrationPanel);
@@ -199,14 +204,21 @@ public class HomeUI {
 		IntegrationSearch.setText("");
 		IntegrationSearch.setColumns(10);
 		
+		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
 		IntegrationscrollPane = new JScrollPane();
 		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		JButton IntegrationButton_delete = new JButton("삭제");
-		
+		IntegrationButton_delete = new JButton("삭제");
 		IntegrationButton_edit = new JButton("수정");
-		
 		IntegrationButton_add = new JButton("추가");
+		IntegrationButton_add.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				homePanel.setVisible(false);
+				Integration Integration = new Integration();
+				Integration.Integration.setVisible(true);
+			}
+		});
+		
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
