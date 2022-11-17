@@ -206,8 +206,6 @@ public class HomeUI {
 			e1.printStackTrace();
 		}
 		
-		
-		
 		homeScheduleTable.updateUI();
 		
 		//----------------------------------------------
