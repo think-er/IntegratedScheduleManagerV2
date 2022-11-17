@@ -84,7 +84,7 @@ public class HomeUI {
 	private JList IntegrationStudentsList;
 	private JButton IntegrationButton_edit;
 	private JButton IntegrationButton_add;
-	
+	private JButton IntegrationButton_delete;
 	private JButton toAddEventUIBtn;
 	
 	public static ArrayList<Schedule> schedule;
@@ -230,11 +230,22 @@ public class HomeUI {
 		IntegrationscrollPane = new JScrollPane();
 		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		JButton IntegrationButton_delete = new JButton("삭제");
+		IntegrationButton_delete = new JButton("삭제");
 		
 		IntegrationButton_edit = new JButton("수정");
 		
 		IntegrationButton_add = new JButton("추가");
+		
+		// 아마 이거 연결하면 될듯한데 
+		// 그냥 하면 안됩니다.
+		// 어디다가 해야할지 모르겠음.
+		
+//		IntegrationButton_add.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				new IntegrationUI();
+//			}
+//		});
+		
 		
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(

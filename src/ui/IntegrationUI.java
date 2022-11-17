@@ -34,38 +34,19 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 
-public class Integration {
+public class IntegrationUI {
 
 	private JFrame Integration;
 	private JTextField Integration_textField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Integration window = new Integration();
-					window.Integration.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public Integration() {
-		initialize();
+	public IntegrationUI() {
+		init();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void init() {
 		Integration = new JFrame();
 		Integration.setBounds(100, 100, 390, 500);
 		Integration.getContentPane().setLayout(null);
@@ -103,7 +84,7 @@ public class Integration {
 		Integration_scrollPane.setBounds(0, 54, 320, 279);
 		Integration_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		String[] strs = {"이정훈(20212940)", "홍길동(20211234)", "유저1(2020XXXX)", "유저2(2021XXXX)", "유저3(2021YYYY)"};
+		String[] strs = {"20212940", "20211234"};
 		
 		JList list = new JList( createData(strs) );
 		list.setFont(new Font("나눔고딕", Font.PLAIN, 14));
