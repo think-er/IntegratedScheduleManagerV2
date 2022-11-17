@@ -10,14 +10,10 @@ import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 import javax.swing.JTable;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JScrollBar;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -26,10 +22,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
-
-import java.util.ArrayList;
-import java.util.Vector;
-import Schedule.Schedule;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 
 public class HomeUI {
@@ -44,7 +39,7 @@ public class HomeUI {
 	private JPanel homeIntegrationPanel;
 	
 	// homeScheduleListPanel
-//	private JPanel homeScheduleListPanel;
+	private JPanel homeScheduleListPanel;
 	
 	// homeSchedulePanel
 	private JPanel homeSchedulePanel;
@@ -81,25 +76,19 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_WIDTH = 200;
 	public static final int HOME_CALENDAR_HEIGHT = 200;
 	
+	private JTable table;
 	private JTextField IntegrationSearch;
 	private JScrollPane IntegrationscrollPane;
 	private JList IntegrationStudentsList;
 	private JButton IntegrationButton_edit;
 	private JButton IntegrationButton_add;
 	private JButton IntegrationButton_delete;
-	private JButton toAddEventUIBtn;
-	
-	public static ArrayList<Schedule> schedule;
-	public static Vector<String> vector;
 	
 	public HomeUI() {
 		init();
 	}
 	
 	private void init() {
-		
-		schedule = new ArrayList<Schedule>();
-		
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -131,17 +120,6 @@ public class HomeUI {
 				HOME_USER_LABEL_WIDTH, HOME_USER_LABEL_HEIGHT);
 		homePanel.add(homeManagerAuthLabel);
 		
-		// 홈 패널: 세부 일정 추가 팝업 화면 버튼
-		toAddEventUIBtn = new JButton("세부 일정 추가");
-		toAddEventUIBtn.setBounds(HOME_USER_LABEL_X-150, HOME_USER_LABEL_Y+20,
-				HOME_USER_LABEL_WIDTH+30, HOME_USER_LABEL_HEIGHT);
-		toAddEventUIBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new AddEventUI();
-			}
-		});
-		
-		homePanel.add(toAddEventUIBtn);
 		
 		// 홈 패널: 달력
 		homeCalendar = new JCalendar();
@@ -151,11 +129,11 @@ public class HomeUI {
 		
 		
 		// 홈 패널: 홈 일정 목록 패널
-//		homeScheduleListPanel = new JPanel();
-//		homeScheduleListPanel.setBounds(HOME_SCHEDULELIST_PANEL_X,
-//				HOME_SCHEDULELIST_PANEL_Y, HOME_SCHEDULELIST_PANEL_WIDTH,
-//				HOME_SCHEDULELIST_PANEL_HEIGHT);
-//		homeScheduleListPanel.setLayout(null);
+		homeScheduleListPanel = new JPanel();
+		homeScheduleListPanel.setBounds(HOME_SCHEDULELIST_PANEL_X,
+				HOME_SCHEDULELIST_PANEL_Y, HOME_SCHEDULELIST_PANEL_WIDTH,
+				HOME_SCHEDULELIST_PANEL_HEIGHT);
+		homeScheduleListPanel.setLayout(null);
 		
 		
 		// 홈 패널: 일정표 패널
@@ -173,27 +151,28 @@ public class HomeUI {
 		homeSchedulePanel.add(homeScheduleScrollPane);
 		
 		// 일정표 패널: 일정표 테이블
-		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
-		Object[][] rows[]= {
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},
-			{null, null, null, null, null, null, null},	//9시 ~ 22시로 설정
-		};
-		homeScheduleTable = new JTable(rows,headers);
-		homeScheduleTable.setRowHeight(60);
-		homeScheduleTable.setRowSelectionAllowed(false);
-		homeScheduleTable.setCellSelectionEnabled(true);
-		homeScheduleScrollPane.setViewportView(homeScheduleTable);
+	      Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
+	      Object[][] rows[]= {
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
+	      };
+	      homeScheduleTable = new JTable(rows,headers);
+	      homeScheduleTable.setRowHeight(60);
+	      homeScheduleTable.setRowSelectionAllowed(false);
+	      homeScheduleTable.setCellSelectionEnabled(true);
+	      homeScheduleScrollPane.setViewportView(homeScheduleTable);
+	      
 		
 		//----------------------------------------------
 		
@@ -210,35 +189,31 @@ public class HomeUI {
 		
 		//----------------------------------------------
 		
-		// 홈 패널: 일정표 목록 패널
+		
+		// 홈 통합 일정 패널: 통합 일정 패널
+
 		homeIntegrationPanel = new JPanel();
 		homeIntegrationPanel.setBounds(0, 210, 200, 332);
 		homePanel.add(homeIntegrationPanel);
 		
-		// 홈 패널: 일정표 목록 패널: 학번 검색 필드
 		IntegrationSearch = new JTextField();
 		IntegrationSearch.setText("");
 		IntegrationSearch.setColumns(10);
 		
+		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
 		IntegrationscrollPane = new JScrollPane();
 		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		IntegrationButton_delete = new JButton("삭제");
-		
 		IntegrationButton_edit = new JButton("수정");
-		
 		IntegrationButton_add = new JButton("추가");
-		
-		// 아마 이거 연결하면 될듯한데 
-		// 그냥 하면 안됩니다.
-		// 어디다가 해야할지 모르겠음.
-		
-//		IntegrationButton_add.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				new IntegrationUI();
-//			}
-//		});
-		
+		IntegrationButton_add.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				homePanel.setVisible(false);
+				Integration Integration = new Integration();
+				Integration.Integration.setVisible(true);
+			}
+		});
 		
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(
@@ -257,7 +232,6 @@ public class HomeUI {
 						.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
 					.addContainerGap())
 		);
-		
 		gl_homeIntegrationPanel.setVerticalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
