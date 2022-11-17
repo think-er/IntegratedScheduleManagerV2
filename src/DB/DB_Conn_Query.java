@@ -10,6 +10,8 @@ import java.sql.Types;
 
 import oracle.jdbc.OracleTypes;
 
+import Schedule.Schedule;
+
 public class DB_Conn_Query {
    Connection con = null;
    String url = "jdbc:oracle:thin:@localhost:1521:XE";
@@ -27,19 +29,14 @@ public class DB_Conn_Query {
      } catch (SQLException e) {         System.out.println("Connection Fail");      }
    }
    public void schedule_sqlrun(int id) throws SQLException{	//스케줄 검색
-	    String query = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
+	   
+	   String query = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
 	    try { DB_Connect();
 	    	  Statement stmt = con.createStatement();
 	          ResultSet rs = stmt.executeQuery(query);
 	          while (rs.next()) {
-	              System.out.print("\t" + rs.getString(1));
-	              System.out.print("\t" + rs.getInt(2));
-	              System.out.print("\t" + rs.getInt(3));
-	              System.out.print("\t" + rs.getString(4));
-	              System.out.print("\t" + rs.getDate(5));
-	              System.out.print("\t" + rs.getString(6) + "\n");
+	        	  Schedule schedule = new Schedule(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getDate(6), rs.getString(7)); 
 	           }
-	          
 	          stmt.close();    rs.close();
 	    } catch (SQLException e) { e.printStackTrace(); 
 	    } finally {   con.close(); }
