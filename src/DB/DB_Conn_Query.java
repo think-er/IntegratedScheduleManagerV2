@@ -1,5 +1,5 @@
 package DB;
-
+//DB 연결 코드
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
