@@ -1,5 +1,7 @@
 package Control;
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import Entity.Schedule;
 
@@ -12,19 +14,24 @@ public class Show_Schedule {
 	private Date date;
 	private String memo;
 	
-	public Show_Schedule() { Get_Index(); }
-	
-	public Show_Schedule(String name, String yoil, int startTime, 
-			int endTime, String fix, Date date , String memo){
-		this.name = name;
-		this.yoil = yoil;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.fix = fix;
-		this.date = date;
-		this.memo = memo;
+	public Show_Schedule(ResultSet rs) {
+		try {
+			while (rs.next()) 
+			{
+				this.name = rs.getString(1);
+				this.yoil = rs.getString(2);
+				this.startTime = rs.getInt(3);
+				this.endTime = rs.getInt(4);
+				this.fix = rs.getString(5);
+				this.date = rs.getDate(6);
+				this.memo = rs.getString(7);
+				Get_Index();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		Get_Index();
 	}
 	//index를 반환하는 함수 추가
 	public int[] Get_Index() {
@@ -43,6 +50,10 @@ public class Show_Schedule {
 		
 		//e_row_index(종료시간) 구하기
 		e_row_index=endTime-9-1;	//1 작게 인덱스 줘야됨
+		
+		System.out.print(s_row_index+ " ");
+		System.out.print(e_row_index+" ");
+		System.out.print(col_index+"\n");
 		
 		int result[]= {s_row_index, e_row_index, col_index};
 		

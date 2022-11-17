@@ -15,17 +15,37 @@ import javax.swing.JTable;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
@@ -155,44 +175,42 @@ public class HomeUI {
 		homeSchedulePanel.add(homeScheduleScrollPane);
 		
 		// 일정표 패널: 일정표 테이블
-	      Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
-	      Object[][] rows[]= {
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},
-	         {null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
-	      };
-	      homeScheduleTable = new JTable(rows,headers);
-	      homeScheduleTable.setRowHeight(60);
-	      homeScheduleTable.setRowSelectionAllowed(false);
-	      homeScheduleTable.setCellSelectionEnabled(true);
-	      homeScheduleScrollPane.setViewportView(homeScheduleTable);
+		
+		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
+		Object[][] colums[]= {
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
+		};
+		homeScheduleTable = new JTable(colums,headers);
+		homeScheduleTable.setRowHeight(60);
+		homeScheduleTable.setRowSelectionAllowed(false);
+		homeScheduleTable.setCellSelectionEnabled(true);
+		homeScheduleScrollPane.setViewportView(homeScheduleTable);
 		
 		//----------------------------------------------
-		
+	  	
 		Schedule s = new Schedule();
 		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
 		try {
 			s.schedule_sqlrun(id);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
+			
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		//----------------------------------------------
-		
-		
-		
-		homeScheduleTable.updateUI();	//테이블 업데이트
+		//homeScheduleTable.updateUI();	//테이블 업데이트
 		
 		//----------------------------------------------
 		
