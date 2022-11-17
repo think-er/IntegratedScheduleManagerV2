@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -29,6 +30,7 @@ import javax.swing.AbstractListModel;
 import java.util.ArrayList;
 import java.util.Vector;
 import Schedule.Schedule;
+import DB.DB_Conn_Query;
 
 public class HomeUI {
 	
@@ -216,6 +218,15 @@ public class HomeUI {
 				"", "", "", "", "", "", ""
 			}
 		));
+		
+		DB_Conn_Query db = new DB_Conn_Query();
+		int id=20203089;
+		try {
+			db.schedule_sqlrun(id);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		// 홈 패널: 일정표 목록 패널
 		homeIntegrationPanel = new JPanel();
