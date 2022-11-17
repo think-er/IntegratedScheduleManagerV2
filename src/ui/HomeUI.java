@@ -23,7 +23,9 @@ import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import DB.DB_Conn_Query;
 
 public class HomeUI {
 	
@@ -149,51 +151,42 @@ public class HomeUI {
 		homeSchedulePanel.add(homeScheduleScrollPane);
 		
 		// 일정표 패널: 일정표 테이블
-		homeScheduleTable = new JTable();
-		homeScheduleTable.setRowHeight(60);
-		homeScheduleTable.setRowSelectionAllowed(false);
-		homeScheduleTable.setCellSelectionEnabled(true);
-		String[] homeScheduleWeek = new String[] {"", "", "", "", "", "", ""};
-		homeScheduleScrollPane.setViewportView(homeScheduleTable);
-		homeScheduleTable.setModel(new DefaultTableModel(
-				// 값
-			new Object[][] {
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			// 열
-			new String[] {
-				"", "", "", "", "", "", ""
-			}
-		));
+	      Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
+	      Object[][] rows[]= {
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},
+	         {null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
+	      };
+	      homeScheduleTable = new JTable(rows,headers);
+	      homeScheduleTable.setRowHeight(60);
+	      homeScheduleTable.setRowSelectionAllowed(false);
+	      homeScheduleTable.setCellSelectionEnabled(true);
+	      homeScheduleScrollPane.setViewportView(homeScheduleTable);
+	      
+	      //----------------------------------------------
+	      
+	      DB_Conn_Query db = new DB_Conn_Query();
+	      int id=20203089;   //-> 로그인한 id 넣어줘야됨.
+	      try {
+	         db.schedule_sqlrun(id);
+	      } catch (SQLException e1) {
+	         // TODO Auto-generated catch block
+	         e1.printStackTrace();
+	      }
+	      
+	      homeScheduleTable.updateUI();
+	      
+	      //----------------------------------------------
 		
 		// 홈 통합 일정 패널: 통합 일정 패널
 		homeIntegrationPanel = new JPanel();
