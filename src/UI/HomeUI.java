@@ -1,4 +1,4 @@
-package ui;
+package UI;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
+import Entity.Schedule;
 
 public class HomeUI {
 	
@@ -176,16 +177,21 @@ public class HomeUI {
 		
 		//----------------------------------------------
 		
-		DB_Conn_Query db = new DB_Conn_Query();
+		Schedule s = new Schedule();
 		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
 		try {
-			db.schedule_sqlrun(id);
+			s.schedule_sqlrun(id);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		homeScheduleTable.updateUI();
+		//----------------------------------------------
+		
+		
+		
+		
+		homeScheduleTable.updateUI();	//테이블 업데이트
 		
 		//----------------------------------------------
 		

@@ -1,10 +1,9 @@
-package Schedule;
-
-import java.time.LocalDate;
+package Control;
 import java.sql.Date;
-import java.time.DayOfWeek;
 
-public class Schedule {
+import Entity.Schedule;
+
+public class Show_Schedule {
 	private String name;
 	private String yoil;
 	private int startTime;
@@ -13,10 +12,8 @@ public class Schedule {
 	private Date date;
 	private String memo;
 	
-	
-	
-	public Schedule(String name, String yoil, int startTime, 
-			int endTime, String fix, Date date , String memo) {
+	public Show_Schedule(String name, String yoil, int startTime, 
+			int endTime, String fix, Date date , String memo){
 		this.name = name;
 		this.yoil = yoil;
 		this.startTime = startTime;
@@ -25,4 +22,6 @@ public class Schedule {
 		this.date = date;
 		this.memo = memo;
 	}
+	//index를 반환하는 함수 추가
+	
 }

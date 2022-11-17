@@ -1,4 +1,4 @@
-package ui;
+package UI;
 
 import java.awt.EventQueue;
 
@@ -34,19 +34,38 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 
-public class IntegrationUI {
+public class Integration {
 
-	private JFrame Integration;
+	JFrame Integration;
 	private JTextField Integration_textField;
 
-	public IntegrationUI() {
-		init();
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Integration window = new Integration();
+					window.Integration.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Integration() {
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void init() {
+	private void initialize() {
 		Integration = new JFrame();
 		Integration.setBounds(100, 100, 390, 500);
 		Integration.getContentPane().setLayout(null);
@@ -84,7 +103,7 @@ public class IntegrationUI {
 		Integration_scrollPane.setBounds(0, 54, 320, 279);
 		Integration_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		String[] strs = {"20212940", "20211234"};
+		String[] strs = {"이정훈(20212940)", "홍길동(20211234)", "유저1(2020XXXX)", "유저2(2021XXXX)", "유저3(2021YYYY)"};
 		
 		JList list = new JList( createData(strs) );
 		list.setFont(new Font("나눔고딕", Font.PLAIN, 14));
@@ -113,7 +132,9 @@ public class IntegrationUI {
 		btnNewButton.setBounds(247, 418, 100, 28);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				Integration.setVisible(false);
+				HomeUI homePanel = new HomeUI();
+				homePanel.homePanel.setVisible(true);
 			}
 		});
 		Integration.getContentPane().add(btnNewButton);
