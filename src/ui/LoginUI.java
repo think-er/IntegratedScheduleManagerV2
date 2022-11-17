@@ -113,10 +113,10 @@ public class LoginUI {
 		toRegisterBtn.setBounds(TO_REGISTER_BTN_X, TO_REGISTER_BTN_Y, 
 				TO_REGISTER_BTN_WIDTH, TO_REGISTER_BTN_HEIGHT);
 		toRegisterBtn.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			RegisterUI registerPanel = new RegisterUI();
-			loginPanel.setVisible(false);
-			registerPanel.registerPanel.setVisible(true);
+			public void actionPerformed(ActionEvent e) {
+				RegisterUI registerPanel = new RegisterUI();
+				loginPanel.setVisible(false);
+				registerPanel.registerPanel.setVisible(true);
 		}
 	});
 		loginPanel.add(toRegisterBtn);
