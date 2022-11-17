@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Entity.Schedule;
+import UI.HomeUI;
 
 public class Show_Schedule {
 	private String name;
@@ -18,23 +19,22 @@ public class Show_Schedule {
 		try {
 			while (rs.next()) 
 			{
-				this.name = rs.getString(1);
+				/*this.name = rs.getString(1);
 				this.yoil = rs.getString(2);
 				this.startTime = rs.getInt(3);
 				this.endTime = rs.getInt(4);
 				this.fix = rs.getString(5);
 				this.date = rs.getDate(6);
-				this.memo = rs.getString(7);
-				Get_Index();
+				this.memo = rs.getString(7);*/
+				Get_Index(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5), rs.getDate(6), rs.getString(7));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 	//index를 반환하는 함수 추가
-	public int[] Get_Index() {
+	public void Get_Index(String name, String yoil, int startTime, int endTime, String fix, Date date, String memo) {
 		int s_row_index,e_row_index, col_index=0;	//[시간][요일], 시간 -> 시작시간 ~ 종료시간
 		String week[] = {"월", "화", "수", "목", "금", "토", "일"};
 		
@@ -54,10 +54,6 @@ public class Show_Schedule {
 		System.out.print(s_row_index+ " ");
 		System.out.print(e_row_index+" ");
 		System.out.print(col_index+"\n");
-		
-		int result[]= {s_row_index, e_row_index, col_index};
-		
-		return result;
 	}
 	
 	//그리고? name, 메모 : ui에 가져와야할 정보

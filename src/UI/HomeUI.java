@@ -39,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
 import java.awt.event.ActionListener;
@@ -47,6 +48,7 @@ import java.beans.PropertyChangeListener;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 import Entity.Schedule;
@@ -108,7 +110,28 @@ public class HomeUI {
 	private JButton IntegrationButton_add;
 	private JButton IntegrationButton_delete;
 	
+	private String name;
+	private String yoil;
+	private int startTime;
+	private int endTime;
+	private String fix;
+	private Date date;
+	private String memo;
+	
+	private int s_row_index;
+	private int e_row_index;
+	private int col_index=0;
+	
+	private int count=0;
+	
+	//private ArrayList<Integer>[] index = new ArrayList[3];
+	private int[][]index=new int[3][3];
+	
+	
 	public HomeUI() {
+		/*for(int i=0;i<3;i++) {
+			index[i]=new ArrayList<Integer>();
+		}*/
 		init();
 	}
 	
@@ -176,6 +199,33 @@ public class HomeUI {
 		
 		// 일정표 패널: 일정표 테이블
 		
+		
+		
+		//----------------------------------------------
+	  	
+		Schedule s = new Schedule();
+		
+		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
+		try {
+			DB_Conn_Query db = new DB_Conn_Query();
+			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
+			ResultSet rs = db.executeQurey(sql);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
+			while (rs.next()) 
+			{
+				name = rs.getString(1);
+				yoil = rs.getString(2);
+				startTime = rs.getInt(3);
+				endTime = rs.getInt(4);
+				fix = rs.getString(5);
+				date = rs.getDate(6);
+				memo = rs.getString(7);
+				Get_Index();
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
 		Object[][] colums[]= {
 				{null, null, null, null, null, null, null},
@@ -192,23 +242,22 @@ public class HomeUI {
 				{null, null, null, null, null, null, null},
 				{null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
 		};
-		homeScheduleTable = new JTable(colums,headers);
+		
+		DefaultTableModel tm = new DefaultTableModel(colums, headers);
+		
+		ColorTable homeScheduleTable = new ColorTable(tm);
+		//homeScheduleTable = new JTable(tm);
 		homeScheduleTable.setRowHeight(60);
 		homeScheduleTable.setRowSelectionAllowed(false);
 		homeScheduleTable.setCellSelectionEnabled(true);
 		homeScheduleScrollPane.setViewportView(homeScheduleTable);
 		
-		//----------------------------------------------
-	  	
-		Schedule s = new Schedule();
-		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
-		try {
-			s.schedule_sqlrun(id);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
-			
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		/*for(int i=0;i<3;i++) {
+			for(int j=0;j<index[i].size();j++) {
+				System.out.print(index[j].get(i)+" ");
+			}
+			System.out.println();
+		}*/
 		
 		//homeScheduleTable.updateUI();	//테이블 업데이트
 		
@@ -289,4 +338,75 @@ public class HomeUI {
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
 	}
+	public void Get_Index() {	
+		//[시간][요일], 시간 -> 시작시간 ~ 종료시간
+		String week[] = {"월", "화", "수", "목", "금", "토", "일"};
+		
+		//col_index(요일) 구하기
+		for(int i=0;i<6;i++) {	
+			if(yoil.equals(week[i])) {
+				col_index=i;
+				break;
+			}
+		}
+		//s_row_index(시작시간) 구하기
+		s_row_index=startTime-9; 	//9시부터 표시하기 때문
+		
+		//e_row_index(종료시간) 구하기
+		e_row_index=endTime-9-1;	//1 작게 인덱스 줘야됨
+		
+		index[count][0]=s_row_index;
+		index[count][1]=e_row_index;
+		index[count][2]=col_index;
+		count++;
+		/*index[0].add(s_row_index);
+		index[1].add(e_row_index);
+		index[2].add(col_index);*/
+		
+		/*System.out.print(s_row_index+ " ");
+		System.out.print(e_row_index+" ");
+		System.out.print(col_index+"\n");*/
+	}
+	
+	class ColorTable extends JTable {
+		public ColorTable(DefaultTableModel dtm) {
+			// TODO Auto-generated constructor stub
+			super(dtm);
+		}
+
+		@Override
+		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+			// TODO Auto-generated method stub
+			JComponent component = (JComponent) super.prepareRenderer(renderer, row, column);
+			
+			/*for(int i=0;i<3;i++) {
+				System.out.println(index[0].get(i)+" "+index[1].get(i)+" "+index[2].get(i));
+				if(row>=index[0].get(i) && row<=index[1].get(i) && column == index[2].get(i)) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+					component.setBackground(Color.lightGray);
+				}else{
+					component.setBackground(Color.white);
+				}
+				
+			}*/
+			
+			
+			if(row>=index[0][0] && row<=index[0][1] && column == index[0][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+				component.setBackground(Color.lightGray);
+			}
+			else if(row>=index[1][0] && row<=index[1][1] && column == index[1][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+				component.setBackground(Color.lightGray);
+			}
+			else if(row>=index[2][0] && row<=index[2][1] && column == index[2][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+				component.setBackground(Color.lightGray);
+			}
+			else {
+				component.setBackground(Color.WHITE);
+			}
+			
+			return component;
+		}
+	}
+	
 }
+
+
