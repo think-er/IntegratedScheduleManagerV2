@@ -21,6 +21,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -52,6 +53,9 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 import Entity.Schedule;
+
+import java.awt.GridLayout;
+import java.awt.Dimension;
 
 public class HomeUI {
 	
@@ -123,9 +127,11 @@ public class HomeUI {
 	private int col_index=0;
 	
 	private int count=0;
+
+	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
 	
 	//private ArrayList<Integer>[] index = new ArrayList[3];
-	private int[][]index=new int[3][3];
+//	private int[][]index=new int[3][3];
 	
 	
 	public HomeUI() {
@@ -184,73 +190,89 @@ public class HomeUI {
 		
 		
 		// 홈 패널: 일정표 패널
-		homeSchedulePanel = new JPanel();
-		homeSchedulePanel.setLayout(null);
-		homeSchedulePanel.setBackground(new Color(128, 128, 128));
-		homeSchedulePanel.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
-				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
-		homePanel.add(homeSchedulePanel);
 		
-		// 일정표 패널: 일정표 스크롤 팬
-		homeScheduleScrollPane = new JScrollPane();
-		homeScheduleScrollPane.setBounds(HOME_SCHEDULE_SCROLLPANE_X, HOME_SCHEDULE_SCROLLPANE_Y,
-				HOME_SCHEDULE_SCROLLPANE_WIDTH, HOME_SCHEDULE_SCROLLPANE_HEIGHT);
-		homeSchedulePanel.add(homeScheduleScrollPane);
+		// 일정표 패널: 일정표 GridLayout
+		//---------------------------------------------
+		JPanel homeScheduleGridPanel = new JPanel();
+		homeScheduleGridPanel.setLayout(new GridLayout(15, 8, 5, 5));
 		
-		// 일정표 패널: 일정표 테이블
-		
-		
-		
-		//----------------------------------------------
-	  	
-		Schedule s = new Schedule();
-		
-		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
-		try {
-			DB_Conn_Query db = new DB_Conn_Query();
-			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
-			ResultSet rs = db.executeQurey(sql);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
-			while (rs.next()) 
-			{
-				name = rs.getString(1);
-				yoil = rs.getString(2);
-				startTime = rs.getInt(3);
-				endTime = rs.getInt(4);
-				fix = rs.getString(5);
-				date = rs.getDate(6);
-				memo = rs.getString(7);
-				Get_Index();
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		for(int k=0; k<8; k++) {
+			JPanel dayOfWeekLabelPanel = new JPanel();
+			dayOfWeekLabelPanel.add(new JLabel(dayOfWeekColumn[k]));
+			homeScheduleGridPanel.add(dayOfWeekLabelPanel);
 		}
 		
-		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
-		Object[][] colums[]= {
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
-		};
+		for(int i=0; i<14; i++) {
+			JPanel timeLabelPanel = new JPanel();
+			timeLabelPanel.add(new JLabel(AddEventUI.hourCb[i] + "시"), BorderLayout.CENTER);
+			homeScheduleGridPanel.add(timeLabelPanel);
+			
+			for(int j=1; j<8; j++) {
+				JButton ex = new JButton();
+				ex.setPreferredSize(new Dimension(82, 70));
+				homeScheduleGridPanel.add(ex);
+			}
+		}
 		
-		DefaultTableModel tm = new DefaultTableModel(colums, headers);
+		//----------------------------------------------
 		
-		ColorTable homeScheduleTable = new ColorTable(tm);
-		//homeScheduleTable = new JTable(tm);
-		homeScheduleTable.setRowHeight(60);
-		homeScheduleTable.setRowSelectionAllowed(false);
-		homeScheduleTable.setCellSelectionEnabled(true);
-		homeScheduleScrollPane.setViewportView(homeScheduleTable);
+		// 일정표 패널: 일정표 스크롤 팬
+		homeScheduleScrollPane = new JScrollPane(homeScheduleGridPanel);
+		homeScheduleScrollPane.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
+				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
+			
+		homePanel.add(homeScheduleScrollPane);
+		
+		//----------------------------------------------
+		
+//		Schedule s = new Schedule();
+//		
+//		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
+//		try {
+//			DB_Conn_Query db = new DB_Conn_Query();
+//			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
+//			ResultSet rs = db.executeQurey(sql);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
+//			while (rs.next()) 
+//			{
+//				name = rs.getString(1);
+//				yoil = rs.getString(2);
+//				startTime = rs.getInt(3);
+//				endTime = rs.getInt(4);
+//				fix = rs.getString(5);
+//				date = rs.getDate(6);
+//				memo = rs.getString(7);
+//				Get_Index();
+//			}
+//		} catch (SQLException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+//		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
+//		Object[][] colums[]= {
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},
+//				{null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
+//		};
+		
+//		DefaultTableModel tm = new DefaultTableModel(colums, headers);
+		
+//		ColorTable homeScheduleTable = new ColorTable(tm);
+//		//homeScheduleTable = new JTable(tm);
+//		homeScheduleTable.setRowHeight(60);
+//		homeScheduleTable.setRowSelectionAllowed(false);
+//		homeScheduleTable.setCellSelectionEnabled(true);
+//		homeScheduleScrollPane.setViewportView(homeScheduleTable);
 		
 		/*for(int i=0;i<3;i++) {
 			for(int j=0;j<index[i].size();j++) {
@@ -338,27 +360,27 @@ public class HomeUI {
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
 	}
-	public void Get_Index() {	
-		//[시간][요일], 시간 -> 시작시간 ~ 종료시간
-		String week[] = {"월", "화", "수", "목", "금", "토", "일"};
-		
-		//col_index(요일) 구하기
-		for(int i=0;i<6;i++) {	
-			if(yoil.equals(week[i])) {
-				col_index=i;
-				break;
-			}
-		}
+//	public void Get_Index() {	
+//		//[시간][요일], 시간 -> 시작시간 ~ 종료시간
+//		String week[] = {"월", "화", "수", "목", "금", "토", "일"};
+//		
+//		//col_index(요일) 구하기
+//		for(int i=0;i<6;i++) {	
+//			if(yoil.equals(week[i])) {
+//				col_index=i;
+//				break;
+//			}
+//		}
 		//s_row_index(시작시간) 구하기
-		s_row_index=startTime-9; 	//9시부터 표시하기 때문
-		
-		//e_row_index(종료시간) 구하기
-		e_row_index=endTime-9-1;	//1 작게 인덱스 줘야됨
-		
-		index[count][0]=s_row_index;
-		index[count][1]=e_row_index;
-		index[count][2]=col_index;
-		count++;
+//		s_row_index=startTime-9; 	//9시부터 표시하기 때문
+//		
+//		//e_row_index(종료시간) 구하기
+//		e_row_index=endTime-9-1;	//1 작게 인덱스 줘야됨
+//		
+//		index[count][0]=s_row_index;
+//		index[count][1]=e_row_index;
+//		index[count][2]=col_index;
+//		count++;
 		/*index[0].add(s_row_index);
 		index[1].add(e_row_index);
 		index[2].add(col_index);*/
@@ -366,19 +388,19 @@ public class HomeUI {
 		/*System.out.print(s_row_index+ " ");
 		System.out.print(e_row_index+" ");
 		System.out.print(col_index+"\n");*/
-	}
+//	}
 	
-	class ColorTable extends JTable {
-		public ColorTable(DefaultTableModel dtm) {
-			// TODO Auto-generated constructor stub
-			super(dtm);
-		}
-
-		@Override
-		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-			// TODO Auto-generated method stub
-			JComponent component = (JComponent) super.prepareRenderer(renderer, row, column);
-			
+//	class ColorTable extends JTable {
+//		public ColorTable(DefaultTableModel dtm) {
+//			// TODO Auto-generated constructor stub
+//			super(dtm);
+//		}
+//
+//		@Override
+//		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+//			// TODO Auto-generated method stub
+//			JComponent component = (JComponent) super.prepareRenderer(renderer, row, column);
+//			
 			/*for(int i=0;i<3;i++) {
 				System.out.println(index[0].get(i)+" "+index[1].get(i)+" "+index[2].get(i));
 				if(row>=index[0].get(i) && row<=index[1].get(i) && column == index[2].get(i)) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
@@ -390,22 +412,21 @@ public class HomeUI {
 			}*/
 			
 			
-			if(row>=index[0][0] && row<=index[0][1] && column == index[0][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-				component.setBackground(Color.lightGray);
-			}
-			else if(row>=index[1][0] && row<=index[1][1] && column == index[1][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-				component.setBackground(Color.lightGray);
-			}
-			else if(row>=index[2][0] && row<=index[2][1] && column == index[2][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-				component.setBackground(Color.lightGray);
-			}
-			else {
-				component.setBackground(Color.WHITE);
-			}
-			
-			return component;
-		}
-	}
+//			if(row>=index[0][0] && row<=index[0][1] && column == index[0][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+//				component.setBackground(Color.lightGray);
+//			}
+//			else if(row>=index[1][0] && row<=index[1][1] && column == index[1][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+//				component.setBackground(Color.lightGray);
+//			}
+//			else if(row>=index[2][0] && row<=index[2][1] && column == index[2][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
+//				component.setBackground(Color.lightGray);
+//			}
+//			else {
+//				component.setBackground(Color.WHITE);
+//			}
+//			
+//			return component;
+//		}
 	
 }
 

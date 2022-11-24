@@ -36,26 +36,29 @@ public class AddEventUI {
 	private JTextField dayField;
 	private JCheckBox fixBox;
 	private JComboBox stHourBox;
-	private JComboBox stMinuteBox;
+//	private JComboBox stMinuteBox;
 	private JComboBox edHourBox;
-	private JComboBox edMinuteBox;
+//	private JComboBox edMinuteBox;
 	private JTextArea memoArea;
 	private JScrollPane memoScrollPane;
 	private JButton saveButton;
+	
+	public static String[] monthCb = {"01", "02", "03", "04", "05", "06"
+			, "07", "08", "09", "10", "11", "12"};
+	public static String[] hourCb = {"09", "10", "11", "12", "13", "14", "15", "16", "17",
+			"18", "19", "20", "21", "22"
+	};
+	
+	public static void main(String[] args) {
+		new AddEventUI();
+	}
 	
 	public AddEventUI() {
 		init();
 	}
 	
 	private void init() {
-		
-		String[] monthCb = {"01", "02", "03", "04", "05", "06"
-				, "07", "08", "09", "10", "11", "12"};
-		String[] hourCb = {"00", "01", "02", "03", "04", "05", "06", "07", "8",
-				"09", "10", "11", "12", "13", "14", "15", "16", "17",
-				"18", "19", "20", "21", "22", "23", "24"
-		};
-		String[] minuteCb = {"00", "30"};
+//		String[] minuteCb = {"00", "30"};
 		
 		subFrame = new JFrame();
 		subFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
@@ -72,17 +75,17 @@ public class AddEventUI {
 		dayLabel = new JLabel("일");
 		stHourLabel = new JLabel("시");
 		edHourLabel = new JLabel("시");
-		stMinuteLabel = new JLabel("분");
-		edMinuteLabel = new JLabel("분");
+//		stMinuteLabel = new JLabel("분");
+//		edMinuteLabel = new JLabel("분");
 		titleField = new JTextField();
 		yearField = new JTextField();
 		monthBox = new JComboBox(monthCb);
 		dayField = new JTextField();
 		fixBox = new JCheckBox();
 		stHourBox = new JComboBox(hourCb);
-		stMinuteBox = new JComboBox(minuteCb);
 		edHourBox = new JComboBox(hourCb);
-		edMinuteBox = new JComboBox(minuteCb);
+//		stMinuteBox = new JComboBox(minuteCb);
+//		edMinuteBox = new JComboBox(minuteCb);
 		memoArea = new JTextArea();
 		saveButton = new JButton("저장");
 		
@@ -109,12 +112,12 @@ public class AddEventUI {
 		fixBox.setBounds(x+310,y+40,60,25);
 		stHourBox.setBounds(x+70, y+80, 50,25);
 		stHourLabel.setBounds(x+120, y+80, 60, 25);
-		stMinuteBox.setBounds(x+140, y+80, 50, 25);
-		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
+//		stMinuteBox.setBounds(x+140, y+80, 50, 25);
+//		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
 		edHourBox.setBounds(x+70, y+120, 50,25);
 		edHourLabel.setBounds(x+120, y+120, 60, 25);
-		edMinuteBox.setBounds(x+140, y+120, 50, 25);
-		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
+//		edMinuteBox.setBounds(x+140, y+120, 50, 25);
+//		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
 		memoScrollPane = new JScrollPane(memoArea);
 		memoScrollPane.setBounds(x+70, y+160, 250, 130);
 		saveButton.setBounds(x+260, y+300, 60, 25);
@@ -135,14 +138,14 @@ public class AddEventUI {
 		subFrame.add(dayField);
 		subFrame.add(fixBox);
 		subFrame.add(stHourBox);
-		subFrame.add(stMinuteBox);
+//		subFrame.add(stMinuteBox);
 		subFrame.add(stHourLabel);
-		subFrame.add(stMinuteLabel);
+//		subFrame.add(stMinuteLabel);
 		subFrame.add(edHourBox);
 		subFrame.add(stHourBox);
 		subFrame.add(edHourLabel);
-		subFrame.add(edMinuteBox);
-		subFrame.add(edMinuteLabel);
+//		subFrame.add(edMinuteBox);
+//		subFrame.add(edMinuteLabel);
 		subFrame.add(memoScrollPane);
 		subFrame.add(saveButton);
 		
