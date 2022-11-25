@@ -107,9 +107,7 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_HEIGHT = 200;
 	
 	private JTable table;
-	private JTextField IntegrationSearch;
-	private JScrollPane IntegrationscrollPane;
-	private JList IntegrationStudentsList;
+	private JScrollPane PersonalSchedulescrollPane;
 	private JButton IntegrationButton_edit;
 	private JButton IntegrationButton_add;
 	private JButton IntegrationButton_delete;
@@ -129,6 +127,8 @@ public class HomeUI {
 	private int count=0;
 
 	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
+	private JLabel IntegrationLabel;
+	private JScrollPane IntegrationscrollPane;
 	
 	//private ArrayList<Integer>[] index = new ArrayList[3];
 //	private int[][]index=new int[3][3];
@@ -292,17 +292,16 @@ public class HomeUI {
 		homeIntegrationPanel.setBounds(0, 210, 200, 332);
 		homePanel.add(homeIntegrationPanel);
 		
-		IntegrationSearch = new JTextField();
-		IntegrationSearch.setText("");
-		IntegrationSearch.setColumns(10);
-		
 		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
-		IntegrationscrollPane = new JScrollPane();
-		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		PersonalSchedulescrollPane = new JScrollPane();
+		PersonalSchedulescrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		IntegrationButton_delete = new JButton("삭제");
+		IntegrationButton_delete.setFont(new Font("굴림", Font.PLAIN, 11));
 		IntegrationButton_edit = new JButton("수정");
+		IntegrationButton_edit.setFont(new Font("굴림", Font.PLAIN, 11));
 		IntegrationButton_add = new JButton("추가");
+		IntegrationButton_add.setFont(new Font("굴림", Font.PLAIN, 11));
 		IntegrationButton_add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				homePanel.setVisible(false);
@@ -311,39 +310,69 @@ public class HomeUI {
 			}
 		});
 		
+		JLabel PersonalLabel = new JLabel("개인 일정");
+		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+		
+		IntegrationLabel = new JLabel("통합 일정");
+		IntegrationLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
+		
+		IntegrationscrollPane = new JScrollPane();
+		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addComponent(IntegrationButton_add, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationButton_edit, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationButton_delete)
-					.addContainerGap())
-				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
-						.addComponent(IntegrationSearch, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-						.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
+							.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+							.addComponent(PersonalSchedulescrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(IntegrationButton_add, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(IntegrationButton_edit, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(IntegrationButton_delete))
+						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(PersonalLabel))
+						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_homeIntegrationPanel.setVerticalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-					.addGap(8)
+				.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createSequentialGroup()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(IntegrationButton_delete)
 						.addComponent(IntegrationButton_edit)
-						.addComponent(IntegrationButton_add))
+						.addComponent(IntegrationButton_add)
+						.addComponent(IntegrationButton_delete))
+					.addPreferredGap(ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+					.addComponent(PersonalLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationSearch, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+					.addComponent(PersonalSchedulescrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
+					.addComponent(IntegrationscrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
 		);
 		
-		IntegrationStudentsList = new JList();
-		IntegrationStudentsList.setModel(new AbstractListModel() {
+		JList Integrationlist = new JList();
+		Integrationlist.setModel(new AbstractListModel() {
+			String[] values = new String[] {"일정1", "일정2"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		IntegrationscrollPane.setViewportView(Integrationlist);
+		
+		JList PersonalSchedulelist = new JList();
+		PersonalSchedulelist.setModel(new AbstractListModel() {
 			String[] values = new String[] {"학생A", "학생B", "학생C"};
 			public int getSize() {
 				return values.length;
@@ -352,7 +381,7 @@ public class HomeUI {
 				return values[index];
 			}
 		});
-		IntegrationscrollPane.setViewportView(IntegrationStudentsList);
+		PersonalSchedulescrollPane.setViewportView(PersonalSchedulelist);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
 		
 		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
@@ -360,74 +389,4 @@ public class HomeUI {
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
 	}
-//	public void Get_Index() {	
-//		//[시간][요일], 시간 -> 시작시간 ~ 종료시간
-//		String week[] = {"월", "화", "수", "목", "금", "토", "일"};
-//		
-//		//col_index(요일) 구하기
-//		for(int i=0;i<6;i++) {	
-//			if(yoil.equals(week[i])) {
-//				col_index=i;
-//				break;
-//			}
-//		}
-		//s_row_index(시작시간) 구하기
-//		s_row_index=startTime-9; 	//9시부터 표시하기 때문
-//		
-//		//e_row_index(종료시간) 구하기
-//		e_row_index=endTime-9-1;	//1 작게 인덱스 줘야됨
-//		
-//		index[count][0]=s_row_index;
-//		index[count][1]=e_row_index;
-//		index[count][2]=col_index;
-//		count++;
-		/*index[0].add(s_row_index);
-		index[1].add(e_row_index);
-		index[2].add(col_index);*/
-		
-		/*System.out.print(s_row_index+ " ");
-		System.out.print(e_row_index+" ");
-		System.out.print(col_index+"\n");*/
-//	}
-	
-//	class ColorTable extends JTable {
-//		public ColorTable(DefaultTableModel dtm) {
-//			// TODO Auto-generated constructor stub
-//			super(dtm);
-//		}
-//
-//		@Override
-//		public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-//			// TODO Auto-generated method stub
-//			JComponent component = (JComponent) super.prepareRenderer(renderer, row, column);
-//			
-			/*for(int i=0;i<3;i++) {
-				System.out.println(index[0].get(i)+" "+index[1].get(i)+" "+index[2].get(i));
-				if(row>=index[0].get(i) && row<=index[1].get(i) && column == index[2].get(i)) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-					component.setBackground(Color.lightGray);
-				}else{
-					component.setBackground(Color.white);
-				}
-				
-			}*/
-			
-			
-//			if(row>=index[0][0] && row<=index[0][1] && column == index[0][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-//				component.setBackground(Color.lightGray);
-//			}
-//			else if(row>=index[1][0] && row<=index[1][1] && column == index[1][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-//				component.setBackground(Color.lightGray);
-//			}
-//			else if(row>=index[2][0] && row<=index[2][1] && column == index[2][2]) { // 특정한 값을 가진 셀을 찾아서 그 셀만 배경색상을 변경한다
-//				component.setBackground(Color.lightGray);
-//			}
-//			else {
-//				component.setBackground(Color.WHITE);
-//			}
-//			
-//			return component;
-//		}
-	
 }
-
-
