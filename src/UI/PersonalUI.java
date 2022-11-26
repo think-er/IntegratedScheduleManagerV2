@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
 import java.awt.Font;
+import javax.swing.DefaultComboBoxModel;
 
 public class PersonalUI {
 	
@@ -85,6 +86,7 @@ public class PersonalUI {
 		dayField = new JTextField();
 		fixBox = new JCheckBox();
 		stHourBox = new JComboBox(hourCb);
+		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		edHourBox = new JComboBox(hourCb);
 //		stMinuteBox = new JComboBox(minuteCb);
 //		edMinuteBox = new JComboBox(minuteCb);
@@ -97,32 +99,32 @@ public class PersonalUI {
 		int x = 30;
 		int y = 20;
 		
-		titleLabel.setBounds(342,60, 60, 25);
-		dateLabel.setBounds(342,100,60,25);
-		startTimeLabel.setBounds(342,140,60,25);
-		endTimeLabel.setBounds(342,180,60,25);
-		memoLabel.setBounds(342,220,60,25);
+		titleLabel.setBounds(342,66, 60, 25);
+		dateLabel.setBounds(342,106,60,25);
+		startTimeLabel.setBounds(342,146,60,25);
+		endTimeLabel.setBounds(342,186,60,25);
+		memoLabel.setBounds(342,226,60,25);
 		
-		titleField.setBounds(412, 60, 250, 25);
-		yearField.setBounds(412, 100, 50, 25);
-		yearLabel.setBounds(462, 100, 60, 25);
-		monthBox.setBounds(482, 100, 50, 25);
-		monthLabel.setBounds(532, 100, 60,25);
-		dayField.setBounds(552, 100, 50, 25);
-		dayLabel.setBounds(602, 100, 60, 25);
-		fixLabel.setBounds(622, 100, 50, 25);
-		fixBox.setBounds(652,100,32,25);
-		stHourBox.setBounds(412, 140, 50,25);
-		stHourLabel.setBounds(462, 140, 60, 25);
+		titleField.setBounds(412, 66, 250, 25);
+		yearField.setBounds(412, 106, 50, 25);
+		yearLabel.setBounds(462, 106, 60, 25);
+		monthBox.setBounds(482, 106, 50, 25);
+		monthLabel.setBounds(532, 106, 60,25);
+		dayField.setBounds(552, 106, 50, 25);
+		dayLabel.setBounds(602, 106, 60, 25);
+		fixLabel.setBounds(622, 106, 50, 25);
+		fixBox.setBounds(652,106,32,25);
+		stHourBox.setBounds(412, 146, 50,25);
+		stHourLabel.setBounds(462, 146, 60, 25);
 //		stMinuteBox.setBounds(x+140, y+80, 50, 25);
 //		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
-		edHourBox.setBounds(412, 180, 50,25);
-		edHourLabel.setBounds(462, 180, 60, 25);
+		edHourBox.setBounds(412, 186, 50,25);
+		edHourLabel.setBounds(462, 186, 60, 25);
 //		edMinuteBox.setBounds(x+140, y+120, 50, 25);
 //		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
 		memoScrollPane = new JScrollPane(memoArea);
-		memoScrollPane.setBounds(412, 220, 250, 130);
-		delBtn.setBounds(602, 360, 60, 25);
+		memoScrollPane.setBounds(412, 226, 250, 130);
+		delBtn.setBounds(602, 366, 60, 25);
 		
 		subFrame.getContentPane().add(titleLabel);
 		subFrame.getContentPane().add(dateLabel);
@@ -151,31 +153,31 @@ public class PersonalUI {
 		subFrame.getContentPane().add(memoScrollPane);
 		subFrame.getContentPane().add(delBtn);
 		
-		JScrollPane individualScrollPane = new JScrollPane();
-		individualScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		individualScrollPane.setBounds(12, 60, 307, 290);
-		subFrame.getContentPane().add(individualScrollPane);
+		JScrollPane personalScrollPane = new JScrollPane();
+		personalScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		personalScrollPane.setBounds(12, 66, 307, 290);
+		subFrame.getContentPane().add(personalScrollPane);
 		
-		JList individuallist = new JList();
-		individualScrollPane.setViewportView(individuallist);
+		JList personalList = new JList();
+		personalScrollPane.setViewportView(personalList);
 		
 		JLabel lblNewLabel = new JLabel("개인 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
-		lblNewLabel.setBounds(12, 20, 181, 30);
+		lblNewLabel.setBounds(12, 26, 181, 30);
 		subFrame.getContentPane().add(lblNewLabel);
 		
 		JButton modifyBtn = new JButton("수정");
-		modifyBtn.setBounds(532, 360, 60, 25);
+		modifyBtn.setBounds(532, 366, 60, 25);
 		subFrame.getContentPane().add(modifyBtn);
 		
 		JButton addBtn = new JButton("등록");
-		addBtn.setBounds(462, 360, 60, 25);
+		addBtn.setBounds(462, 366, 60, 25);
 		subFrame.getContentPane().add(addBtn);
 		
 		subFrame.setTitle("개인 일정 관리");
 		subFrame.setResizable(false);
 			
-		subFrame.setSize(700,439);
+		subFrame.setSize(700,440);
 		subFrame.setVisible(true);
 		
 	}

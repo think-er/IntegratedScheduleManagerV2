@@ -33,11 +33,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class IntegrationUI {
 
 	JFrame Integration;
-	private JTextField Integration_textField;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -67,79 +71,119 @@ public class IntegrationUI {
 	 */
 	private void initialize() {
 		Integration = new JFrame();
-		Integration.setBounds(100, 100, 390, 500);
+		Integration.setBounds(100, 100, 700, 440);
 		Integration.getContentPane().setLayout(null);
 		
-		JPanel Integration_panel = new JPanel();
-		Integration_panel.setBounds(27, 15, 320, 50);
-		Integration.getContentPane().add(Integration_panel);
+		JLabel titleLabel = new JLabel("일정 제목");
+		titleLabel.setBounds(342, 66, 60, 25);
+		Integration.getContentPane().add(titleLabel);
 		
-		JLabel lblNewLabel = new JLabel("이름: 자바 프로그래밍 팀프로젝트 일정");
-		lblNewLabel.setOpaque(true);
-		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setBackground(new Color(0, 128, 255));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 15));
-		GroupLayout gl_Integration_panel = new GroupLayout(Integration_panel);
-		gl_Integration_panel.setHorizontalGroup(
-			gl_Integration_panel.createParallelGroup(Alignment.LEADING)
-				.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
-		);
-		gl_Integration_panel.setVerticalGroup(
-			gl_Integration_panel.createParallelGroup(Alignment.LEADING)
-				.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-		);
-		Integration_panel.setLayout(gl_Integration_panel);
+		JLabel dateLabel = new JLabel("일정 날짜");
+		dateLabel.setBounds(342, 106, 60, 25);
+		Integration.getContentPane().add(dateLabel);
 		
-		JPanel Integration_panel_1 = new JPanel();
-		Integration_panel_1.setBounds(27, 75, 320, 333);
-		Integration.getContentPane().add(Integration_panel_1);
+		JLabel fixLabel = new JLabel("고정");
+		fixLabel.setBounds(622, 106, 50, 25);
+		Integration.getContentPane().add(fixLabel);
 		
-		Integration_textField = new JTextField();
-		Integration_textField.setBounds(12, 10, 296, 34);
-		Integration_textField.setColumns(10);
+		JLabel startTimeLabel = new JLabel("시작 시간");
+		startTimeLabel.setBounds(342, 146, 60, 25);
+		Integration.getContentPane().add(startTimeLabel);
 		
-		JScrollPane Integration_scrollPane = new JScrollPane();
-		Integration_scrollPane.setBounds(0, 54, 320, 279);
-		Integration_scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		JLabel endTimeLabel = new JLabel("종료 시간");
+		endTimeLabel.setBounds(342, 186, 60, 25);
+		Integration.getContentPane().add(endTimeLabel);
+		
+		JLabel memoLabel = new JLabel("일정 메모");
+		memoLabel.setBounds(342, 226, 60, 25);
+		Integration.getContentPane().add(memoLabel);
+		
+		JLabel yearLabel = new JLabel("년");
+		yearLabel.setBounds(462, 106, 60, 25);
+		Integration.getContentPane().add(yearLabel);
+		
+		JLabel monthLabel = new JLabel("월");
+		monthLabel.setBounds(532, 106, 60, 25);
+		Integration.getContentPane().add(monthLabel);
+		
+		JLabel dayLabel = new JLabel("일");
+		dayLabel.setBounds(602, 106, 60, 25);
+		Integration.getContentPane().add(dayLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(412, 66, 250, 25);
+		Integration.getContentPane().add(textField);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(412, 106, 50, 25);
+		Integration.getContentPane().add(textField_1);
+		
+		JComboBox monthBox = new JComboBox(new Object[]{});
+		monthBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
+		monthBox.setBounds(482, 106, 50, 25);
+		Integration.getContentPane().add(monthBox);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(552, 106, 50, 25);
+		Integration.getContentPane().add(textField_2);
+		
+		JCheckBox fixBox = new JCheckBox();
+		fixBox.setBounds(652, 106, 32, 25);
+		Integration.getContentPane().add(fixBox);
+		
+		JComboBox stHourBox = new JComboBox(new Object[]{});
+		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
+		stHourBox.setBounds(412, 146, 50, 25);
+		Integration.getContentPane().add(stHourBox);
+		
+		JLabel stHourLabel = new JLabel("시");
+		stHourLabel.setBounds(462, 146, 60, 25);
+		Integration.getContentPane().add(stHourLabel);
+		
+		JComboBox edHourBox = new JComboBox(new Object[]{});
+		edHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
+		edHourBox.setBounds(412, 186, 50, 25);
+		Integration.getContentPane().add(edHourBox);
+		
+		JLabel edHourLabel = new JLabel("시");
+		edHourLabel.setBounds(462, 186, 60, 25);
+		Integration.getContentPane().add(edHourLabel);
+		
+		JScrollPane memoScrollPane = new JScrollPane((Component) null);
+		memoScrollPane.setBounds(412, 226, 250, 130);
+		Integration.getContentPane().add(memoScrollPane);
+		
+		JTextArea memoArea = new JTextArea();
+		memoScrollPane.setViewportView(memoArea);
+		
+		JButton delBtn = new JButton("삭제");
+		delBtn.setBounds(602, 366, 60, 25);
+		Integration.getContentPane().add(delBtn);
+		
+		JScrollPane IntegrationScrollPane = new JScrollPane();
+		IntegrationScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		IntegrationScrollPane.setBounds(12, 66, 307, 290);
+		Integration.getContentPane().add(IntegrationScrollPane);
+		
+		JList integrationList = new JList();
+		IntegrationScrollPane.setViewportView(integrationList);
+		
+		JLabel lblNewLabel = new JLabel("통합 일정 관리");
+		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
+		lblNewLabel.setBounds(12, 26, 181, 30);
+		Integration.getContentPane().add(lblNewLabel);
+		
+		JButton modifyBtn = new JButton("수정");
+		modifyBtn.setBounds(532, 366, 60, 25);
+		Integration.getContentPane().add(modifyBtn);
+		
+		JButton addBtn = new JButton("등록");
+		addBtn.setBounds(462, 366, 60, 25);
+		Integration.getContentPane().add(addBtn);
 		
 		String[] strs = {"이정훈(20212940)", "홍길동(20211234)", "유저1(2020XXXX)", "유저2(2021XXXX)", "유저3(2021YYYY)"};
-		
-		JList list = new JList( createData(strs) );
-		list.setFont(new Font("나눔고딕", Font.PLAIN, 14));
-		list.setToolTipText("");
-		list.setSelectedIndices(new int[] {0});
-		list.setCellRenderer(new CheckListRenderer());
-	    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	    list.setBorder(new EmptyBorder(0,4,0,0));
-	    
-	    list.addMouseListener(new MouseAdapter() {
-	      public void mouseClicked(MouseEvent e) {
-	        int index = list.locationToIndex(e.getPoint());
-	        CheckableItem item = (CheckableItem)list.getModel().getElementAt(index);//리스트 선택
-	        item.setSelected(! item.isSelected());
-	        Rectangle rect = list.getCellBounds(index, index);
-	        list.repaint(rect);
-	      }
-	    });   
-		
-		Integration_scrollPane.setViewportView(list);
-		Integration_panel_1.setLayout(null);
-		Integration_panel_1.add(Integration_textField);
-		Integration_panel_1.add(Integration_scrollPane);
-		
-		JButton btnNewButton = new JButton("저장");
-		btnNewButton.setBounds(247, 418, 100, 28);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Integration.setVisible(false);
-				HomeUI homePanel = new HomeUI();
-				homePanel.homePanel.setVisible(true);
-			}
-		});
-		Integration.getContentPane().add(btnNewButton);
 		Integration.setResizable(false);
-		Integration.setTitle("통합 일정표 추가");
+		Integration.setTitle("통합 일정 관리");
 	}
 
 
