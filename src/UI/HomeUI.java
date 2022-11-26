@@ -82,7 +82,7 @@ public class HomeUI {
 	public static final int HOME_FRAME_X = 0;
 	public static final int HOME_FRAME_Y = 0;
 	public static final int HOME_FRAME_WIDTH = 1000;
-	public static final int HOME_FRAME_HEIGHT = 650;
+	public static final int HOME_FRAME_HEIGHT = 580;
 	
 	public static final int HOME_SCHEDULELIST_PANEL_X = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_Y = 0; 
@@ -131,8 +131,6 @@ public class HomeUI {
 //	private int count=0;
 
 	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
-	private JLabel IntegrationLabel;
-	private JScrollPane IntegrationscrollPane;
 	private JLabel idLabel;
 	private JLabel levelLabel;
 	
@@ -163,7 +161,7 @@ public class HomeUI {
 		// 홈 패널 (화면 전환을 위한)
 		homePanel = new JPanel();
 		homePanel.setBounds(HOME_FRAME_X, HOME_FRAME_Y, 
-				HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
+				1000, 580);
 		homePanel.setLayout(null);
 		MainFrame.frame.getContentPane().add(homePanel);
 		
@@ -348,12 +346,6 @@ public class HomeUI {
 		JLabel PersonalLabel = new JLabel("팀원 시간표 보기");
 		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		
-		IntegrationLabel = new JLabel("통합 일정 리스트");
-		IntegrationLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
-		
-		IntegrationscrollPane = new JScrollPane();
-		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
 		toAddEventBtn = new JButton("개인 일정 관리");
 		toAddEventBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -364,14 +356,12 @@ public class HomeUI {
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+				.addGroup(Alignment.LEADING, gl_homeIntegrationPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(PersonalSchedulescrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-						.addComponent(IntegrationscrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(toAddEventBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(IntegrationButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-						.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
 						.addComponent(PersonalLabel))
 					.addContainerGap())
 		);
@@ -384,25 +374,9 @@ public class HomeUI {
 					.addGap(10)
 					.addComponent(PersonalLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(PersonalSchedulescrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationscrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addComponent(PersonalSchedulescrollPane, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(20, Short.MAX_VALUE))
 		);
-		
-		JList Integrationlist = new JList();
-		Integrationlist.setModel(new AbstractListModel() {
-			String[] values = new String[] {"일정1", "일정2"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		IntegrationscrollPane.setColumnHeaderView(Integrationlist);
 		
 		JList PersonalSchedulelist = new JList();
 		PersonalSchedulelist.setModel(new AbstractListModel() {

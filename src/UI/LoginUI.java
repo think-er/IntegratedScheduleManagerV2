@@ -115,12 +115,12 @@ public class LoginUI {
 			}
 		});
 		//-----------------------------------------------------------------
-		loginBtn.setBounds(92, 277, 
+		loginBtn.setBounds(215, 276, 
 				111, 30);
 		loginPanel.add(loginBtn);
 		
 		toRegisterBtn = new JButton("회원가입");
-		toRegisterBtn.setBounds(215, 277, 
+		toRegisterBtn.setBounds(92, 276, 
 				111, 30);
 		toRegisterBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
