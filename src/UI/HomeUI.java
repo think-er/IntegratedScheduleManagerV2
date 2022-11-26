@@ -82,7 +82,7 @@ public class HomeUI {
 	public static final int HOME_FRAME_X = 0;
 	public static final int HOME_FRAME_Y = 0;
 	public static final int HOME_FRAME_WIDTH = 1000;
-	public static final int HOME_FRAME_HEIGHT = 600;
+	public static final int HOME_FRAME_HEIGHT = 650;
 	
 	public static final int HOME_SCHEDULELIST_PANEL_X = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_Y = 0; 
@@ -111,9 +111,7 @@ public class HomeUI {
 	
 	private JTable table;
 	private JScrollPane PersonalSchedulescrollPane;
-	private JButton IntegrationButton_edit;
-	private JButton IntegrationButton_add;
-	private JButton IntegrationButton_delete;
+	private JButton IntegrationButton;
 	
 	
 	private GridBagLayout grid;
@@ -135,6 +133,11 @@ public class HomeUI {
 	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
 	private JLabel IntegrationLabel;
 	private JScrollPane IntegrationscrollPane;
+	private JLabel idLabel;
+	private JLabel levelLabel;
+	
+	private String ID;
+	private String LEVEL;
 	
 	//private ArrayList<Integer>[] index = new ArrayList[3];
 //	private int[][]index=new int[3][3];
@@ -146,7 +149,13 @@ public class HomeUI {
 		}*/
 		init();
 	}
-	
+	void load(String id, String level) {
+		//로그인한 학번, 등급 불러오기
+		ID=id;
+		LEVEL=level;
+		idLabel.setText(id);
+		levelLabel.setText(level);
+	}
 	private void init() {
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -160,8 +169,8 @@ public class HomeUI {
 		
 		// 홈 패널: 학번
 		homeUserLabel = new JLabel(String.format("학번: %s", RegisterUI.ID));
-		homeUserLabel.setBounds(HOME_USER_LABEL_X, HOME_USER_LABEL_Y, 
-				HOME_USER_LABEL_WIDTH, HOME_USER_LABEL_HEIGHT);
+		homeUserLabel.setBounds(850, 30, 
+				49, 30);
 		homePanel.add(homeUserLabel);
 		
 		// 홈 패널: 권한 
@@ -174,9 +183,9 @@ public class HomeUI {
 		{
 			userManagerAuthstr = "(일반)";
 		}
-		homeManagerAuthLabel = new JLabel(String.format("등급: %s", userManagerAuthstr));
-		homeManagerAuthLabel.setBounds(HOME_USER_LABEL_X, HOME_USER_LABEL_Y+20, 
-				HOME_USER_LABEL_WIDTH, HOME_USER_LABEL_HEIGHT);
+		homeManagerAuthLabel = new JLabel("등급: ");
+		homeManagerAuthLabel.setBounds(850, 50, 
+				49, 30);
 		homePanel.add(homeManagerAuthLabel);
 		
 		
@@ -320,20 +329,15 @@ public class HomeUI {
 		// 홈 통합 일정 패널: 통합 일정 패널
 
 		homeIntegrationPanel = new JPanel();
-		homeIntegrationPanel.setBounds(0, 210, 200, 332);
+		homeIntegrationPanel.setBounds(0, 210, 200, 356);
 		homePanel.add(homeIntegrationPanel);
 		
 		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
 		PersonalSchedulescrollPane = new JScrollPane();
 		PersonalSchedulescrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		IntegrationButton_delete = new JButton("삭제");
-		IntegrationButton_delete.setFont(new Font("굴림", Font.PLAIN, 11));
-		IntegrationButton_edit = new JButton("수정");
-		IntegrationButton_edit.setFont(new Font("굴림", Font.PLAIN, 11));
-		IntegrationButton_add = new JButton("추가");
-		IntegrationButton_add.setFont(new Font("굴림", Font.PLAIN, 11));
-		IntegrationButton_add.addActionListener(new ActionListener() {
+		IntegrationButton = new JButton("통합 일정 관리");
+		IntegrationButton.setFont(new Font("굴림", Font.PLAIN, 12));
+		IntegrationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//HomeUI.setVisible(false) 삭제
 				Integration Integration = new Integration();
@@ -350,44 +354,53 @@ public class HomeUI {
 		IntegrationscrollPane = new JScrollPane();
 		IntegrationscrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
+		toAddEventBtn = new JButton("개인 일정 관리");
+		toAddEventBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new AddEventUI();
+			}
+		});
+		
 		GroupLayout gl_homeIntegrationPanel = new GroupLayout(homeIntegrationPanel);
 		gl_homeIntegrationPanel.setHorizontalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
-							.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-							.addComponent(PersonalSchedulescrollPane, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
 						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(IntegrationButton_add, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(IntegrationButton_edit, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(IntegrationButton_delete))
+							.addComponent(PersonalSchedulescrollPane, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
 						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(PersonalLabel))
 						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
+						.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(toAddEventBtn, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(IntegrationButton, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
 					.addContainerGap())
 		);
 		gl_homeIntegrationPanel.setVerticalGroup(
-			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createSequentialGroup()
-					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(IntegrationButton_edit)
-						.addComponent(IntegrationButton_add)
-						.addComponent(IntegrationButton_delete))
-					.addPreferredGap(ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, gl_homeIntegrationPanel.createSequentialGroup()
+					.addComponent(toAddEventBtn)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(IntegrationButton)
+					.addGap(10)
 					.addComponent(PersonalLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(PersonalSchedulescrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addGap(10)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(IntegrationscrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
+					.addComponent(IntegrationscrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(30, Short.MAX_VALUE))
 		);
 		
 		JList Integrationlist = new JList();
@@ -400,7 +413,7 @@ public class HomeUI {
 				return values[index];
 			}
 		});
-		IntegrationscrollPane.setViewportView(Integrationlist);
+		IntegrationscrollPane.setColumnHeaderView(Integrationlist);
 		
 		JList PersonalSchedulelist = new JList();
 		PersonalSchedulelist.setModel(new AbstractListModel() {
@@ -415,14 +428,13 @@ public class HomeUI {
 		PersonalSchedulescrollPane.setViewportView(PersonalSchedulelist);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
 		
-		toAddEventBtn = new JButton("세부 일정 추가");
-		toAddEventBtn.setBounds(710, 54, 130, 23);
-		toAddEventBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new AddEventUI();
-			}
-		});
-		homePanel.add(toAddEventBtn);
+		idLabel = new JLabel("");
+		idLabel.setBounds(901, 38, 73, 15);
+		homePanel.add(idLabel);
+		
+		levelLabel = new JLabel("");
+		levelLabel.setBounds(901, 58, 73, 15);
+		homePanel.add(levelLabel);
 		
 		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
 		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);

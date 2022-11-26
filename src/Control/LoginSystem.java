@@ -13,14 +13,14 @@ public class LoginSystem {
 		String sql = "SELECT 유저_아이디, 유저_비밀번호, 관리자_여부 FROM 유저";
 		ResultSet src = db.executeQurey(sql);
 		Boolean success = false;
-		String m = "n";	//관리자 : manager, 일반 : normal
+		String m = "일반";
 		try {
 			while(src.next()) {
 				if(id.equals(src.getString("유저_아이디"))&&pw.equals(src.getString("유저_비밀번호"))) {
 					//유저테이블 DB의 아이디, 비밀번호가 일치할 경우
 					success = true; //로그인 성공
 					if(src.getString("관리자_여부").equals("1")) {	//관리자인 경우
-						m="m";
+						m="관리";
 					}
 				}
 			}
