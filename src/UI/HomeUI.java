@@ -166,7 +166,7 @@ public class HomeUI {
 		
 		// 홈 패널: 권한 
 		String userManagerAuthstr = new String();
-		if(RegisterUI.TF = true)
+		if(RegisterUI.TF == "1")
 		{
 			userManagerAuthstr = "(관리자)";
 		}
