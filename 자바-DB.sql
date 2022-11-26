@@ -1,124 +1,117 @@
 ----------------------------------------------------------------
------------- < ½Ç½À 1 > »ç¿ëÀÚ »ý¼º ------------ 
+------------ < ì‹¤ìŠµ 1 > ì‚¬ìš©ìž ìƒì„± ------------ 
 ----------------------------------------------------------------
 /* ########  ID : SYSTEM ######## */
-/*
-´ëÇÐ ÇÐ»ç DB¸¦ À§ÇÑ »ç¿ëÀÚ »ý¼º 
-»ý¼ºÇÒ »ç¿ëÀÚ : UNIV (¿À¶óÅ¬ 12CÀÌ»ó¿¡¼­´Â C##UNIV)
-*/
 
 ALTER session set "_ORACLE_SCRIPT"=true;
-DROP USER suser1 CASCADE; -- ±âÁ¸ »ç¿ëÀÚ »èÁ¦(ÇöÀç Á¢¼ÓµÇ¾î ÀÖÀ¸¸é »èÁ¦ ¾È µÊ)
-	-- CASCADE option : °ü·Ã ½ºÅ°¸¶ °³Ã¼µéµµ ÇÔ²² »èÁ¦.  Default´Â No Action
-CREATE USER suser1 IDENTIFIED BY 1234  -- »ç¿ëÀÚ ID : suser, ºñ¹Ð¹øÈ£ : 1234
+DROP USER suser CASCADE; -- ê¸°ì¡´ ì‚¬ìš©ìž ì‚­ì œ(í˜„ìž¬ ì ‘ì†ë˜ì–´ ìžˆìœ¼ë©´ ì‚­ì œ ì•ˆ ë¨)
+	-- CASCADE option : ê´€ë ¨ ìŠ¤í‚¤ë§ˆ ê°œì²´ë“¤ë„ í•¨ê»˜ ì‚­ì œ.  DefaultëŠ” No Action
+CREATE USER suser IDENTIFIED BY 1234  -- ì‚¬ìš©ìž ID : suser, ë¹„ë°€ë²ˆí˜¸ : 1234
     DEFAULT TABLESPACE USERS
     TEMPORARY TABLESPACE TEMP;
-GRANT connect, resource, dba TO suser1; -- ±ÇÇÑ ºÎ¿©
+GRANT connect, resource, dba TO suser; -- ê¶Œí•œ ë¶€ì—¬
 
 -----------------------------------------------
------------------ Å×ÀÌºí »ý¼º ------------------
+----------------- í…Œì´ë¸” ìƒì„± ------------------
 -----------------------------------------------
 /*############ ID : SUSER #############*/
 
-CREATE TABLE À¯Àú (
-    À¯Àú_¾ÆÀÌµð NUMBER(10) PRIMARY KEY,  --ÇÐ¹ø
-    À¯Àú_ºñ¹Ð¹øÈ£ VARCHAR(20),
-    °ü¸®ÀÚ_¿©ºÎ CHAR(1) CHECK(°ü¸®ÀÚ_¿©ºÎ IN ('0','1')),  --¿À¶óÅ¬¿¡¼± BOOLEANÀÌ ¾ø¾î 0°ú 1·Î Ç¥Çö
-	ÀÌ¸§	NCHAR(5) NOT NULL,
-	ÀüÈ­¹øÈ£	CHAR(20),
-	ÇÐ³â	NUMBER(1)
+CREATE TABLE ìœ ì € (
+    ìœ ì €_ì•„ì´ë”” NUMBER(10) PRIMARY KEY,  --í•™ë²ˆ
+    ìœ ì €_ë¹„ë°€ë²ˆí˜¸ VARCHAR(20),
+    ê´€ë¦¬ìž_ì—¬ë¶€ CHAR(1) CHECK(ê´€ë¦¬ìž_ì—¬ë¶€ IN ('0','1')),  --ì˜¤ë¼í´ì—ì„  BOOLEANì´ ì—†ì–´ 0ê³¼ 1ë¡œ í‘œí˜„
+	ì´ë¦„	NCHAR(5) NOT NULL,
+	ì „í™”ë²ˆí˜¸	CHAR(20),
+	í•™ë…„	NUMBER(1)
 );
 
-CREATE TABLE ÆÀ(
-    ÆÀ_¹øÈ£ NUMBER(5) PRIMARY KEY,
-    ÆÀ_ÀÌ¸§ VARCHAR(20) UNIQUE,
-    °ü¸®ÀÚ_¾ÆÀÌµð NUMBER(10),
-    FOREIGN KEY (°ü¸®ÀÚ_¾ÆÀÌµð) REFERENCES À¯Àú(À¯Àú_¾ÆÀÌµð)
+CREATE TABLE íŒ€(
+    íŒ€_ë²ˆí˜¸ NUMBER(5) PRIMARY KEY,
+    íŒ€_ì´ë¦„ VARCHAR(20) UNIQUE,
+    ê´€ë¦¬ìž_ì•„ì´ë”” NUMBER(10),
+    FOREIGN KEY (ê´€ë¦¬ìž_ì•„ì´ë””) REFERENCES ìœ ì €(ìœ ì €_ì•„ì´ë””)
 );
 
-CREATE TABLE ¼Ò¼Ó(
-    ÆÀ_¹øÈ£ NUMBER(5),
-    À¯Àú_¾ÆÀÌµð NUMBER(10),
-    PRIMARY KEY (ÆÀ_¹øÈ£, À¯Àú_¾ÆÀÌµð),
-    FOREIGN KEY (ÆÀ_¹øÈ£) REFERENCES ÆÀ(ÆÀ_¹øÈ£),
-	FOREIGN KEY (À¯Àú_¾ÆÀÌµð) REFERENCES À¯Àú(À¯Àú_¾ÆÀÌµð)
+CREATE TABLE ì†Œì†(
+    íŒ€_ë²ˆí˜¸ NUMBER(5),
+    ìœ ì €_ì•„ì´ë”” NUMBER(10),
+    PRIMARY KEY (íŒ€_ë²ˆí˜¸, ìœ ì €_ì•„ì´ë””),
+    FOREIGN KEY (íŒ€_ë²ˆí˜¸) REFERENCES íŒ€(íŒ€_ë²ˆí˜¸),
+	FOREIGN KEY (ìœ ì €_ì•„ì´ë””) REFERENCES ìœ ì €(ìœ ì €_ì•„ì´ë””)
 );
 
-CREATE TABLE ½ºÄÉÁÙ(
-    ½ºÄÉÁÙ_¹øÈ£ NUMBER(5) PRIMARY KEY,
-    À¯Àú_¾ÆÀÌµð NUMBER(10),
-    ½ºÄÉÁÙ_ÀÌ¸§ VARCHAR(20),
-    ¿äÀÏ VARCHAR(5),
-    ½ÃÀÛ½Ã°£ NUMBER(3),
-    Á¾·á½Ã°£ NUMBER(3),
-    °íÁ¤¿©ºÎ CHAR(1) CHECK(°íÁ¤¿©ºÎ IN ('0','1')),
-    ³¯Â¥ DATE,
-    ¸Þ¸ð VARCHAR(50),
-    FOREIGN KEY (À¯Àú_¾ÆÀÌµð) REFERENCES À¯Àú(À¯Àú_¾ÆÀÌµð)
+CREATE TABLE ìŠ¤ì¼€ì¤„(
+    ìŠ¤ì¼€ì¤„_ë²ˆí˜¸ NUMBER(5) PRIMARY KEY,
+    ìœ ì €_ì•„ì´ë”” NUMBER(10),
+    ìŠ¤ì¼€ì¤„_ì´ë¦„ VARCHAR(20),
+    ìš”ì¼ VARCHAR(5),
+    ì‹œìž‘ì‹œê°„ NUMBER(3),
+    ì¢…ë£Œì‹œê°„ NUMBER(3),
+    ê³ ì •ì—¬ë¶€ CHAR(1) CHECK(ê³ ì •ì—¬ë¶€ IN ('0','1')),
+    ë‚ ì§œ DATE,
+    ë©”ëª¨ VARCHAR(50),
+    FOREIGN KEY (ìœ ì €_ì•„ì´ë””) REFERENCES ìœ ì €(ìœ ì €_ì•„ì´ë””)
 );
 
-CREATE TABLE ÅëÇÕ½ºÄÉÁÙ(
-    ÅëÇÕ_¹øÈ£ NUMBER(5) PRIMARY KEY,
-    ÆÀ_¹øÈ£ NUMBER(5),
-    ÅëÇÕ½ºÄÉÁÙ_ÀÌ¸§ VARCHAR(20),
-    ³¯Â¥ DATE,    -- ÅëÇÕ ½ºÄÉÁÙÀº Ç×»ó ºñ°íÁ¤À¸·Î Ãë±Þ(ÀÏÈ¸¼º)
-    ½ÃÀÛ½Ã°£ NUMBER(3),
-    Á¾·á½Ã°£ NUMBER(3),
-    ¸Þ¸ð VARCHAR(50),
-    FOREIGN KEY (ÆÀ_¹øÈ£) REFERENCES ÆÀ(ÆÀ_¹øÈ£)
+CREATE TABLE í†µí•©ìŠ¤ì¼€ì¤„(
+    í†µí•©_ë²ˆí˜¸ NUMBER(5) PRIMARY KEY,
+    íŒ€_ë²ˆí˜¸ NUMBER(5),
+    í†µí•©ìŠ¤ì¼€ì¤„_ì´ë¦„ VARCHAR(20),
+    ë‚ ì§œ DATE,    -- í†µí•© ìŠ¤ì¼€ì¤„ì€ í•­ìƒ ë¹„ê³ ì •ìœ¼ë¡œ ì·¨ê¸‰(ì¼íšŒì„±)
+    ì‹œìž‘ì‹œê°„ NUMBER(3),
+    ì¢…ë£Œì‹œê°„ NUMBER(3),
+    ë©”ëª¨ VARCHAR(50),
+    FOREIGN KEY (íŒ€_ë²ˆí˜¸) REFERENCES íŒ€(íŒ€_ë²ˆí˜¸)
 );
 
 -----------------------------------------------
------------------ µ¥ÀÌÅÍ ÀÔ·Â ------------------
+----------------- ë°ì´í„° ìž…ë ¥ ------------------
 -----------------------------------------------
 
--- À¯Àú(À¯Àú_¾ÆÀÌµð, À¯Àú_ºñ¹Ð¹øÈ£, °ü¸®ÀÚ_¿©ºÎ, ÀÌ¸§, ÀüÈ­¹øÈ£, ÇÐ³â)
-INSERT INTO À¯Àú VALUES(20173070, '20173070', 0, 'ÀåÀÎÇõ', '010-0000-0000', 3);
-INSERT INTO À¯Àú VALUES(20203089, '20203089', 1, 'Á¤°¡¿µ', '010-1111-1111', 3);
-INSERT INTO À¯Àú VALUES(20143698, '20143698', 0, '±è¹ÎÈ£', '010-2352-1257', 5);
-INSERT INTO À¯Àú VALUES(20195150, '20195150', 0, 'Á¤À¯¸®', '010-8942-4235', 4);
-INSERT INTO À¯Àú VALUES(20129921, '20129921', 0, 'ÀåÇö¼ö', '010-6912-7777', 7);
-INSERT INTO À¯Àú VALUES(20205609, '20205609', 0, '±èÃ¤¿ø', '010-4491-8956', 3);
-INSERT INTO À¯Àú VALUES(20226289, '20226289', 0, '´Ù³ªÄ«', '010-4217-5922', 1);
-INSERT INTO À¯Àú VALUES(20210804, '20210804', 0, 'ÇöÁö¿ø', '010-7942-1253', 2);
-INSERT INTO À¯Àú VALUES(20205939, '20205939', 0, '¹®¿µÇå', '010-8563-1606', 3);
-INSERT INTO À¯Àú VALUES(20196042, '20196042', 1, '¹ÚÁö¿ø', '010-5693-1001', 4);
+-- ìœ ì €(ìœ ì €_ì•„ì´ë””, ìœ ì €_ë¹„ë°€ë²ˆí˜¸, ê´€ë¦¬ìž_ì—¬ë¶€, ì´ë¦„, ì „í™”ë²ˆí˜¸, í•™ë…„)
+INSERT INTO ìœ ì € VALUES(20173070, '20173070', 0, 'ìž¥ì¸í˜', '010-0000-0000', 3);
+INSERT INTO ìœ ì € VALUES(20203089, '20203089', 1, 'ì •ê°€ì˜', '010-1111-1111', 3);
+INSERT INTO ìœ ì € VALUES(20143698, '20143698', 0, 'ê¹€ë¯¼í˜¸', '010-2352-1257', 5);
+INSERT INTO ìœ ì € VALUES(20195150, '20195150', 0, 'ì •ìœ ë¦¬', '010-8942-4235', 4);
+INSERT INTO ìœ ì € VALUES(20129921, '20129921', 0, 'ìž¥í˜„ìˆ˜', '010-6912-7777', 7);
+INSERT INTO ìœ ì € VALUES(20205609, '20205609', 0, 'ê¹€ì±„ì›', '010-4491-8956', 3);
+INSERT INTO ìœ ì € VALUES(20226289, '20226289', 0, 'ë‹¤ë‚˜ì¹´', '010-4217-5922', 1);
+INSERT INTO ìœ ì € VALUES(20210804, '20210804', 0, 'í˜„ì§€ì›', '010-7942-1253', 2);
+INSERT INTO ìœ ì € VALUES(20205939, '20205939', 0, 'ë¬¸ì˜í—Œ', '010-8563-1606', 3);
+INSERT INTO ìœ ì € VALUES(20196042, '20196042', 1, 'ë°•ì§€ì›', '010-5693-1001', 4);
 
--- ÆÀ(ÆÀ_¹øÈ£,  ÆÀ_ÀÌ¸§, °ü¸®ÀÚ_¾ÆÀÌµð)
-INSERT INTO ÆÀ VALUES (1, 'ÀÚ¹Ù', 20203089);
-INSERT INTO ÆÀ VALUES(2,'µðºñ¸ðÀÓ',20196042);
--- ¼Ò¼Ó(ÆÀ_¹øÈ£, À¯Àú_¾ÆÀÌµð)
-INSERT INTO ¼Ò¼Ó VALUES(1, 20203089);
-INSERT INTO ¼Ò¼Ó VALUES(1, 20173070);
+-- íŒ€(íŒ€_ë²ˆí˜¸,  íŒ€_ì´ë¦„, ê´€ë¦¬ìž_ì•„ì´ë””)
+INSERT INTO íŒ€ VALUES (1, 'ìžë°”', 20203089);
+INSERT INTO íŒ€ VALUES(2,'ë””ë¹„ëª¨ìž„',20196042);
+-- ì†Œì†(íŒ€_ë²ˆí˜¸, ìœ ì €_ì•„ì´ë””)
+INSERT INTO ì†Œì† VALUES(1, 20203089);
+INSERT INTO ì†Œì† VALUES(1, 20173070);
 
-INSERT INTO ¼Ò¼Ó VALUES(1, 20143698);
-INSERT INTO ¼Ò¼Ó VALUES(1, 20195150);
-INSERT INTO ¼Ò¼Ó VALUES(2, 20129921);
-INSERT INTO ¼Ò¼Ó VALUES(2, 20205609);
-INSERT INTO ¼Ò¼Ó VALUES(2, 20226289);
-INSERT INTO ¼Ò¼Ó VALUES(2, 20210804);
--- ½ºÄÉÁÙ(½ºÄÉÁÙ_¹øÈ£, À¯Àú_¾ÆÀÌµð, ½ºÄÉÁÙ_ÀÌ¸§, ¿äÀÏ, ½ÃÀÛ½Ã°£, Á¾·á½Ã°£, °íÁ¤¿©ºÎ, ³¯Â¥, ¸Þ¸ð)
-INSERT INTO ½ºÄÉÁÙ VALUES(1, 20203089, 'DB', 'È­', 9, 11, 1, NULL, 'Á¤º¸ 816');
+INSERT INTO ì†Œì† VALUES(1, 20143698);
+INSERT INTO ì†Œì† VALUES(1, 20195150);
+INSERT INTO ì†Œì† VALUES(2, 20129921);
+INSERT INTO ì†Œì† VALUES(2, 20205609);
+INSERT INTO ì†Œì† VALUES(2, 20226289);
+INSERT INTO ì†Œì† VALUES(2, 20210804);
+-- ìŠ¤ì¼€ì¤„(ìŠ¤ì¼€ì¤„_ë²ˆí˜¸, ìœ ì €_ì•„ì´ë””, ìŠ¤ì¼€ì¤„_ì´ë¦„, ìš”ì¼, ì‹œìž‘ì‹œê°„, ì¢…ë£Œì‹œê°„, ê³ ì •ì—¬ë¶€, ë‚ ì§œ, ë©”ëª¨)
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(1, 20203089, 'DB', 'í™”', 9, 11, 1, NULL, 'ì •ë³´ 816');
 
-INSERT INTO ½ºÄÉÁÙ VALUES(2, 20203089, '¿î¿µÃ¼Á¦', '±Ý', 13, 14,1, NULL, 'Á¤º¸ 812');
-INSERT INTO ½ºÄÉÁÙ VALUES(3, 20203089, 'À¥ÇÁ·Î±×·¡¹Ö', '¿ù', 9, 11,1, NULL, 'Á¤º¸ 810');
-INSERT INTO ½ºÄÉÁÙ VALUES(4, 20173070, 'DB', 'È­', 9, 11, 1, NULL, 'Á¤º¸ 816');
-INSERT INTO ½ºÄÉÁÙ VALUES(5, 20173070, '¿î¿µÃ¼Á¦', '±Ý', 13, 14,1, NULL, 'Á¤º¸ 812');
-INSERT INTO ½ºÄÉÁÙ VALUES(6, 20173070, 'À¥ÇÁ·Î±×·¡¹Ö', '¿ù', 9, 11,1, NULL, 'Á¤º¸ 810');
-INSERT INTO ½ºÄÉÁÙ VALUES(7, 20143698, 'ÆÄÀÌ½ã', 'È­', 11,13, 1, NULL, 'Á¤º¸ 817');
-INSERT INTO ½ºÄÉÁÙ VALUES(8, 20143698, '¸¶ÀÌÅ©·Î', '±Ý', 14,16,1,NULL, 'Á¤º¸ 815');
-INSERT INTO ½ºÄÉÁÙ VALUES(9, 20143698, '°í±ÞÄ¸½ºÅæ', '¸ñ', 12,15,1,NULL, 'Á¤º¸ 815');
-INSERT INTO ½ºÄÉÁÙ VALUES(10, 20143698, '¾î¼Àºí¸®', '¼ö', 10,12,1,NULL, 'Á¤º¸ 811');
-INSERT INTO ½ºÄÉÁÙ VALUES(11, 20195150, '¸¶ÀÌÅ©·Î', '±Ý', 14,16,1,NULL, 'Á¤º¸ 815');
-INSERT INTO ½ºÄÉÁÙ VALUES(12, 20195150, '°æÁ¦','¿ù', 15,17,1,NULL, '±¹Á¦°ü 412');
-INSERT INTO ½ºÄÉÁÙ VALUES(13, 20195150, '¹üÁËºÐ¼®', '¿ù',13, 15,1,NULL, 'ÀÎ¹®2 512');
-INSERT INTO ½ºÄÉÁÙ VALUES(14, 20195150, 'ºí·ÏÃ¼ÀÎ', 'È­', 13,15,1,NULL, 'Á¤º¸°ü 610');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(2, 20203089, 'ìš´ì˜ì²´ì œ', 'ê¸ˆ', 13, 14,1, NULL, 'ì •ë³´ 812');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(3, 20203089, 'ì›¹í”„ë¡œê·¸ëž˜ë°', 'ì›”', 9, 11,1, NULL, 'ì •ë³´ 810');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(4, 20173070, 'DB', 'í™”', 9, 11, 1, NULL, 'ì •ë³´ 816');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(5, 20173070, 'ìš´ì˜ì²´ì œ', 'ê¸ˆ', 13, 14,1, NULL, 'ì •ë³´ 812');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(6, 20173070, 'ì›¹í”„ë¡œê·¸ëž˜ë°', 'ì›”', 9, 11,1, NULL, 'ì •ë³´ 810');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(7, 20143698, 'íŒŒì´ì¬', 'í™”', 11,13, 1, NULL, 'ì •ë³´ 817');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(8, 20143698, 'ë§ˆì´í¬ë¡œ', 'ê¸ˆ', 14,16,1,NULL, 'ì •ë³´ 815');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(9, 20143698, 'ê³ ê¸‰ìº¡ìŠ¤í†¤', 'ëª©', 12,15,1,NULL, 'ì •ë³´ 815');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(10, 20143698, 'ì–´ì…ˆë¸”ë¦¬', 'ìˆ˜', 10,12,1,NULL, 'ì •ë³´ 811');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(11, 20195150, 'ë§ˆì´í¬ë¡œ', 'ê¸ˆ', 14,16,1,NULL, 'ì •ë³´ 815');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(12, 20195150, 'ê²½ì œ','ì›”', 15,17,1,NULL, 'êµ­ì œê´€ 412');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(13, 20195150, 'ë²”ì£„ë¶„ì„', 'ì›”',13, 15,1,NULL, 'ì¸ë¬¸2 512');
+INSERT INTO ìŠ¤ì¼€ì¤„ VALUES(14, 20195150, 'ë¸”ë¡ì²´ì¸', 'í™”', 13,15,1,NULL, 'ì •ë³´ê´€ 610');
 
-
-
-
--- ÅëÇÕ½ºÄÉÁÙ(ÅëÇÕ_¹øÈ£, ÆÀ_¹øÈ£, ÅëÇÕ½ºÄÉÁÙ_ÀÌ¸§, ³¯Â¥, ½ÃÀÛ½Ã°£, Á¾·á½Ã°£, ¸Þ¸ð)
-INSERT INTO ÅëÇÕ½ºÄÉÁÙ VALUES(1, 1, 'È¸ÀÇ1', '2022/11/15', 17, 18, 'Ã¹¹øÂ° È¸ÀÇ');
+-- í†µí•©ìŠ¤ì¼€ì¤„(í†µí•©_ë²ˆí˜¸, íŒ€_ë²ˆí˜¸, í†µí•©ìŠ¤ì¼€ì¤„_ì´ë¦„, ë‚ ì§œ, ì‹œìž‘ì‹œê°„, ì¢…ë£Œì‹œê°„, ë©”ëª¨)
+INSERT INTO í†µí•©ìŠ¤ì¼€ì¤„ VALUES(1, 1, 'íšŒì˜1', '2022/11/15', 17, 18, 'ì²«ë²ˆì§¸ íšŒì˜');
 
 
 
