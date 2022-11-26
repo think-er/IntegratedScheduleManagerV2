@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
+import java.awt.Font;
 public class LoginUI {
 	
 	public JPanel loginPanel;
@@ -53,6 +54,7 @@ public class LoginUI {
 	public final static int BACK_BTN_Y = 0;
 	public final static int BACK_BTN_WIDTH = 60;
 	public final static int BACK_BTN_HEIGHT = 30;
+	private JLabel titleLabel;
 	
 	public LoginUI() {
 		init();
@@ -70,23 +72,23 @@ public class LoginUI {
 //		loginPanel.add(loginTitleLabel);
 		
 		loginIdLabel = new JLabel("학번");
-		loginIdLabel.setBounds(LOGIN_LABEL_X, LOGIN_LABEL_Y,
+		loginIdLabel.setBounds(26, 186,
 				LOGIN_LABEL_WIDTH, LOGIN_LABEL_HEIGHT);
 		loginPanel.add(loginIdLabel);
 		
 		loginIdField = new JTextField();
-		loginIdField.setBounds(LOGIN_FIELD_X, LOGIN_FIELD_Y, 
-				LOGIN_FIELD_WIDTH, LOGIN_FIELD_HEIGHT);
+		loginIdField.setBounds(92, 186, 
+				234, 30);
 		loginPanel.add(loginIdField);
 		
 		loginPwLabel = new JLabel("비밀번호");
-		loginPwLabel.setBounds(LOGIN_LABEL_X, LOGIN_LABEL_Y+40, 
+		loginPwLabel.setBounds(26, 226, 
 				LOGIN_LABEL_WIDTH, LOGIN_LABEL_HEIGHT);
 		loginPanel.add(loginPwLabel);
 		
 		loginPwField = new JPasswordField();
-		loginPwField.setBounds(LOGIN_FIELD_X, LOGIN_FIELD_Y+40,
-				LOGIN_FIELD_WIDTH, LOGIN_FIELD_HEIGHT);
+		loginPwField.setBounds(92, 226,
+				234, 30);
 		loginPanel.add(loginPwField);
 				
 		loginBtn = new JButton("로그인");
@@ -113,13 +115,13 @@ public class LoginUI {
 			}
 		});
 		//-----------------------------------------------------------------
-		loginBtn.setBounds(LOGIN_BTN_X, LOGIN_BTN_Y, 
-				LOGIN_BTN_WIDTH, LOGIN_BTN_HEIGHT);
+		loginBtn.setBounds(92, 277, 
+				111, 30);
 		loginPanel.add(loginBtn);
 		
 		toRegisterBtn = new JButton("회원가입");
-		toRegisterBtn.setBounds(TO_REGISTER_BTN_X, TO_REGISTER_BTN_Y, 
-				TO_REGISTER_BTN_WIDTH, TO_REGISTER_BTN_HEIGHT);
+		toRegisterBtn.setBounds(215, 277, 
+				111, 30);
 		toRegisterBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegisterUI registerPanel = new RegisterUI();
@@ -130,6 +132,11 @@ public class LoginUI {
 		loginPanel.add(toRegisterBtn);
 		
 		MainFrame.frame.getContentPane().add(loginPanel);
+		
+		titleLabel = new JLabel("<html><body><center>통합 일정 관리<br>프로그램</center></body></html>");
+		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 33));
+		titleLabel.setBounds(92, 35, 234, 123);
+		loginPanel.add(titleLabel);
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
