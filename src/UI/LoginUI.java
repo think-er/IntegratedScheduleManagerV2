@@ -110,6 +110,7 @@ public class LoginUI {
 					loginPanel.setVisible(false);
 					HomeUI homePanel = new HomeUI();
 					homePanel.load(id,m);
+					homePanel.init();
 					homePanel.homePanel.setVisible(true);
 				}
 			}

@@ -43,6 +43,8 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.ListSelectionModel;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -110,7 +112,7 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_HEIGHT = 200;
 	
 	private JTable table;
-	private JScrollPane PersonalSchedulescrollPane;
+	private JScrollPane teamListScrollPane;
 	private JButton IntegrationButton;
 	
 	
@@ -137,24 +139,24 @@ public class HomeUI {
 	private String ID;
 	private String LEVEL;
 	
+	DB_Conn_Query db = new DB_Conn_Query();
+	
 	//private ArrayList<Integer>[] index = new ArrayList[3];
 //	private int[][]index=new int[3][3];
 	
 	
-	public HomeUI() {
-		/*for(int i=0;i<3;i++) {
-			index[i]=new ArrayList<Integer>();
-		}*/
-		init();
+	public void HomeUI() {
+		
 	}
 	void load(String id, String level) {
 		//로그인한 학번, 등급 불러오기
 		ID=id;
 		LEVEL=level;
-		idLabel.setText(id);
-		levelLabel.setText(level);
 	}
-	private void init() {
+	/**
+	 * @wbp.parser.entryPoint
+	 */
+	void init() {
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -201,6 +203,21 @@ public class HomeUI {
 				HOME_SCHEDULELIST_PANEL_HEIGHT);
 		homeScheduleListPanel.setLayout(null);
 		
+		idLabel = new JLabel("");
+		idLabel.setBounds(901, 38, 73, 15);
+		homePanel.add(idLabel);
+		
+		levelLabel = new JLabel("");
+		levelLabel.setBounds(901, 58, 73, 15);
+		homePanel.add(levelLabel);
+		
+		idLabel.setText(ID);
+		levelLabel.setText(LEVEL);
+		
+		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
+		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
+		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainFrame.frame.setResizable(false);
 		
 		// 일정표
 //		grid = new GridBagLayout();
@@ -331,8 +348,8 @@ public class HomeUI {
 		homePanel.add(homeIntegrationPanel);
 		
 		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
-		PersonalSchedulescrollPane = new JScrollPane();
-		PersonalSchedulescrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		teamListScrollPane = new JScrollPane();
+		teamListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		IntegrationButton = new JButton("통합 일정 관리");
 		IntegrationButton.setFont(new Font("굴림", Font.PLAIN, 12));
 		IntegrationButton.addActionListener(new ActionListener() {
@@ -343,10 +360,11 @@ public class HomeUI {
 			}
 		});
 		
-		JLabel PersonalLabel = new JLabel("팀원 시간표 보기");
+		JLabel PersonalLabel = new JLabel("팀원 시간표 조회");
 		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		
 		PersonalBtn = new JButton("개인 일정 관리");
+		PersonalBtn.setFont(new Font("굴림", Font.PLAIN, 12));
 		PersonalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new PersonalUI();
@@ -359,7 +377,7 @@ public class HomeUI {
 				.addGroup(Alignment.LEADING, gl_homeIntegrationPanel.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
-						.addComponent(PersonalSchedulescrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(teamListScrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(PersonalBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(IntegrationButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(PersonalLabel))
@@ -374,12 +392,32 @@ public class HomeUI {
 					.addGap(10)
 					.addComponent(PersonalLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(PersonalSchedulescrollPane, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
+					.addComponent(teamListScrollPane, GroupLayout.PREFERRED_SIZE, 253, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		
-		JList PersonalSchedulelist = new JList();
-		PersonalSchedulelist.setModel(new AbstractListModel() {
+		//-----------------------------팀원 이름 리스트 추가--------------------------
+		JList<String> teamList = new JList<String>();
+		teamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		
+		String sql = "SELECT 이름 "
+				+ "FROM 유저,소속 "
+				+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
+				+ "AND 소속.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
+		
+		ResultSet src = db.executeQurey(sql);
+		System.out.println(ID);
+		try {
+			while(src.next()) {
+				listModel.addElement(src.getString("이름"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		teamList.setModel(listModel);
+		
+		/*teamList.setModel(new AbstractListModel() {
 			String[] values = new String[] {"학생A", "학생B", "학생C"};
 			public int getSize() {
 				return values.length;
@@ -387,21 +425,12 @@ public class HomeUI {
 			public Object getElementAt(int index) {
 				return values[index];
 			}
-		});
-		PersonalSchedulescrollPane.setViewportView(PersonalSchedulelist);
+		});*/
+		//--------------------------------------------------------------------------
+		
+		teamListScrollPane.setViewportView(teamList);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
 		
-		idLabel = new JLabel("");
-		idLabel.setBounds(901, 38, 73, 15);
-		homePanel.add(idLabel);
 		
-		levelLabel = new JLabel("");
-		levelLabel.setBounds(901, 58, 73, 15);
-		homePanel.add(levelLabel);
-		
-		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
-		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
-		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MainFrame.frame.setResizable(false);
 	}
 }
