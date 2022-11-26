@@ -108,9 +108,7 @@ public class LoginUI {
 				else {
 					JOptionPane.showMessageDialog(null,"로그인되었습니다.");
 					loginPanel.setVisible(false);
-					HomeUI homePanel = new HomeUI();
-					homePanel.load(id,m);
-					homePanel.init();
+					HomeUI homePanel = new HomeUI(id,m);
 					homePanel.homePanel.setVisible(true);
 				}
 			}

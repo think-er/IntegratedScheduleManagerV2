@@ -146,19 +146,13 @@ public class HomeUI {
 	//private ArrayList<Integer>[] index = new ArrayList[3];
 //	private int[][]index=new int[3][3];
 	
-	
-	public void HomeUI() {
+	public HomeUI() {
 		
 	}
-	void load(String id, String level) {
-		//로그인한 학번, 등급 불러오기
+	public HomeUI(String id, String level) {
 		ID=id;
 		LEVEL=level;
-	}
-	/**
-	 * @wbp.parser.entryPoint
-	 */
-	void init() {
+		
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
