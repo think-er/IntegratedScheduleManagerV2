@@ -60,8 +60,7 @@ public class AddEventUI {
 	private void init() {
 //		String[] minuteCb = {"00", "30"};
 		
-		subFrame = new JFrame();
-		subFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+		subFrame = new JFrame();	
 		
 		titleLabel = new JLabel("일정 제목");
 		dateLabel = new JLabel("일정 날짜");

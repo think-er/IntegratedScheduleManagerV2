@@ -138,7 +138,6 @@ public class Integration {
 			}
 		});
 		Integration.getContentPane().add(btnNewButton);
-		Integration.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정표 추가");
 	}
