@@ -54,8 +54,10 @@ import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 import Entity.Schedule;
 
-import java.awt.GridLayout;
+import java.awt.GridBagLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import javax.swing.border.LineBorder;
 
 public class HomeUI {
 	
@@ -64,6 +66,7 @@ public class HomeUI {
 	private JLabel homeUserLabel;
 	private JLabel homeManagerAuthLabel;
 	private JCalendar homeCalendar;
+	private JButton toAddEventBtn;
 	
 	// homeIntegrationPanel
 	private JPanel homeIntegrationPanel;
@@ -112,19 +115,22 @@ public class HomeUI {
 	private JButton IntegrationButton_add;
 	private JButton IntegrationButton_delete;
 	
-	private String name;
-	private String yoil;
-	private int startTime;
-	private int endTime;
-	private String fix;
-	private Date date;
-	private String memo;
 	
-	private int s_row_index;
-	private int e_row_index;
-	private int col_index=0;
+	private GridBagLayout grid;
 	
-	private int count=0;
+//	private String name;
+//	private String yoil;
+//	private int startTime;
+//	private int endTime;
+//	private String fix;
+//	private Date date;
+//	private String memo;
+//	
+//	private int s_row_index;
+//	private int e_row_index;
+//	private int col_index=0;
+//	
+//	private int count=0;
 
 	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
 	private JLabel IntegrationLabel;
@@ -189,41 +195,66 @@ public class HomeUI {
 		homeScheduleListPanel.setLayout(null);
 		
 		
-		// 홈 패널: 일정표 패널
-		
-		// 일정표 패널: 일정표 GridLayout
-		//---------------------------------------------
-		JPanel homeScheduleGridPanel = new JPanel();
-		homeScheduleGridPanel.setLayout(new GridLayout(15, 8, 5, 5));
-		
-		for(int k=0; k<8; k++) {
-			JPanel dayOfWeekLabelPanel = new JPanel();
-			dayOfWeekLabelPanel.add(new JLabel(dayOfWeekColumn[k]));
-			homeScheduleGridPanel.add(dayOfWeekLabelPanel);
-		}
-		
-		for(int i=0; i<14; i++) {
-			JPanel timeLabelPanel = new JPanel();
-			timeLabelPanel.add(new JLabel(AddEventUI.hourCb[i] + "시"), BorderLayout.CENTER);
-			homeScheduleGridPanel.add(timeLabelPanel);
-			
-			for(int j=1; j<8; j++) {
-				JButton ex = new JButton();
-				ex.setPreferredSize(new Dimension(82, 70));
-				homeScheduleGridPanel.add(ex);
-			}
-		}
-		
-		//----------------------------------------------
+		// 일정표
+//		grid = new GridBagLayout();
+//		
+//		
+//		
+//		// 홈 패널: 날짜 표시 패널
+//		JPanel homeScheduleDatePanel = new JPanel();
+//		homeScheduleDatePanel.setLayout(new GridBagLayout());
+//		for(int i=0; i<8; i++) {
+//			JPanel dateColumnPanel = new JPanel();
+//			
+//			// ------------------------------------------------------------------
+//			// 나중에 날짜 표시 해야함
+//			dateColumnPanel.add(new JLabel(dayOfWeekColumn[i]));
+//			
+//			// ------------------------------------------------------------------
+//			homeScheduleDatePanel.add(dateColumnPanel);
+//		}
+//		
+//		
+//		// 일정표 패널: 일정표 행(시간) 부분
+//		JPanel homeScheduleRowPanel = new JPanel();
+//		homeScheduleRowPanel.setLayout(new GridLayout(14, 1, 5, 5));
+//		for(int i=0; i<14; i++) {
+//			// 컴포넌트의 레이아웃을 조절하기 위해서
+//			JPanel rowPanel = new JPanel();
+//			rowPanel.add(new JLabel(AddEventUI.hourCb[i] + "시"), BorderLayout.CENTER);
+//			homeScheduleRowPanel.add(rowPanel);
+//		}
+//		
+//		
+//		// 일정표 패널: 일정표 데이터 부분
+//		JPanel homeScheduleDataPanel = new JPanel();
+//		homeScheduleDataPanel.setLayout(new GridLayout(14, 7, 5, 5));
+//		
+//		for(int i=0; i<14; i++) {
+//			for(int j=0; j<7; j++) {
+//				JButton ex = new JButton();
+////				ex.setPreferredSize(new Dimension(100, 80));
+//				homeScheduleDataPanel.add(ex);
+//			}
+//		}
+//		
+//		JPanel homeScheduleScrollPanel = new JPanel();
+//		homeScheduleScrollPanel.add(homeScheduleRowPanel);
+//		homeScheduleScrollPanel.add(homeScheduleDataPanel);
 		
 		// 일정표 패널: 일정표 스크롤 팬
-		homeScheduleScrollPane = new JScrollPane(homeScheduleGridPanel);
-		homeScheduleScrollPane.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
-				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
-			
-		homePanel.add(homeScheduleScrollPane);
+//		homeScheduleScrollPane = new JScrollPane(homeScheduleScrollPanel);
 		
-		//----------------------------------------------
+		
+		// 일정표 패널: 날짜 표시 패널 + 일정표 스크롤팬
+//		JPanel homeSchedulePanel = new JPanel();
+//		homeSchedulePanel.setLayout(null);
+//		homeSchedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+//		homeSchedulePanel.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
+//				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
+//		homeSchedulePanel.add(homeScheduleScrollPane);
+//		homePanel.add(homeSchedulePanel);
+		
 		
 //		Schedule s = new Schedule();
 //		
@@ -383,6 +414,15 @@ public class HomeUI {
 		});
 		PersonalSchedulescrollPane.setViewportView(PersonalSchedulelist);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
+		
+		toAddEventBtn = new JButton("세부 일정 추가");
+		toAddEventBtn.setBounds(710, 54, 130, 23);
+		toAddEventBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new AddEventUI();
+			}
+		});
+		homePanel.add(toAddEventBtn);
 		
 		MainFrame.frame.setTitle("통합 일정 관리 프로그램");
 		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
