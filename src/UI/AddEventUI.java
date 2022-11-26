@@ -7,6 +7,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JList;
+import java.awt.Font;
 
 public class AddEventUI {
 	
@@ -41,7 +44,7 @@ public class AddEventUI {
 //	private JComboBox edMinuteBox;
 	private JTextArea memoArea;
 	private JScrollPane memoScrollPane;
-	private JButton saveButton;
+	private JButton delBtn;
 	
 	public static String[] monthCb = {"01", "02", "03", "04", "05", "06"
 			, "07", "08", "09", "10", "11", "12"};
@@ -86,72 +89,93 @@ public class AddEventUI {
 //		stMinuteBox = new JComboBox(minuteCb);
 //		edMinuteBox = new JComboBox(minuteCb);
 		memoArea = new JTextArea();
-		saveButton = new JButton("저장");
+		delBtn = new JButton("삭제");
 		
 		
-		subFrame.setLayout(null);
+		subFrame.getContentPane().setLayout(null);
 		
 		int x = 30;
 		int y = 20;
 		
-		titleLabel.setBounds(x,y, 60, 25);
-		dateLabel.setBounds(x,y+40,60,25);
-		startTimeLabel.setBounds(x,y+80,60,25);
-		endTimeLabel.setBounds(x,y+120,60,25);
-		memoLabel.setBounds(x,y+160,60,25);
+		titleLabel.setBounds(342,60, 60, 25);
+		dateLabel.setBounds(342,100,60,25);
+		startTimeLabel.setBounds(342,140,60,25);
+		endTimeLabel.setBounds(342,180,60,25);
+		memoLabel.setBounds(342,220,60,25);
 		
-		titleField.setBounds(x+70, y, 250, 25);
-		yearField.setBounds(x+70, y+40, 50, 25);
-		yearLabel.setBounds(x+120, y+40, 60, 25);
-		monthBox.setBounds(x+140, y+40, 50, 25);
-		monthLabel.setBounds(x+190, y+40, 60,25);
-		dayField.setBounds(x+210, y+40, 50, 25);
-		dayLabel.setBounds(x+260, y+40, 60, 25);
-		fixLabel.setBounds(x+280, y+40, 50, 25);
-		fixBox.setBounds(x+310,y+40,60,25);
-		stHourBox.setBounds(x+70, y+80, 50,25);
-		stHourLabel.setBounds(x+120, y+80, 60, 25);
+		titleField.setBounds(412, 60, 250, 25);
+		yearField.setBounds(412, 100, 50, 25);
+		yearLabel.setBounds(462, 100, 60, 25);
+		monthBox.setBounds(482, 100, 50, 25);
+		monthLabel.setBounds(532, 100, 60,25);
+		dayField.setBounds(552, 100, 50, 25);
+		dayLabel.setBounds(602, 100, 60, 25);
+		fixLabel.setBounds(622, 100, 50, 25);
+		fixBox.setBounds(652,100,32,25);
+		stHourBox.setBounds(412, 140, 50,25);
+		stHourLabel.setBounds(462, 140, 60, 25);
 //		stMinuteBox.setBounds(x+140, y+80, 50, 25);
 //		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
-		edHourBox.setBounds(x+70, y+120, 50,25);
-		edHourLabel.setBounds(x+120, y+120, 60, 25);
+		edHourBox.setBounds(412, 180, 50,25);
+		edHourLabel.setBounds(462, 180, 60, 25);
 //		edMinuteBox.setBounds(x+140, y+120, 50, 25);
 //		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
 		memoScrollPane = new JScrollPane(memoArea);
-		memoScrollPane.setBounds(x+70, y+160, 250, 130);
-		saveButton.setBounds(x+260, y+300, 60, 25);
+		memoScrollPane.setBounds(412, 220, 250, 130);
+		delBtn.setBounds(602, 360, 60, 25);
 		
-		subFrame.add(titleLabel);
-		subFrame.add(dateLabel);
-		subFrame.add(fixLabel);
-		subFrame.add(startTimeLabel);
-		subFrame.add(endTimeLabel);
-		subFrame.add(memoLabel);
-		subFrame.add(yearLabel);
-		subFrame.add(monthLabel);
-		subFrame.add(dayLabel);
+		subFrame.getContentPane().add(titleLabel);
+		subFrame.getContentPane().add(dateLabel);
+		subFrame.getContentPane().add(fixLabel);
+		subFrame.getContentPane().add(startTimeLabel);
+		subFrame.getContentPane().add(endTimeLabel);
+		subFrame.getContentPane().add(memoLabel);
+		subFrame.getContentPane().add(yearLabel);
+		subFrame.getContentPane().add(monthLabel);
+		subFrame.getContentPane().add(dayLabel);
 		
-		subFrame.add(titleField);
-		subFrame.add(yearField);
-		subFrame.add(monthBox);
-		subFrame.add(dayField);
-		subFrame.add(fixBox);
-		subFrame.add(stHourBox);
+		subFrame.getContentPane().add(titleField);
+		subFrame.getContentPane().add(yearField);
+		subFrame.getContentPane().add(monthBox);
+		subFrame.getContentPane().add(dayField);
+		subFrame.getContentPane().add(fixBox);
+		subFrame.getContentPane().add(stHourBox);
 //		subFrame.add(stMinuteBox);
-		subFrame.add(stHourLabel);
+		subFrame.getContentPane().add(stHourLabel);
 //		subFrame.add(stMinuteLabel);
-		subFrame.add(edHourBox);
-		subFrame.add(stHourBox);
-		subFrame.add(edHourLabel);
+		subFrame.getContentPane().add(edHourBox);
+		subFrame.getContentPane().add(stHourBox);
+		subFrame.getContentPane().add(edHourLabel);
 //		subFrame.add(edMinuteBox);
 //		subFrame.add(edMinuteLabel);
-		subFrame.add(memoScrollPane);
-		subFrame.add(saveButton);
+		subFrame.getContentPane().add(memoScrollPane);
+		subFrame.getContentPane().add(delBtn);
 		
-		subFrame.setTitle("세부 일정 추가");
+		JScrollPane individualScrollPane = new JScrollPane();
+		individualScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		individualScrollPane.setBounds(12, 60, 307, 290);
+		subFrame.getContentPane().add(individualScrollPane);
+		
+		JList individuallist = new JList();
+		individualScrollPane.setViewportView(individuallist);
+		
+		JLabel lblNewLabel = new JLabel("개인 일정 관리");
+		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
+		lblNewLabel.setBounds(12, 20, 181, 30);
+		subFrame.getContentPane().add(lblNewLabel);
+		
+		JButton modifyBtn = new JButton("수정");
+		modifyBtn.setBounds(532, 360, 60, 25);
+		subFrame.getContentPane().add(modifyBtn);
+		
+		JButton addBtn = new JButton("등록");
+		addBtn.setBounds(462, 360, 60, 25);
+		subFrame.getContentPane().add(addBtn);
+		
+		subFrame.setTitle("개인 일정 관리");
 		subFrame.setResizable(false);
 			
-		subFrame.setSize(400,400);
+		subFrame.setSize(700,439);
 		subFrame.setVisible(true);
 		
 	}

@@ -345,10 +345,10 @@ public class HomeUI {
 			}
 		});
 		
-		JLabel PersonalLabel = new JLabel("개인 일정");
+		JLabel PersonalLabel = new JLabel("팀원 시간표 보기");
 		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		
-		IntegrationLabel = new JLabel("통합 일정");
+		IntegrationLabel = new JLabel("통합 일정 리스트");
 		IntegrationLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		
 		IntegrationscrollPane = new JScrollPane();
@@ -365,30 +365,19 @@ public class HomeUI {
 		gl_homeIntegrationPanel.setHorizontalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(PersonalSchedulescrollPane, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
-						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(PersonalLabel))
-						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-						.addGroup(Alignment.TRAILING, gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(IntegrationscrollPane, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
-						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(toAddEventBtn, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
-						.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(IntegrationButton, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)))
+						.addComponent(PersonalSchedulescrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(IntegrationscrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(toAddEventBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(IntegrationButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+						.addComponent(PersonalLabel))
 					.addContainerGap())
 		);
 		gl_homeIntegrationPanel.setVerticalGroup(
-			gl_homeIntegrationPanel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_homeIntegrationPanel.createSequentialGroup()
+			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
 					.addComponent(toAddEventBtn)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(IntegrationButton)
@@ -400,7 +389,7 @@ public class HomeUI {
 					.addComponent(IntegrationLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(IntegrationscrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(30, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
 		JList Integrationlist = new JList();
