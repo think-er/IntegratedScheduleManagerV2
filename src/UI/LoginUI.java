@@ -95,7 +95,7 @@ public class LoginUI {
 		//----------------------로그인 기능 추가------------------------------
 			public void actionPerformed(ActionEvent e) {
 				String id = loginIdField.getText();
-				String pw = loginPwField.getText();
+				String pw = String.valueOf(loginPwField.getPassword());
 				
 				LoginSystem login = new LoginSystem();
 				String m = login.LoginSystem(id, pw);
