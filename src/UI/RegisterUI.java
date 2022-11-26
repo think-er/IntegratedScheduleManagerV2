@@ -94,59 +94,47 @@ public class RegisterUI {
 		registerManagerAuthField.setBounds(80, 319,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerManagerAuthField.setEnabled(false);
-		registerManagerAuthField.setBackground(Color.gray);
+		registerManagerAuthField.setBackground(Color.LIGHT_GRAY);
 		registerPanel.add(registerManagerAuthField);
 			
 		registerBtn = new JButton("회원가입");
 		registerBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//관리자 여부를 체크했을 때
-				if(registerManagerAuthField.getText().length()==0 && registerManagerAuthCheck.isSelected())
-				{
-					JOptionPane.showMessageDialog(null,"관리자 인증번호를 확인하세요.");
+				ID = registerIdField.getText();
+				PW = String.valueOf(registerPwField.getPassword());
+				String NAME = registerNameField.getText();
+				String TELL = registerTellField.getText();
+				String GRADE = registerGradeField.getText();
+				Boolean SF = false;
+				
+				if(ID.length()==0||PW.length()==0) {	//id pw 입력하지 않았을 때
+					JOptionPane.showMessageDialog(null,"아이디 또는 비밀번호를 입력하세요.");
 				}
-				else if(registerManagerAuthField.getText().length()>0)
-				{
-					if(registerManagerAuthField.getText().equals(Admin))
-					{
-						ID = registerIdField.getText();
-//						PW = String.registerPwField;
-						PW = String.valueOf(registerPwField.getPassword());
-						TF = "1";
-						String NAME = registerNameField.getText();
-						String TELL = registerTellField.getText();
-						String GRADE = registerGradeField.getText();
-						
-						DB_Conn_Query db = new DB_Conn_Query();
-						String query = "insert into 유저 values("+ID+",'"+PW+"','"+TF+"','"+NAME+"','"+TELL+"',"+GRADE+")";
-						db.executeUpdate(query);
-						
-						JOptionPane.showMessageDialog(null,"관리자 회원가입 되었습니다.");
-						registerPanel.setVisible(false);
-						LoginUI loginPanel = new LoginUI();
-						loginPanel.loginPanel.setVisible(true);
+				else {	//id pw 입력했을 때
+					if(registerManagerAuthCheck.isSelected()) {//관리자 여부를 체크했을 때
+						if(!registerManagerAuthField.getText().equals(Admin))	//인증번호 불일치
+						{
+							JOptionPane.showMessageDialog(null,"관리자 인증번호를 확인하세요.");
+						}
+						else {	//인증번호 일치
+							TF = "1";
+							SF=true;
+						}
 					}
-					else if(!registerManagerAuthField.getText().equals(Admin))
-					{
-						JOptionPane.showMessageDialog(null,"관리자 인증번호를 확인하세요.");
-					}
+					else	//관리자 여부 체크 x : 일반 회원가입
+						TF = "0";
 				}
-				else if(!registerManagerAuthCheck.isSelected() && registerManagerAuthField.getText().length()==0)
-				{
-					if(registerIdField.getText().length() ==0 || registerPwField.getPassword().length ==0)
-					{
-						JOptionPane.showMessageDialog(null,"아이디 또는 비밀번호를 입력하세요.");
-					}
-					else if(registerIdField.getText().length() >0 && registerPwField.getPassword().length >0)
-					{
-						ID = registerIdField.getText();
-						PW = String.valueOf(registerPwField.getPassword());
-						TF = "1";
-						registerPanel.setVisible(false);
-						LoginUI loginPanel = new LoginUI();
-						loginPanel.loginPanel.setVisible(true);
-					}
+				if(SF) {
+					DB_Conn_Query db = new DB_Conn_Query();
+					String query = "insert into 유저 values("+ID+",'"+PW+"','"+TF+"','"+NAME+"','"+TELL+"',"+GRADE+")";
+					db.executeUpdate(query);
+					
+					JOptionPane.showMessageDialog(null,"회원가입 성공");
+					registerPanel.setVisible(false);
+					LoginUI loginPanel = new LoginUI();
+					loginPanel.loginPanel.setVisible(true);
 				}
+				
 			}
 		});
 		registerBtn.setBounds(292, 318, 
