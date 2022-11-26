@@ -60,6 +60,8 @@ import java.awt.GridBagLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class HomeUI {
 	
@@ -398,6 +400,7 @@ public class HomeUI {
 		
 		//-----------------------------팀원 이름 리스트 추가--------------------------
 		JList<String> teamList = new JList<String>();
+		
 		teamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
@@ -417,6 +420,13 @@ public class HomeUI {
 		}
 		teamList.setModel(listModel);
 		
+		teamList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()) {	//이거 없으면 mouse 눌릴때, 뗄때 각각 한번씩 호출되서 총 두번 호출
+					System.out.println("selected :"+teamList.getSelectedValue());
+				}
+			}
+		});
 		//--------------------------------------------------------------------------
 		
 		teamListScrollPane.setViewportView(teamList);
