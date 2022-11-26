@@ -11,7 +11,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
 import java.awt.Font;
 
-public class AddEventUI {
+public class PersonalUI {
 	
 	private JFrame subFrame;
 	
@@ -53,10 +53,10 @@ public class AddEventUI {
 	};
 	
 	public static void main(String[] args) {
-		new AddEventUI();
+		new PersonalUI();
 	}
 	
-	public AddEventUI() {
+	public PersonalUI() {
 		init();
 	}
 	

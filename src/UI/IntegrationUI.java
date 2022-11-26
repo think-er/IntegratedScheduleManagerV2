@@ -34,7 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.AbstractListModel;
 
-public class Integration {
+public class IntegrationUI {
 
 	JFrame Integration;
 	private JTextField Integration_textField;
@@ -46,7 +46,7 @@ public class Integration {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Integration window = new Integration();
+					IntegrationUI window = new IntegrationUI();
 					window.Integration.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,7 +58,7 @@ public class Integration {
 	/**
 	 * Create the application.
 	 */
-	public Integration() {
+	public IntegrationUI() {
 		initialize();
 	}
 

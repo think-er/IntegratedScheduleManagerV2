@@ -66,7 +66,7 @@ public class HomeUI {
 	private JLabel homeUserLabel;
 	private JLabel homeManagerAuthLabel;
 	private JCalendar homeCalendar;
-	private JButton toAddEventBtn;
+	private JButton PersonalBtn;
 	
 	// homeIntegrationPanel
 	private JPanel homeIntegrationPanel;
@@ -338,7 +338,7 @@ public class HomeUI {
 		IntegrationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//HomeUI.setVisible(false) 삭제
-				Integration Integration = new Integration();
+				IntegrationUI Integration = new IntegrationUI();
 				Integration.Integration.setVisible(true);
 			}
 		});
@@ -346,10 +346,10 @@ public class HomeUI {
 		JLabel PersonalLabel = new JLabel("팀원 시간표 보기");
 		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		
-		toAddEventBtn = new JButton("개인 일정 관리");
-		toAddEventBtn.addActionListener(new ActionListener() {
+		PersonalBtn = new JButton("개인 일정 관리");
+		PersonalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new AddEventUI();
+				new PersonalUI();
 			}
 		});
 		
@@ -360,7 +360,7 @@ public class HomeUI {
 					.addContainerGap()
 					.addGroup(gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(PersonalSchedulescrollPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-						.addComponent(toAddEventBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+						.addComponent(PersonalBtn, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(IntegrationButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
 						.addComponent(PersonalLabel))
 					.addContainerGap())
@@ -368,7 +368,7 @@ public class HomeUI {
 		gl_homeIntegrationPanel.setVerticalGroup(
 			gl_homeIntegrationPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_homeIntegrationPanel.createSequentialGroup()
-					.addComponent(toAddEventBtn)
+					.addComponent(PersonalBtn)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(IntegrationButton)
 					.addGap(10)
