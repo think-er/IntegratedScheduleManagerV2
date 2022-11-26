@@ -335,6 +335,7 @@ public class HomeUI {
 		IntegrationButton_add.setFont(new Font("굴림", Font.PLAIN, 11));
 		IntegrationButton_add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//HomeUI.setVisible(false) 삭제
 				Integration Integration = new Integration();
 				Integration.Integration.setVisible(true);
 			}
