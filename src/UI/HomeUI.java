@@ -145,11 +145,18 @@ public class HomeUI {
 	
 	//private ArrayList<Integer>[] index = new ArrayList[3];
 //	private int[][]index=new int[3][3];
+	/**
+	 * @wbp.parser.constructor
+	 */
 	
-	public HomeUI() {
-		
+	
+	
+	public HomeUI() {	
+		this("20203089","관리");
 	}
+
 	public HomeUI(String id, String level) {
+		
 		ID=id;
 		LEVEL=level;
 		
