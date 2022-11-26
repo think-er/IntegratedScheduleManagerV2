@@ -417,15 +417,6 @@ public class HomeUI {
 		}
 		teamList.setModel(listModel);
 		
-		/*teamList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"학생A", "학생B", "학생C"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});*/
 		//--------------------------------------------------------------------------
 		
 		teamListScrollPane.setViewportView(teamList);
