@@ -82,7 +82,7 @@ public class HomeUI {
 	public static final int HOME_FRAME_X = 0;
 	public static final int HOME_FRAME_Y = 0;
 	public static final int HOME_FRAME_WIDTH = 1000;
-	public static final int HOME_FRAME_HEIGHT = 580;
+	public static final int HOME_FRAME_HEIGHT = 620;
 	
 	public static final int HOME_SCHEDULELIST_PANEL_X = 0; 
 	public static final int HOME_SCHEDULELIST_PANEL_Y = 0; 
