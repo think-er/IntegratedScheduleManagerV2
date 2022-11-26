@@ -2,17 +2,32 @@ package UI;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import DB.DB_Conn_Query;
+
 import javax.swing.JList;
 import java.awt.Font;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 
 public class PersonalUI {
+	
+	// 스케줄표 아이디를 불러오기 위한 변수
+	private static String ID;
+	DB_Conn_Query db = new DB_Conn_Query();
+	//----------------------------
 	
 	private JFrame subFrame;
 	
@@ -54,14 +69,16 @@ public class PersonalUI {
 	};
 	
 	public static void main(String[] args) {
-		new PersonalUI();
+		new PersonalUI(ID);
 	}
 	
-	public PersonalUI() {
-		init();
+	public PersonalUI(String id) {
+		init(id);
+		ID=id;
 	}
 	
-	private void init() {
+	
+	private void init(String id) {
 //		String[] minuteCb = {"00", "30"};
 		
 		subFrame = new JFrame();	
@@ -158,8 +175,7 @@ public class PersonalUI {
 		personalScrollPane.setBounds(12, 66, 307, 290);
 		subFrame.getContentPane().add(personalScrollPane);
 		
-		JList personalList = new JList();
-		personalScrollPane.setViewportView(personalList);
+		
 		
 		JLabel lblNewLabel = new JLabel("개인 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
@@ -180,5 +196,34 @@ public class PersonalUI {
 		subFrame.setSize(700,440);
 		subFrame.setVisible(true);
 		
+		JList<String> personalList = new JList<String>();
+		
+		personalList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		
+		String query = "SELECT 스케줄_이름 "
+				+ "FROM 스케줄,유저 "
+				+ "WHERE 스케줄.유저_아이디=유저.유저_아이디 "
+				+ "AND 유저.유저_아이디="+id;
+		ResultSet rs = db.executeQurey(query);
+		try {
+			while(rs.next()) {
+				listModel.addElement(rs.getString("스케줄_이름"));
+			}
+		}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		personalList.setModel(listModel);
+		
+		personalList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()) {
+					System.out.println("selected :"+personalList.getSelectedValue());
+				}
+			}
+		});
+		
+		personalScrollPane.setViewportView(personalList);
 	}
 }

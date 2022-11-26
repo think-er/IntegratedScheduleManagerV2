@@ -370,7 +370,7 @@ public class HomeUI {
 		PersonalBtn.setFont(new Font("굴림", Font.PLAIN, 12));
 		PersonalBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new PersonalUI();
+				new PersonalUI(ID);
 			}
 		});
 		
