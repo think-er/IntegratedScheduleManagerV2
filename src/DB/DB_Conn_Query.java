@@ -14,7 +14,6 @@ import oracle.jdbc.OracleTypes;
 public class DB_Conn_Query {
    public Connection con = null;
    public Statement stmt = null;
-   //String url = "jdbc:oracle:thin:@211.220.77.92:1521:XE";
    String url = "jdbc:oracle:thin:@localhost:1521:XE";
    String id = "suser";      String password = "1234";
    

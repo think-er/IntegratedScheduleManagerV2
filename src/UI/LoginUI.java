@@ -4,11 +4,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import Control.LoginSystem;
+
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+import DB.DB_Conn_Query;
 public class LoginUI {
 	
 	public JPanel loginPanel;
@@ -88,23 +91,33 @@ public class LoginUI {
 				
 		loginBtn = new JButton("로그인");
 		loginBtn.addActionListener(new ActionListener() {
+			
+		//----------------------로그인 기능 추가------------------------------
 			public void actionPerformed(ActionEvent e) {
-				if(loginIdField.getText().equals(RegisterUI.ID) && 
-						loginPwField.getText().equals(RegisterUI.PW))
-				{
+				String id = loginIdField.getText();
+				String pw = loginPwField.getText();
+				
+				LoginSystem login = new LoginSystem();
+				String m = login.LoginSystem(id, pw);
+				
+				if(m==null) {
+					JOptionPane.showMessageDialog(null,"로그인실패.");
+				}
+				else {
 					JOptionPane.showMessageDialog(null,"로그인되었습니다.");
-					
 					loginPanel.setVisible(false);
 					HomeUI homePanel = new HomeUI();
 					homePanel.homePanel.setVisible(true);
+					/*if(m=="n") {
+						
+					}
+					else if(m=="m") {
 					
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,"로그인실패.");
+					}*/
 				}
 			}
 		});
+		//-----------------------------------------------------------------
 		loginBtn.setBounds(LOGIN_BTN_X, LOGIN_BTN_Y, 
 				LOGIN_BTN_WIDTH, LOGIN_BTN_HEIGHT);
 		loginPanel.add(loginBtn);
