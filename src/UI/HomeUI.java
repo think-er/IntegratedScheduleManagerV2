@@ -58,6 +58,8 @@ import java.awt.GridBagLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.border.LineBorder;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 
 public class HomeUI {
 	
@@ -116,7 +118,7 @@ public class HomeUI {
 	private JButton IntegrationButton_delete;
 	
 	
-	private GridBagLayout grid;
+	private GridBagLayout gbl;
 	
 //	private String name;
 //	private String yoil;
@@ -194,12 +196,66 @@ public class HomeUI {
 				HOME_SCHEDULELIST_PANEL_HEIGHT);
 		homeScheduleListPanel.setLayout(null);
 		
+		JPanel homeScheduleColumnPanel = new JPanel();
+		homeScheduleColumnPanel.setBounds(212, 86, 730, 50);
+		homeScheduleColumnPanel.setBorder(new LineBorder(new Color(255, 0, 0)));
+
+		homeScheduleColumnPanel.setLayout(new GridLayout(1, 8, 0, 0));
 		
-		// 일정표
-//		grid = new GridBagLayout();
-//		
-//		
-//		
+		JPanel homeScheduleColumn_0 = new JPanel();
+		homeScheduleColumn_0.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_1 = new JPanel();
+		homeScheduleColumn_1.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_2 = new JPanel();
+		homeScheduleColumn_2.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_3 = new JPanel();
+		homeScheduleColumn_3.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_4 = new JPanel();
+		homeScheduleColumn_4.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_5 = new JPanel();
+		homeScheduleColumn_5.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_6 = new JPanel();
+		homeScheduleColumn_6.setBorder(new LineBorder(new Color(255, 0, 0)));
+		JPanel homeScheduleColumn_7 = new JPanel();
+		homeScheduleColumn_7.setBorder(new LineBorder(new Color(255, 0, 0)));
+		
+		homeScheduleColumnPanel.add(homeScheduleColumn_0);
+		homeScheduleColumnPanel.add(homeScheduleColumn_1);
+		homeScheduleColumnPanel.add(homeScheduleColumn_2);
+		homeScheduleColumnPanel.add(homeScheduleColumn_3);
+		homeScheduleColumnPanel.add(homeScheduleColumn_4);
+		homeScheduleColumnPanel.add(homeScheduleColumn_5);
+		homeScheduleColumnPanel.add(homeScheduleColumn_6);
+		homeScheduleColumnPanel.add(homeScheduleColumn_7);
+		
+		homePanel.add(homeScheduleColumnPanel);
+		
+		JPanel homeSchedulePanel = new JPanel();
+		homeSchedulePanel.setLayout(new GridLayout(14, 8));
+		for(int i=0; i<14; i++) {
+			JPanel timeUI = new JPanel();
+			timeUI.setPreferredSize(new Dimension(90, 80));
+			timeUI.setBorder(new LineBorder(new Color(0, 0, 0)));
+			homeSchedulePanel.add(timeUI);
+			timeUI.setLayout(new BorderLayout());
+			JLabel timeLabel = new JLabel(AddEventUI.hourCb[i] + ":00");
+			timeUI.add(timeLabel, BorderLayout.CENTER);
+			
+			for(int j=1; j<8; j++) {
+				EventUI ex = new EventUI();
+				ex.x = i;
+				ex.y = j;
+				homeSchedulePanel.add(ex);
+			}
+		}
+		
+		
+		JScrollPane scrollPane = new JScrollPane(homeSchedulePanel);
+		scrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		scrollPane.setBounds(212, 136, 750, 407);
+		homePanel.add(scrollPane);
+		
+		
 //		// 홈 패널: 날짜 표시 패널
 //		JPanel homeScheduleDatePanel = new JPanel();
 //		homeScheduleDatePanel.setLayout(new GridBagLayout());
@@ -245,15 +301,8 @@ public class HomeUI {
 		// 일정표 패널: 일정표 스크롤 팬
 //		homeScheduleScrollPane = new JScrollPane(homeScheduleScrollPanel);
 		
-		
-		// 일정표 패널: 날짜 표시 패널 + 일정표 스크롤팬
-//		JPanel homeSchedulePanel = new JPanel();
-//		homeSchedulePanel.setLayout(null);
-//		homeSchedulePanel.setBorder(new LineBorder(new Color(0, 0, 0)));
-//		homeSchedulePanel.setBounds(HOME_SCHEDULE_PANEL_X, HOME_SCHEDULE_PANEL_Y,
-//				HOME_SCHEDULE_PANEL_WIDTH, HOME_SCHEDULE_PANEL_HEIGHT);
-//		homeSchedulePanel.add(homeScheduleScrollPane);
-//		homePanel.add(homeSchedulePanel);
+//		homeScheduleScrollPanel.add(homeScheduleRowPanel);
+//		homeScheduleScrollPanel.add(homeScheduleDataPanel);
 		
 		
 //		Schedule s = new Schedule();
