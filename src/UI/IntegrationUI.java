@@ -208,19 +208,62 @@ public class IntegrationUI extends JFrame {
 		
 		JScrollPane TeamMemberScrollPane = new JScrollPane();
 		TeamMemberScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		TeamMemberScrollPane.setBounds(12, 226, 307, 137);
+		TeamMemberScrollPane.setBounds(12, 226, 113, 137);
 		Integration.getContentPane().add(TeamMemberScrollPane);
 		
-		JList TeamMemberList = new JList();
+		JList<String> TeamMemberList = new JList<String>();
 		TeamMemberScrollPane.setViewportView(TeamMemberList);
 		
-		JLabel lblNewLabel_1 = new JLabel("[팀원 선택]");
-		lblNewLabel_1.setBounds(22, 206, 82, 15);
-		Integration.getContentPane().add(lblNewLabel_1);
+		DefaultListModel<String> listModel2 = new DefaultListModel<String>();
+		
+		query = "SELECT 유저.이름 "+
+				"FROM 유저,소속 "+
+				"WHERE 유저.유저_아이디 = 소속.유저_아이디 "+
+				"AND 소속.팀_번호 = ( SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+id+")";
+		rs = db.executeQurey(query);
+		try {
+			while(rs.next()) {
+				listModel2.addElement(rs.getString("이름"));
+			}
+		}
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
+		TeamMemberList.setModel(listModel2);
+		
+		TeamMemberList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(!e.getValueIsAdjusting()) {
+					System.out.println("selected :"+TeamMemberList.getSelectedValue());
+				}
+			}
+		});
+		
+		JLabel TeamMemberLabel = new JLabel("[팀원 리스트]");
+		TeamMemberLabel.setBounds(22, 206, 82, 15);
+		Integration.getContentPane().add(TeamMemberLabel);
+		
+		JScrollPane SelectedMemberScrollPane = new JScrollPane();
+		SelectedMemberScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		SelectedMemberScrollPane.setBounds(206, 226, 113, 137);
+		Integration.getContentPane().add(SelectedMemberScrollPane);
+		
+		JList<String> SelectedMemberList = new JList<String>();
+		SelectedMemberScrollPane.setViewportView(SelectedMemberList);
+		
+		JButton SelectBtn = new JButton(">>");
+		SelectBtn.setBounds(137, 261, 60, 23);
+		Integration.getContentPane().add(SelectBtn);
+		
+		JButton UnSelectBtn = new JButton("<<");
+		UnSelectBtn.setBounds(137, 303, 60, 23);
+		Integration.getContentPane().add(UnSelectBtn);
+		
+		JLabel SelectedMemberLabel = new JLabel("[선택된 팀원]");
+		SelectedMemberLabel.setBounds(218, 206, 82, 15);
+		Integration.getContentPane().add(SelectedMemberLabel);
 		
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정 관리");
 	}
-
-
 }
