@@ -15,6 +15,8 @@ import javax.swing.event.ListSelectionListener;
 import DB.DB_Conn_Query;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +25,8 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import java.awt.Dialog.ModalExclusionType;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PersonalUI {
 	
@@ -70,6 +74,8 @@ public class PersonalUI {
 			"18", "19", "20", "21", "22"
 	};
 	protected static String selected;
+	private JLabel yoilLabel;
+	private JTextField textField;
 	
 	public static void main(String[] args) {
 		new PersonalUI(ID);
@@ -108,9 +114,6 @@ public class PersonalUI {
 		stHourBox = new JComboBox(hourCb);
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		edHourBox = new JComboBox(hourCb);
-//		stMinuteBox = new JComboBox(minuteCb);
-//		edMinuteBox = new JComboBox(minuteCb);
-		memoArea = new JTextArea();
 		delBtn = new JButton("삭제");
 		
 		
@@ -121,9 +124,9 @@ public class PersonalUI {
 		
 		titleLabel.setBounds(342,66, 60, 25);
 		dateLabel.setBounds(342,106,60,25);
-		startTimeLabel.setBounds(342,146,60,25);
-		endTimeLabel.setBounds(342,186,60,25);
-		memoLabel.setBounds(342,226,60,25);
+		startTimeLabel.setBounds(342,181,60,25);
+		endTimeLabel.setBounds(342,221,60,25);
+		memoLabel.setBounds(342,262,60,25);
 		
 		titleField.setBounds(412, 66, 250, 25);
 		yearField.setBounds(412, 106, 50, 25);
@@ -134,16 +137,16 @@ public class PersonalUI {
 		dayLabel.setBounds(602, 106, 60, 25);
 		fixLabel.setBounds(622, 106, 50, 25);
 		fixBox.setBounds(652,106,32,25);
-		stHourBox.setBounds(412, 146, 50,25);
-		stHourLabel.setBounds(462, 146, 60, 25);
+		stHourBox.setBounds(412, 181, 50,25);
+		stHourLabel.setBounds(462, 181, 60, 25);
 //		stMinuteBox.setBounds(x+140, y+80, 50, 25);
 //		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
-		edHourBox.setBounds(412, 186, 50,25);
-		edHourLabel.setBounds(462, 186, 60, 25);
+		edHourBox.setBounds(412, 221, 50,25);
+		edHourLabel.setBounds(462, 221, 60, 25);
 //		edMinuteBox.setBounds(x+140, y+120, 50, 25);
 //		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
-		memoScrollPane = new JScrollPane(memoArea);
-		memoScrollPane.setBounds(412, 226, 250, 130);
+		memoScrollPane = new JScrollPane();
+		memoScrollPane.setBounds(412, 261, 250, 95);
 		delBtn.setBounds(602, 366, 60, 25);
 		
 		subFrame.getContentPane().add(titleLabel);
@@ -171,6 +174,10 @@ public class PersonalUI {
 //		subFrame.add(edMinuteBox);
 //		subFrame.add(edMinuteLabel);
 		subFrame.getContentPane().add(memoScrollPane);
+		//		stMinuteBox = new JComboBox(minuteCb);
+		//		edMinuteBox = new JComboBox(minuteCb);
+				memoArea = new JTextArea();
+				memoScrollPane.setViewportView(memoArea);
 		subFrame.getContentPane().add(delBtn);
 		
 		JScrollPane personalScrollPane = new JScrollPane();
@@ -184,10 +191,6 @@ public class PersonalUI {
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
 		lblNewLabel.setBounds(12, 26, 181, 30);
 		subFrame.getContentPane().add(lblNewLabel);
-		
-		JButton modifyBtn = new JButton("수정");
-		modifyBtn.setBounds(532, 366, 60, 25);
-		subFrame.getContentPane().add(modifyBtn);
 		
 		JButton addBtn = new JButton("등록");
 		addBtn.setBounds(462, 366, 60, 25);
@@ -250,7 +253,29 @@ public class PersonalUI {
 				}
 			}
 		});
+		JButton modifyBtn = new JButton("수정");
+		modifyBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(selected == null) 
+					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
+				else {
+					
+				}
+				
+			}
+		});
+		modifyBtn.setBounds(532, 366, 60, 25);
+		subFrame.getContentPane().add(modifyBtn);
 		
 		personalScrollPane.setViewportView(personalList);
+		
+		yoilLabel = new JLabel("요일");
+		yoilLabel.setBounds(342, 146, 60, 25);
+		subFrame.getContentPane().add(yoilLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(412, 146, 50, 25);
+		subFrame.getContentPane().add(textField);
 	}
 }
