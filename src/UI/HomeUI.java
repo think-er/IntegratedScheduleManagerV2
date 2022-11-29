@@ -51,7 +51,13 @@ import java.beans.PropertyChangeListener;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 import Entity.Schedule;
@@ -232,12 +238,35 @@ public class HomeUI {
 		
 		homeScheduleColumnPanel.add(homeScheduleColumn_0);
 		homeScheduleColumnPanel.add(homeScheduleColumn_1);
+		
+		//----------------------------------- 캘린더에서 년 월 일 받아오는 코드----------------------------------------\\
+		
+		JLabel Sun = new JLabel("New label");
+		homeScheduleColumn_1.add(Sun);
 		homeScheduleColumnPanel.add(homeScheduleColumn_2);
+		
+		JLabel Mon = new JLabel("New label");
+		homeScheduleColumn_2.add(Mon);
 		homeScheduleColumnPanel.add(homeScheduleColumn_3);
+		
+		JLabel Tue = new JLabel("New label");
+		homeScheduleColumn_3.add(Tue);
 		homeScheduleColumnPanel.add(homeScheduleColumn_4);
+		
+		JLabel Wed = new JLabel("New label");
+		homeScheduleColumn_4.add(Wed);
 		homeScheduleColumnPanel.add(homeScheduleColumn_5);
+		
+		JLabel Thu = new JLabel("New label");
+		homeScheduleColumn_5.add(Thu);
 		homeScheduleColumnPanel.add(homeScheduleColumn_6);
+		
+		JLabel Fri = new JLabel("New label");
+		homeScheduleColumn_6.add(Fri);
 		homeScheduleColumnPanel.add(homeScheduleColumn_7);
+		
+		JLabel Sat = new JLabel("New label");
+		homeScheduleColumn_7.add(Sat);
 		
 		homePanel.add(homeScheduleColumnPanel);
 		// -----------------------------------------------------------------
@@ -276,6 +305,50 @@ public class HomeUI {
 		}
 		
 		update_Schedule();
+		
+		homeCalendar.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			public void propertyChange(PropertyChangeEvent evt)
+			{
+				int Y = homeCalendar.getYearChooser().getYear();
+				int M = homeCalendar.getMonthChooser().getMonth();
+				int D = homeCalendar.getDayChooser().getDay();
+				
+				LocalDate now = LocalDate.of(Y, M+1, D); 
+
+				// determine country (Locale) specific first day of current week
+				DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
+				LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+
+				// determine last day of current week
+				DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(6); // or minus(1)
+				LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
+
+				// Print the dates of the current week
+				LocalDate printDate = startOfCurrentWeek;
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+				//for (int i=0; i < 7; i++) {
+				//    System.out.println(printDate.format(formatter));
+				//    printDate = printDate.plusDays(1);
+				//}
+				Sun.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Mon.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Tue.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Wed.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Thu.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Fri.setText(printDate.format(formatter));
+				printDate = printDate.plusDays(1);
+				Sat.setText(printDate.format(formatter));
+				
+			}
+		});
+		//----------------------------------- 캘린더에서 년 월 일 받아오는 코드----------------------------------------\\
+
 		
 		homeScheduleScrollPane = new JScrollPane(homeSchedulePanel);
 		homeScheduleScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -398,19 +471,20 @@ public class HomeUI {
 				// 요일 문자가 아닌 숫자로 받기
 				String days = rs.getString(2);
 				int days2 = 0;
-				if (days.equals("월"))
+				
+				if (days.equals("일"))
 					days2 = 0;
-				else if (days.equals("화"))
+				else if (days.equals("월"))
 					days2 = 1;
-				else if (days.equals("수"))
+				else if (days.equals("화"))
 					days2 = 2;
-				else if (days.equals("목"))
+				else if (days.equals("수"))
 					days2 = 3;
-				else if (days.equals("금"))
+				else if (days.equals("목"))
 					days2 = 4;
-				else if (days.equals("토"))
+				else if (days.equals("금"))
 					days2 = 5;
-				else if (days.equals("일"))
+				else if (days.equals("토"))
 					days2 = 6;
 				int startTime = Integer.parseInt(rs.getString(3));
 				int endTime = Integer.parseInt(rs.getString(4));
