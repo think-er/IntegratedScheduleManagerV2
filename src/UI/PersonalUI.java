@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -262,7 +263,13 @@ public class PersonalUI {
 								yoilField.setText(rs.getString("요일"));
 							}
 							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
-								Date d = rs.getDate("날짜");
+								Date date = rs.getDate("날짜");
+								SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
+								SimpleDateFormat m_date = new SimpleDateFormat("MM");
+								SimpleDateFormat d_date = new SimpleDateFormat("dd");
+								yearField.setText(y_date.format(date));
+								monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
+								dayField.setText(d_date.format(date));
 								fixBox.setSelected(false);
 								yoilField.setEnabled(false);
 								yearField.setEnabled(true);
