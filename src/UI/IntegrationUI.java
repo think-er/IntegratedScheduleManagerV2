@@ -52,10 +52,15 @@ public class IntegrationUI extends JFrame {
 	JFrame Integration;
 	private JTextField titleField;
 	private JTextField yearField;
+	private JComboBox monthBox;
 	private JTextField dayField;
+	private JCheckBox fixBox;
+	private JComboBox stHourBox;
+	private JComboBox edHourBox;
+	private JTextArea memoArea;
+	private JTextField yoilField;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
-	private JTextField yoilField;
 	
 	/**
 	 * Create the application.
@@ -122,7 +127,7 @@ public class IntegrationUI extends JFrame {
 		yearField.setBounds(412, 106, 50, 25);
 		Integration.getContentPane().add(yearField);
 		
-		JComboBox monthBox = new JComboBox(new Object[]{});
+		monthBox = new JComboBox(new Object[]{});
 		monthBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthBox.setBounds(482, 106, 50, 25);
 		Integration.getContentPane().add(monthBox);
@@ -131,11 +136,21 @@ public class IntegrationUI extends JFrame {
 		dayField.setBounds(552, 106, 50, 25);
 		Integration.getContentPane().add(dayField);
 		
-		JCheckBox fixBox = new JCheckBox();
+		fixBox = new JCheckBox();
+		fixBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fixBox.isSelected()==true) {	//고정 체크 : 요일 활성화, 날짜 비활성화
+					enabled("1");
+				}
+				else {	//고정 체크 x : 요일 비활성화, 날짜 활성화
+					enabled("0");
+				}
+			}
+		});
 		fixBox.setBounds(652, 106, 32, 25);
 		Integration.getContentPane().add(fixBox);
 		
-		JComboBox stHourBox = new JComboBox(new Object[]{});
+		stHourBox = new JComboBox(new Object[]{});
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		stHourBox.setBounds(414, 184, 50, 25);
 		Integration.getContentPane().add(stHourBox);
@@ -144,7 +159,7 @@ public class IntegrationUI extends JFrame {
 		stHourLabel.setBounds(462, 186, 60, 25);
 		Integration.getContentPane().add(stHourLabel);
 		
-		JComboBox edHourBox = new JComboBox(new Object[]{});
+		edHourBox = new JComboBox(new Object[]{});
 		edHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		edHourBox.setBounds(414, 229, 50, 25);
 		Integration.getContentPane().add(edHourBox);
@@ -157,7 +172,7 @@ public class IntegrationUI extends JFrame {
 		memoScrollPane.setBounds(412, 267, 250, 89);
 		Integration.getContentPane().add(memoScrollPane);
 		
-		JTextArea memoArea = new JTextArea();
+		memoArea = new JTextArea();
 		memoScrollPane.setViewportView(memoArea);
 		
 		JButton delBtn = new JButton("삭제");
@@ -196,25 +211,33 @@ public class IntegrationUI extends JFrame {
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
 					IntegrationUI.selected = integrationList.getSelectedValue();
-					String query = "SELECT 요일, 시작시간, 종료시간, 날짜, 메모 "
+					String query = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
 							+ "FROM 통합스케줄 "
-							+ "WHERE 통합스케줄_이름 = '"+selected+"'";
+							+ "WHERE 통합스케줄_이름 = '"+selected+"' AND "
+									+ "통합스케줄.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+id+")";
 					ResultSet rs = db.executeQurey(query);
 					try {
 						while(rs.next()) {
 							titleField.setText(selected);
-							yoilField.setText(rs.getString("요일"));
-							Date date = rs.getDate("날짜");
+							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
+								//yearField.setText((d.getYear()).toString());
+								enabled("1");
+								yoilField.setText(rs.getString("요일"));
+							}
+							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
+								Date date = rs.getDate("날짜");
+								enabled("0");
+								SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
+								SimpleDateFormat m_date = new SimpleDateFormat("MM");
+								SimpleDateFormat d_date = new SimpleDateFormat("dd");
+								yearField.setText(y_date.format(date));
+								monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
+								dayField.setText(d_date.format(date));
+								
+							}
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
 							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
 							memoArea.setText(rs.getString("메모"));
-							System.out.println(rs.getDate("날짜"));
-							SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
-							SimpleDateFormat m_date = new SimpleDateFormat("MM");
-							SimpleDateFormat d_date = new SimpleDateFormat("dd");
-							yearField.setText(y_date.format(date));
-							monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
-							dayField.setText(d_date.format(date));
 						}
 					}
 					catch (SQLException e1) {
@@ -250,5 +273,15 @@ public class IntegrationUI extends JFrame {
 		
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정 관리");
+	}
+	public void enabled(String b) {
+		Boolean tf=true;
+		if(b.equals("0"))tf=false;
+		
+		fixBox.setSelected(tf);
+		yoilField.setEnabled(tf);
+		yearField.setEnabled(!tf);
+		monthBox.setEnabled(!tf);
+		dayField.setEnabled(!tf);
 	}
 }
