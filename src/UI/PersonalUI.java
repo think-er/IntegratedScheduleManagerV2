@@ -250,10 +250,6 @@ public class PersonalUI {
 							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
 								//yearField.setText((d.getYear()).toString());
 								enabled("1");
-								yoilField.setEnabled(true);
-								yearField.setEnabled(false);
-								monthBox.setEnabled(false);
-								dayField.setEnabled(false);
 								yoilField.setText(rs.getString("요일"));
 							}
 							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
