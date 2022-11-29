@@ -271,6 +271,10 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(yoilField);
 		yoilField.setColumns(10);
 		
+		JButton refreshBtn = new JButton("새로고침");
+		refreshBtn.setBounds(565, 26, 97, 23);
+		Integration.getContentPane().add(refreshBtn);
+		
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정 관리");
 	}

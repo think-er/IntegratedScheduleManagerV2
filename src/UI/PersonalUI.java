@@ -298,6 +298,10 @@ public class PersonalUI {
 		yoilField = new JTextField();
 		yoilField.setBounds(412, 146, 50, 25);
 		subFrame.getContentPane().add(yoilField);
+		
+		JButton refreshBtn = new JButton("새로고침");
+		refreshBtn.setBounds(565, 26, 97, 23);
+		subFrame.getContentPane().add(refreshBtn);
 	}
 	public void enabled(String b) {
 		Boolean tf=true;
