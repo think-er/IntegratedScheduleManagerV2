@@ -82,7 +82,6 @@ public class HomeUI {
 	
 	// homeSchedulePanel
 	private JPanel homeSchedulePanel;
-	private JTable homeScheduleTable;
 	private JScrollPane homeScheduleScrollPane;
 	
 	public static final int HOME_FRAME_X = 0;
@@ -115,23 +114,8 @@ public class HomeUI {
 	public static final int HOME_CALENDAR_WIDTH = 200;
 	public static final int HOME_CALENDAR_HEIGHT = 200;
 	
-	private JTable table;
 	private JScrollPane teamListScrollPane;
 	private JButton IntegrationButton;
-	
-//	private String name;
-//	private String yoil;
-//	private int startTime;
-//	private int endTime;
-//	private String fix;
-//	private Date date;
-//	private String memo;
-//	
-//	private int s_row_index;
-//	private int e_row_index;
-//	private int col_index=0;
-//	
-//	private int count=0;
 
 	public static String[] dayOfWeekColumn = { "", "월", "화", "수", "목", "금", "토", "일" };
 	private JLabel idLabel;
@@ -140,15 +124,12 @@ public class HomeUI {
 	private String ID;
 	private String LEVEL;
 	
+	private JPanel homeScheduleColumnPanel;
+	public EventUI[][] event;
+	
+	private JButton viewCompEventBtn;
+	
 	DB_Conn_Query db = new DB_Conn_Query();
-	
-	//private ArrayList<Integer>[] index = new ArrayList[3];
-//	private int[][]index=new int[3][3];
-	/**
-	 * @wbp.parser.constructor
-	 */
-	
-	
 	
 	public HomeUI() {	
 		this("20203089","관리");
@@ -221,14 +202,16 @@ public class HomeUI {
 		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
+	
+		
 		
 		// -----------------------------------------------------------------
-		JPanel homeScheduleColumnPanel = new JPanel();
+		// 날짜 변경 패널
+		homeScheduleColumnPanel = new JPanel();
 		homeScheduleColumnPanel.setBounds(212, 86, 730, 50);
 		homeScheduleColumnPanel.setBorder(new LineBorder(new Color(255, 0, 0)));
 
 		homeScheduleColumnPanel.setLayout(new GridLayout(1, 8, 0, 0));
-		// -----------------------------------------------------------------
 		
 		JPanel homeScheduleColumn_0 = new JPanel();
 		homeScheduleColumn_0.setBorder(new LineBorder(new Color(255, 0, 0)));
@@ -257,95 +240,63 @@ public class HomeUI {
 		homeScheduleColumnPanel.add(homeScheduleColumn_7);
 		
 		homePanel.add(homeScheduleColumnPanel);
+		// -----------------------------------------------------------------
 		
-		JPanel homeSchedulePanel = new JPanel();
+		
+		
+		// -----------------------------------------------------------------
+		// 스케줄 표현
+		
+		event = new EventUI[14][7];
+		
+		homeSchedulePanel = new JPanel();
 		homeSchedulePanel.setLayout(new GridLayout(14, 8));
+		
+		// 표 배치
 		for(int i=0; i<14; i++) {
+			
+			// 시간 행 패널
 			JPanel timeUI = new JPanel();
 			timeUI.setPreferredSize(new Dimension(90, 80));
 			timeUI.setBorder(new LineBorder(new Color(0, 0, 0)));
 			homeSchedulePanel.add(timeUI);
-			timeUI.setLayout(new BorderLayout());
-			JLabel timeLabel = new JLabel(PersonalUI.hourCb[i] + ":00");
-			timeUI.add(timeLabel, BorderLayout.CENTER);
 			
-			for(int j=1; j<8; j++) {
-				EventUI ex = new EventUI();
-				ex.x = i;
-				ex.y = j;
-				homeSchedulePanel.add(ex);
+			// 시간 행 패널의 라벨
+			JLabel timeLabel = new JLabel();
+			timeUI.add(timeLabel);
+			timeLabel.setText(PersonalUI.hourCb[i] + ": 00");
+			
+			// 세부 일정 데이터가 띄워지는 패널
+			for(int j=0; j<7; j++) {
+				event[i][j] = new EventUI();
+				event[i][j].setX(i);
+				event[i][j].setY(j);
+				homeSchedulePanel.add(event[i][j]);
 			}
 		}
 		
+		update_Schedule();
 		
-		JScrollPane scrollPane = new JScrollPane(homeSchedulePanel);
-		scrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		scrollPane.setBounds(212, 136, 750, 407);
-		homePanel.add(scrollPane);	
+		homeScheduleScrollPane = new JScrollPane(homeSchedulePanel);
+		homeScheduleScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
+		homeScheduleScrollPane.setBounds(212, 136, 750, 407);
+		homePanel.add(homeScheduleScrollPane);	
+		// -----------------------------------------------------------------
 		
-//		Schedule s = new Schedule();
-//		
-//		int id=20203089;	//-> 로그인한 id 넣어줘야됨.
-//		try {
-//			DB_Conn_Query db = new DB_Conn_Query();
-//			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디 = "+id;
-//			ResultSet rs = db.executeQurey(sql);	//id에 해당하는 스케줄 데이터를 Schedule 클래스에 넣어줌
-//			while (rs.next()) 
-//			{
-//				name = rs.getString(1);
-//				yoil = rs.getString(2);
-//				startTime = rs.getInt(3);
-//				endTime = rs.getInt(4);
-//				fix = rs.getString(5);
-//				date = rs.getDate(6);
-//				memo = rs.getString(7);
-//				Get_Index();
+		// -----------------------------------------------------------------
+		// 공통된 시간표들을 잠시 표현하는 버튼
+		viewCompEventBtn = new JButton("공통 시간 보기");
+		
+		viewCompEventBtn.setBounds(700, 30, 130, 30);
+		homePanel.add(viewCompEventBtn);
+//		viewCompEventBtn.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
 //			}
-//		} catch (SQLException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
-//		Object headers[] = {"월", "화", "수", "목", "금", "토", "일"};
-//		Object[][] colums[]= {
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},
-//				{null, null, null, null, null, null, null},   //9시 ~ 22시로 설정
-//		};
-		
-//		DefaultTableModel tm = new DefaultTableModel(colums, headers);
-		
-//		ColorTable homeScheduleTable = new ColorTable(tm);
-//		//homeScheduleTable = new JTable(tm);
-//		homeScheduleTable.setRowHeight(60);
-//		homeScheduleTable.setRowSelectionAllowed(false);
-//		homeScheduleTable.setCellSelectionEnabled(true);
-//		homeScheduleScrollPane.setViewportView(homeScheduleTable);
-		
-		/*for(int i=0;i<3;i++) {
-			for(int j=0;j<index[i].size();j++) {
-				System.out.print(index[j].get(i)+" ");
-			}
-			System.out.println();
-		}*/
-		
-		//homeScheduleTable.updateUI();	//테이블 업데이트
-		
-		//----------------------------------------------
+//		});
 		
 		
 		// 홈 통합 일정 패널: 통합 일정 패널
-
 		homeIntegrationPanel = new JPanel();
 		homeIntegrationPanel.setBounds(0, 210, 200, 356);
 		homePanel.add(homeIntegrationPanel);
@@ -405,14 +356,14 @@ public class HomeUI {
 		teamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
-		String sql = "SELECT 이름 "
-				+ "FROM 유저,소속 "
-				+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
-				+ "AND 소속.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
-		
-		ResultSet src = db.executeQurey(sql);
-		System.out.println(ID);
 		try {
+			String sql = "SELECT 이름 "
+					+ "FROM 유저,소속 "
+					+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
+					+ "AND 소속.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
+			
+			ResultSet src = db.executeQurey(sql);
+			System.out.println(ID);
 			while(src.next()) {
 				listModel.addElement(src.getString("이름"));
 			}
@@ -435,4 +386,46 @@ public class HomeUI {
 		
 		
 	}
+	
+	
+	public void update_Schedule() {
+		// 데이터베이스에서 로그인한 개인 시간표 가져오기
+		try {
+			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 메모 FROM 스케줄 WHERE 유저_아이디 ="+ID;
+			ResultSet rs = db.executeQurey(sql);
+			while(rs.next()) {
+				String name = rs.getString(1);
+				// 요일 문자가 아닌 숫자로 받기
+				String days = rs.getString(2);
+				int days2 = 0;
+				if (days.equals("월"))
+					days2 = 0;
+				else if (days.equals("화"))
+					days2 = 1;
+				else if (days.equals("수"))
+					days2 = 2;
+				else if (days.equals("목"))
+					days2 = 3;
+				else if (days.equals("금"))
+					days2 = 4;
+				else if (days.equals("토"))
+					days2 = 5;
+				else if (days.equals("일"))
+					days2 = 6;
+				int startTime = Integer.parseInt(rs.getString(3));
+				int endTime = Integer.parseInt(rs.getString(4));
+				String memo = rs.getString(6);
+				
+				for(int i=startTime - 9; i <= endTime - 9; i++) {
+					event[i][days2].setEventName(name, event[i][days2]);
+					event[i][days2].setEventMemo(memo);
+					event[i][days2].setEventMode(true);
+					event[i][days2].viewEventMode();
+				}
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		};
+	}
+	
 }
