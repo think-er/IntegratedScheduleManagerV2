@@ -18,6 +18,7 @@ import javax.swing.JList;
 import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -68,6 +69,7 @@ public class PersonalUI {
 	public static String[] hourCb = {"09", "10", "11", "12", "13", "14", "15", "16", "17",
 			"18", "19", "20", "21", "22"
 	};
+	protected static String selected;
 	
 	public static void main(String[] args) {
 		new PersonalUI(ID);
@@ -212,15 +214,39 @@ public class PersonalUI {
 				listModel.addElement(rs.getString("스케줄_이름"));
 			}
 		}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		personalList.setModel(listModel);
 		
 		personalList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
-					System.out.println("selected :"+personalList.getSelectedValue());
+					PersonalUI.selected = personalList.getSelectedValue();
+					System.out.println("selected :"+selected);
+					String sql = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
+							+ "FROM 스케줄 "
+							+ "WHERE 스케줄_이름 = '"+selected+"' AND 유저_아이디 = "+id;
+					ResultSet rs = db.executeQurey(sql);
+					try {
+						while(rs.next()) {
+							titleField.setText(selected);
+							if(rs.getString("고정여부").equals("0")) {	//비고정 : 날짜 입력 필요
+								Date d = rs.getDate("날짜");
+								//yearField.setText((d.getYear()).toString());
+								fixBox.setSelected(false);
+							}
+							else {	//고정 : 날짜 입력 필요 x
+								fixBox.setSelected(true);
+							}
+							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
+							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
+							memoArea.setText(rs.getString("메모"));
+						}
+					}
+					catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
