@@ -436,7 +436,7 @@ public class HomeUI extends JFrame{
 			String sql = "SELECT 이름 "
 					+ "FROM 유저,소속 "
 					+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
-					+ "AND 소속.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
+					+ "AND 소속.팀_번호 in (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
 			
 			ResultSet src = db.executeQurey(sql);
 			System.out.println(ID);
