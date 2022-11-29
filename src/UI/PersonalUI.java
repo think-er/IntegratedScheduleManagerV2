@@ -21,7 +21,10 @@ import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -35,6 +38,9 @@ public class PersonalUI {
 	
 	// 스케줄표 아이디를 불러오기 위한 변수
 	private static String ID;
+	// 등록에 쓰일 변수
+	public static String WEEK = "";
+	public static String FIX;
 	DB_Conn_Query db = new DB_Conn_Query();
 	//----------------------------
 	
@@ -189,8 +195,8 @@ public class PersonalUI {
 		subFrame.getContentPane().add(memoScrollPane);
 		//		stMinuteBox = new JComboBox(minuteCb);
 		//		edMinuteBox = new JComboBox(minuteCb);
-				memoArea = new JTextArea();
-				memoScrollPane.setViewportView(memoArea);
+		memoArea = new JTextArea();
+		memoScrollPane.setViewportView(memoArea);
 		subFrame.getContentPane().add(delBtn);
 		
 		JScrollPane personalScrollPane = new JScrollPane();
@@ -206,6 +212,135 @@ public class PersonalUI {
 		subFrame.getContentPane().add(lblNewLabel);
 		
 		JButton addBtn = new JButton("등록");
+		// 등록 버튼을 눌렀을 시 쿼리에 데이터 저장
+		addBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ResultSet rs = db.executeQurey("SELECT COUNT(*) FROM 스케줄");
+				
+				int SCNUM=0;
+				try {
+					while(rs.next()) {
+						SCNUM = rs.getInt(1);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.out.println(SCNUM);
+				String SCNAME = titleField.getText();
+				
+				int year = Integer.parseInt(yearField.getText());
+				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
+				int day = Integer.parseInt(dayField.getText());
+				
+				// 날짜 Date로 변환
+				String Days = year+"-"+month+"-"+day;
+				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+				LocalDate DATE = LocalDate.parse(Days, sdf);
+				
+				System.out.println(DATE);
+				 
+				int START = Integer.parseInt(stHourBox.getSelectedItem().toString());
+				int END = Integer.parseInt(edHourBox.getSelectedItem().toString());
+				String MEMO = memoArea.getText();
+				
+				// 요일 구하는 식
+				int totalDays = 0;
+				totalDays = totalDays + (year)/4;
+				if((year-1900)%4==0 && month <3) {
+					totalDays = totalDays -1;
+				}
+				if(month==1) {
+						totalDays = totalDays +day;
+				}
+				if(month==2) {
+					totalDays = totalDays +day+31;
+				}
+				if(month==3) {
+					totalDays = totalDays +day+31+28;
+				}
+				if(month==4) {
+					totalDays = totalDays +day+31+28+31;
+				}
+				if(month==5) {
+					totalDays = totalDays +day+31+28+31+30;
+				}
+				if(month==6) {
+					totalDays = totalDays +day+31+28+31+30+31;
+				}
+				if(month==7) {
+					totalDays = totalDays +day+31+28+31+30+31+30;
+				}
+				if(month==8) {
+					totalDays = totalDays +day+31+28+31+30+31+30+31;
+				}
+				if(month==9) {
+					totalDays = totalDays +day+31+28+31+30+31+30+31+31;
+				}
+				if(month==10) {
+					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30;
+				}
+				if(month==11) {
+					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30+31;
+				}
+				if(month==12) {
+					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30+31+30;
+				}
+				
+				int dow = totalDays%7;
+				
+				if(dow==0) {
+					WEEK = "일";
+				}
+				if(dow==1) {
+					WEEK = "월";
+				}
+				if(dow==2) {
+					WEEK = "화";
+				}
+				if(dow==3) {
+					WEEK = "수";
+				}
+				if(dow==4) {
+					WEEK = "목";
+				}
+				if(dow==5) {
+					WEEK = "금";
+				}
+				if(dow==6) {
+					WEEK = "토";
+				}
+				
+				if(SCNAME.length()==0||yearField.getText().isEmpty()||dayField.getText().isEmpty()) {	//일정 제목과 날짜를 입력하지 않았을 때
+						JOptionPane.showMessageDialog(null,"일정 제목과 일정 날짜를 입력하세요.");
+					}
+				else if(START>=END) { //시작시간이 종료시간보다 늦을 경우 경고창
+					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
+				}
+					else {
+						if(fixBox.isSelected()) {
+							FIX = "1";
+							DATE = null;
+						}
+						else {
+							FIX = "0";
+						}
+							
+						SCNUM+=1;
+						DB_Conn_Query db = new DB_Conn_Query();
+						String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"','"+DATE+"','"+MEMO+"')";
+						System.out.print(query);
+						db.executeUpdate(query);
+						// Field 초기화
+						titleField.setText("");  
+						yearField.setText("");
+						dayField.setText("");
+						memoArea.setText("");
+						JOptionPane.showMessageDialog(null,"일정 등록 성공");
+					}
+				}	
+		});
+		
 		addBtn.setBounds(462, 366, 60, 25);
 		subFrame.getContentPane().add(addBtn);
 		
@@ -298,10 +433,6 @@ public class PersonalUI {
 		yoilField = new JTextField();
 		yoilField.setBounds(412, 146, 50, 25);
 		subFrame.getContentPane().add(yoilField);
-		
-		JButton refreshBtn = new JButton("새로고침");
-		refreshBtn.setBounds(565, 26, 97, 23);
-		subFrame.getContentPane().add(refreshBtn);
 	}
 	public void enabled(String b) {
 		Boolean tf=true;
