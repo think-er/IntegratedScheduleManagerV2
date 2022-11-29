@@ -71,7 +71,7 @@ import javax.swing.event.ListSelectionEvent;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 
-public class HomeUI {
+public class HomeUI extends JFrame{
 	
 	// homePanel
 	public JPanel homePanel;
@@ -137,15 +137,15 @@ public class HomeUI {
 	
 	DB_Conn_Query db = new DB_Conn_Query();
 	
-	public HomeUI() {	
+	public HomeUI() {
+		
 		this("20203089","관리");
 	}
 
 	public HomeUI(String id, String level) {
-		
 		ID=id;
 		LEVEL=level;
-		
+
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -241,31 +241,31 @@ public class HomeUI {
 		
 		//----------------------------------- 캘린더에서 년 월 일 받아오는 코드----------------------------------------\\
 		
-		JLabel Sun = new JLabel("New label");
+		JLabel Sun = new JLabel("일");
 		homeScheduleColumn_1.add(Sun);
 		homeScheduleColumnPanel.add(homeScheduleColumn_2);
 		
-		JLabel Mon = new JLabel("New label");
+		JLabel Mon = new JLabel("월");
 		homeScheduleColumn_2.add(Mon);
 		homeScheduleColumnPanel.add(homeScheduleColumn_3);
 		
-		JLabel Tue = new JLabel("New label");
+		JLabel Tue = new JLabel("화");
 		homeScheduleColumn_3.add(Tue);
 		homeScheduleColumnPanel.add(homeScheduleColumn_4);
 		
-		JLabel Wed = new JLabel("New label");
+		JLabel Wed = new JLabel("수");
 		homeScheduleColumn_4.add(Wed);
 		homeScheduleColumnPanel.add(homeScheduleColumn_5);
 		
-		JLabel Thu = new JLabel("New label");
+		JLabel Thu = new JLabel("목");
 		homeScheduleColumn_5.add(Thu);
 		homeScheduleColumnPanel.add(homeScheduleColumn_6);
 		
-		JLabel Fri = new JLabel("New label");
+		JLabel Fri = new JLabel("금");
 		homeScheduleColumn_6.add(Fri);
 		homeScheduleColumnPanel.add(homeScheduleColumn_7);
 		
-		JLabel Sat = new JLabel("New label");
+		JLabel Sat = new JLabel("토");
 		homeScheduleColumn_7.add(Sat);
 		
 		homePanel.add(homeScheduleColumnPanel);
