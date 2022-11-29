@@ -145,6 +145,7 @@ public class HomeUI extends JFrame{
 	public HomeUI(String id, String level) {
 		ID=id;
 		LEVEL=level;
+		
 
 		MainFrame.frame.getContentPane().setLayout(null);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -162,22 +163,6 @@ public class HomeUI extends JFrame{
 				49, 30);
 		homePanel.add(homeUserLabel);
 		
-		// 홈 패널: 권한 
-		String userManagerAuthstr = new String();
-		if(RegisterUI.TF == "1")
-		{
-			userManagerAuthstr = "(관리자)";
-		}
-		else
-		{
-			userManagerAuthstr = "(일반)";
-		}
-		homeManagerAuthLabel = new JLabel("등급: ");
-		homeManagerAuthLabel.setBounds(850, 50, 
-				49, 30);
-		homePanel.add(homeManagerAuthLabel);
-		
-		
 		// 홈 패널: 달력
 		homeCalendar = new JCalendar();
 		homeCalendar.setBounds(HOME_CALENDAR_X, HOME_CALENDAR_Y, 
@@ -191,6 +176,13 @@ public class HomeUI extends JFrame{
 				HOME_SCHEDULELIST_PANEL_Y, HOME_SCHEDULELIST_PANEL_WIDTH,
 				HOME_SCHEDULELIST_PANEL_HEIGHT);
 		homeScheduleListPanel.setLayout(null);
+		
+		// 홈 패널: 권한
+		
+		homeManagerAuthLabel = new JLabel("등급: ");
+		homeManagerAuthLabel.setBounds(850, 50, 
+				49, 30);
+		homePanel.add(homeManagerAuthLabel);
 		
 		// -----------------------------------------------------------------
 		idLabel = new JLabel("");
@@ -378,6 +370,14 @@ public class HomeUI extends JFrame{
 		teamListScrollPane = new JScrollPane();
 		teamListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		IntegrationButton = new JButton("통합 일정 관리");
+		
+		
+		// 관리자가 아닐 시 통합일정생성 버튼 숨기기
+		if (LEVEL.equals("일반")) {
+			IntegrationButton.setVisible(false);
+		}
+
+		
 		IntegrationButton.setFont(new Font("굴림", Font.PLAIN, 12));
 		IntegrationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -386,6 +386,9 @@ public class HomeUI extends JFrame{
 				Integration.Integration.setVisible(true);
 			}
 		});
+		
+		
+
 		
 		JLabel PersonalLabel = new JLabel("팀원 시간표 조회");
 		PersonalLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));

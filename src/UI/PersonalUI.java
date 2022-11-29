@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import java.awt.Dialog.ModalExclusionType;
 
 public class PersonalUI {
 	
@@ -81,7 +82,7 @@ public class PersonalUI {
 	private void init(String id) {
 //		String[] minuteCb = {"00", "30"};
 		
-		subFrame = new JFrame();	
+		subFrame = new JFrame();
 		
 		titleLabel = new JLabel("일정 제목");
 		dateLabel = new JLabel("일정 날짜");
