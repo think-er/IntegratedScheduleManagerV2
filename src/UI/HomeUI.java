@@ -382,7 +382,7 @@ public class HomeUI extends JFrame{
 		IntegrationButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//HomeUI.setVisible(false) 삭제
-				IntegrationUI Integration = new IntegrationUI();
+				IntegrationUI Integration = new IntegrationUI(id);
 				Integration.Integration.setVisible(true);
 			}
 		});
