@@ -27,6 +27,8 @@ import javax.swing.DefaultListModel;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PersonalUI {
 	
@@ -75,7 +77,7 @@ public class PersonalUI {
 	};
 	protected static String selected;
 	private JLabel yoilLabel;
-	private JTextField textField;
+	private JTextField yoilField;
 	
 	public static void main(String[] args) {
 		new PersonalUI(ID);
@@ -111,6 +113,22 @@ public class PersonalUI {
 		monthBox = new JComboBox(monthCb);
 		dayField = new JTextField();
 		fixBox = new JCheckBox();
+		fixBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(fixBox.isSelected()==true) {	//고정 체크 : 요일 활성화, 날짜 비활성화
+					yoilField.setEnabled(true);
+					yearField.setEnabled(false);
+					monthBox.setEnabled(false);
+					dayField.setEnabled(false);
+				}
+				else {	//고정 체크 x : 요일 비활성화, 날짜 활성화
+					yoilField.setEnabled(false);
+					yearField.setEnabled(true);
+					monthBox.setEnabled(true);
+					dayField.setEnabled(true);
+				}
+			}
+		});
 		stHourBox = new JComboBox(hourCb);
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		edHourBox = new JComboBox(hourCb);
@@ -234,13 +252,22 @@ public class PersonalUI {
 					try {
 						while(rs.next()) {
 							titleField.setText(selected);
-							if(rs.getString("고정여부").equals("0")) {	//비고정 : 날짜 입력 필요
-								Date d = rs.getDate("날짜");
+							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
 								//yearField.setText((d.getYear()).toString());
-								fixBox.setSelected(false);
-							}
-							else {	//고정 : 날짜 입력 필요 x
 								fixBox.setSelected(true);
+								yoilField.setEnabled(true);
+								yearField.setEnabled(false);
+								monthBox.setEnabled(false);
+								dayField.setEnabled(false);
+								yoilField.setText(rs.getString("요일"));
+							}
+							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
+								Date d = rs.getDate("날짜");
+								fixBox.setSelected(false);
+								yoilField.setEnabled(false);
+								yearField.setEnabled(true);
+								monthBox.setEnabled(true);
+								dayField.setEnabled(true);
 							}
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
 							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
@@ -274,8 +301,8 @@ public class PersonalUI {
 		yoilLabel.setBounds(342, 146, 60, 25);
 		subFrame.getContentPane().add(yoilLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(412, 146, 50, 25);
-		subFrame.getContentPane().add(textField);
+		yoilField = new JTextField();
+		yoilField.setBounds(412, 146, 50, 25);
+		subFrame.getContentPane().add(yoilField);
 	}
 }
