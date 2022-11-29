@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -49,11 +50,12 @@ public class IntegrationUI extends JFrame {
 	private static String ID;
 	protected static String selected;
 	JFrame Integration;
-	private JTextField titleTextField;
-	private JTextField yearTextField;
-	private JTextField dayTextField;
+	private JTextField titleField;
+	private JTextField yearField;
+	private JTextField dayField;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
+	private JTextField yoilField;
 	
 	/**
 	 * Create the application.
@@ -66,6 +68,7 @@ public class IntegrationUI extends JFrame {
 		initialize(id);
 		ID=id;
 	}
+	
 
 	/**
 	 * Initialize the contents of the frame.
@@ -88,15 +91,15 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(fixLabel);
 		
 		JLabel startTimeLabel = new JLabel("시작 시간");
-		startTimeLabel.setBounds(342, 146, 60, 25);
+		startTimeLabel.setBounds(342, 186, 60, 25);
 		Integration.getContentPane().add(startTimeLabel);
 		
 		JLabel endTimeLabel = new JLabel("종료 시간");
-		endTimeLabel.setBounds(342, 186, 60, 25);
+		endTimeLabel.setBounds(342, 229, 60, 25);
 		Integration.getContentPane().add(endTimeLabel);
 		
 		JLabel memoLabel = new JLabel("일정 메모");
-		memoLabel.setBounds(342, 226, 60, 25);
+		memoLabel.setBounds(342, 268, 60, 25);
 		Integration.getContentPane().add(memoLabel);
 		
 		JLabel yearLabel = new JLabel("년");
@@ -111,22 +114,22 @@ public class IntegrationUI extends JFrame {
 		dayLabel.setBounds(602, 106, 20, 25);
 		Integration.getContentPane().add(dayLabel);
 		
-		titleTextField = new JTextField();
-		titleTextField.setBounds(412, 66, 250, 25);
-		Integration.getContentPane().add(titleTextField);
+		titleField = new JTextField();
+		titleField.setBounds(412, 66, 250, 25);
+		Integration.getContentPane().add(titleField);
 		
-		yearTextField = new JTextField();
-		yearTextField.setBounds(412, 106, 50, 25);
-		Integration.getContentPane().add(yearTextField);
+		yearField = new JTextField();
+		yearField.setBounds(412, 106, 50, 25);
+		Integration.getContentPane().add(yearField);
 		
 		JComboBox monthBox = new JComboBox(new Object[]{});
 		monthBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthBox.setBounds(482, 106, 50, 25);
 		Integration.getContentPane().add(monthBox);
 		
-		dayTextField = new JTextField();
-		dayTextField.setBounds(552, 106, 50, 25);
-		Integration.getContentPane().add(dayTextField);
+		dayField = new JTextField();
+		dayField.setBounds(552, 106, 50, 25);
+		Integration.getContentPane().add(dayField);
 		
 		JCheckBox fixBox = new JCheckBox();
 		fixBox.setBounds(652, 106, 32, 25);
@@ -134,28 +137,28 @@ public class IntegrationUI extends JFrame {
 		
 		JComboBox stHourBox = new JComboBox(new Object[]{});
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
-		stHourBox.setBounds(412, 146, 50, 25);
+		stHourBox.setBounds(414, 184, 50, 25);
 		Integration.getContentPane().add(stHourBox);
 		
 		JLabel stHourLabel = new JLabel("시");
-		stHourLabel.setBounds(462, 146, 60, 25);
+		stHourLabel.setBounds(462, 186, 60, 25);
 		Integration.getContentPane().add(stHourLabel);
 		
 		JComboBox edHourBox = new JComboBox(new Object[]{});
 		edHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
-		edHourBox.setBounds(412, 186, 50, 25);
+		edHourBox.setBounds(414, 229, 50, 25);
 		Integration.getContentPane().add(edHourBox);
 		
 		JLabel edHourLabel = new JLabel("시");
-		edHourLabel.setBounds(462, 186, 60, 25);
+		edHourLabel.setBounds(462, 229, 60, 25);
 		Integration.getContentPane().add(edHourLabel);
 		
 		JScrollPane memoScrollPane = new JScrollPane((Component) null);
-		memoScrollPane.setBounds(412, 226, 250, 130);
+		memoScrollPane.setBounds(412, 267, 250, 89);
 		Integration.getContentPane().add(memoScrollPane);
 		
-		JTextArea memoTextField = new JTextArea();
-		memoScrollPane.setViewportView(memoTextField);
+		JTextArea memoArea = new JTextArea();
+		memoScrollPane.setViewportView(memoArea);
 		
 		JButton delBtn = new JButton("삭제");
 		delBtn.setBounds(602, 366, 60, 25);
@@ -187,22 +190,31 @@ public class IntegrationUI extends JFrame {
 			}
 		integrationList.setModel(listModel);
 		
+		// 통합스케줄의 스케줄 클릭 시 
+		
 		integrationList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
 					IntegrationUI.selected = integrationList.getSelectedValue();
-					System.out.println("selected :"+integrationList.getSelectedValue());
-					String query = "SELECT 시작시간, 종료시간, 날짜, 메모 "
+					String query = "SELECT 요일, 시작시간, 종료시간, 날짜, 메모 "
 							+ "FROM 통합스케줄 "
 							+ "WHERE 통합스케줄_이름 = '"+selected+"'";
 					ResultSet rs = db.executeQurey(query);
 					try {
 						while(rs.next()) {
-							titleTextField.setText(selected);
-							Date d = rs.getDate("날짜");
+							titleField.setText(selected);
+							yoilField.setText(rs.getString("요일"));
+							Date date = rs.getDate("날짜");
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
 							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
-							memoTextField.setText(rs.getString("메모"));
+							memoArea.setText(rs.getString("메모"));
+							System.out.println(rs.getDate("날짜"));
+							SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
+							SimpleDateFormat m_date = new SimpleDateFormat("MM");
+							SimpleDateFormat d_date = new SimpleDateFormat("dd");
+							yearField.setText(y_date.format(date));
+							monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
+							dayField.setText(d_date.format(date));
 						}
 					}
 					catch (SQLException e1) {
@@ -212,7 +224,7 @@ public class IntegrationUI extends JFrame {
 			}
 		});
 		
-		
+		//////////////////////////////
 		JLabel lblNewLabel = new JLabel("통합 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
 		lblNewLabel.setBounds(12, 26, 181, 30);
@@ -226,9 +238,17 @@ public class IntegrationUI extends JFrame {
 		addBtn.setBounds(462, 366, 60, 25);
 		Integration.getContentPane().add(addBtn);
 		
+		JLabel yoilLabel = new JLabel("요일");
+		yoilLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		yoilLabel.setBounds(342, 156, 57, 15);
+		Integration.getContentPane().add(yoilLabel);
+		
+		yoilField = new JTextField();
+		yoilField.setBounds(412, 149, 50, 25);
+		Integration.getContentPane().add(yoilField);
+		yoilField.setColumns(10);
+		
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정 관리");
 	}
-
-
 }
