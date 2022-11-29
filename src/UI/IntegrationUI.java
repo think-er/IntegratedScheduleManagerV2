@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -45,6 +47,7 @@ import javax.swing.DefaultListModel;
 
 public class IntegrationUI extends JFrame {
 	private static String ID;
+	protected static String selected;
 	JFrame Integration;
 	private JTextField titleTextField;
 	private JTextField yearTextField;
@@ -187,7 +190,24 @@ public class IntegrationUI extends JFrame {
 		integrationList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {
+					IntegrationUI.selected = integrationList.getSelectedValue();
 					System.out.println("selected :"+integrationList.getSelectedValue());
+					String query = "SELECT 시작시간, 종료시간, 날짜, 메모 "
+							+ "FROM 통합스케줄 "
+							+ "WHERE 통합스케줄_이름 = '"+selected+"'";
+					ResultSet rs = db.executeQurey(query);
+					try {
+						while(rs.next()) {
+							titleTextField.setText(selected);
+							Date d = rs.getDate("날짜");
+							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
+							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
+							memoTextField.setText(rs.getString("메모"));
+						}
+					}
+					catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
