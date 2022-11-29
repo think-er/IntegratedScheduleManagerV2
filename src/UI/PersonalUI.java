@@ -117,16 +117,10 @@ public class PersonalUI {
 		fixBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(fixBox.isSelected()==true) {	//고정 체크 : 요일 활성화, 날짜 비활성화
-					yoilField.setEnabled(true);
-					yearField.setEnabled(false);
-					monthBox.setEnabled(false);
-					dayField.setEnabled(false);
+					enabled("1");
 				}
 				else {	//고정 체크 x : 요일 비활성화, 날짜 활성화
-					yoilField.setEnabled(false);
-					yearField.setEnabled(true);
-					monthBox.setEnabled(true);
-					dayField.setEnabled(true);
+					enabled("0");
 				}
 			}
 		});
@@ -255,7 +249,7 @@ public class PersonalUI {
 							titleField.setText(selected);
 							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
 								//yearField.setText((d.getYear()).toString());
-								fixBox.setSelected(true);
+								enabled("1");
 								yoilField.setEnabled(true);
 								yearField.setEnabled(false);
 								monthBox.setEnabled(false);
@@ -264,17 +258,14 @@ public class PersonalUI {
 							}
 							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
 								Date date = rs.getDate("날짜");
+								enabled("0");
 								SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
 								SimpleDateFormat m_date = new SimpleDateFormat("MM");
 								SimpleDateFormat d_date = new SimpleDateFormat("dd");
 								yearField.setText(y_date.format(date));
 								monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
 								dayField.setText(d_date.format(date));
-								fixBox.setSelected(false);
-								yoilField.setEnabled(false);
-								yearField.setEnabled(true);
-								monthBox.setEnabled(true);
-								dayField.setEnabled(true);
+								
 							}
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
 							edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
@@ -311,5 +302,15 @@ public class PersonalUI {
 		yoilField = new JTextField();
 		yoilField.setBounds(412, 146, 50, 25);
 		subFrame.getContentPane().add(yoilField);
+	}
+	public void enabled(String b) {
+		Boolean tf=true;
+		if(b.equals("0"))tf=false;
+		
+		fixBox.setSelected(tf);
+		yoilField.setEnabled(tf);
+		yearField.setEnabled(!tf);
+		monthBox.setEnabled(!tf);
+		dayField.setEnabled(!tf);
 	}
 }
