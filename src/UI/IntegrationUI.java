@@ -194,7 +194,7 @@ public class IntegrationUI extends JFrame {
 				+ "FROM 통합스케줄,소속 "
 				+ "WHERE 통합스케줄.팀_번호=소속.팀_번호 "
 				+ "AND 소속.유저_아이디="+id;
-		ResultSet rs = db.executeQurey(query);
+		ResultSet rs = db.executeQuery(query);
 		try {
 			while(rs.next()) {
 				listModel.addElement(rs.getString("통합스케줄_이름"));
@@ -215,7 +215,7 @@ public class IntegrationUI extends JFrame {
 							+ "FROM 통합스케줄 "
 							+ "WHERE 통합스케줄_이름 = '"+selected+"' AND "
 									+ "통합스케줄.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+id+")";
-					ResultSet rs = db.executeQurey(query);
+					ResultSet rs = db.executeQuery(query);
 					try {
 						while(rs.next()) {
 							titleField.setText(selected);

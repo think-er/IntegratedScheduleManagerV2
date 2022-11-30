@@ -30,7 +30,7 @@ public class DB_Conn_Query {
      } catch (SQLException e) {         System.out.println("Connection Fail");      }
    }
    
-   public ResultSet executeQurey(String sql) {
+   public ResultSet executeQuery(String sql) {
 		//SQL문 실행하기 위한 메소드 - Parameter : String객체로 만든 SQL문
 		//실행결과는 ResultSet으로 반환
 		
@@ -46,7 +46,7 @@ public class DB_Conn_Query {
 		
 		return src;
 	}
-	//추가
+	
 	public void executeUpdate(String sql) {
 		try {
 			stmt.executeUpdate(sql);

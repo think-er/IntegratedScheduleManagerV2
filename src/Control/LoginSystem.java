@@ -11,7 +11,7 @@ public class LoginSystem {
 	public String LoginSystem(String id, String pw) {
 		DB_Conn_Query db = new DB_Conn_Query();
 		String sql = "SELECT 유저_아이디, 유저_비밀번호, 관리자_여부 FROM 유저";
-		ResultSet src = db.executeQurey(sql);
+		ResultSet src = db.executeQuery(sql);
 		Boolean success = false;
 		String m = "일반";
 		try {

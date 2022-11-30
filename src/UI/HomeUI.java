@@ -438,7 +438,7 @@ public class HomeUI extends JFrame{
 					+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
 					+ "AND 소속.팀_번호 in (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
 			
-			ResultSet src = db.executeQurey(sql);
+			ResultSet src = db.executeQuery(sql);
 			System.out.println(ID);
 			while(src.next()) {
 				listModel.addElement(src.getString("이름"));
@@ -468,7 +468,7 @@ public class HomeUI extends JFrame{
 		// 데이터베이스에서 로그인한 개인 시간표 가져오기
 		try {
 			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 메모 FROM 스케줄 WHERE 유저_아이디 ="+ID;
-			ResultSet rs = db.executeQurey(sql);
+			ResultSet rs = db.executeQuery(sql);
 			while(rs.next()) {
 				String name = rs.getString(1);
 				// 요일 문자가 아닌 숫자로 받기

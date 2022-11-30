@@ -215,7 +215,7 @@ public class PersonalUI {
 		// 등록 버튼을 눌렀을 시 쿼리에 데이터 저장
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ResultSet rs = db.executeQurey("SELECT COUNT(*) FROM 스케줄");
+				ResultSet rs = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
 				
 				int SCNUM=0;
 				try {
@@ -359,7 +359,7 @@ public class PersonalUI {
 				+ "FROM 스케줄,유저 "
 				+ "WHERE 스케줄.유저_아이디=유저.유저_아이디 "
 				+ "AND 유저.유저_아이디="+id;
-		ResultSet rs = db.executeQurey(query);
+		ResultSet rs = db.executeQuery(query);
 		try {
 			while(rs.next()) {
 				listModel.addElement(rs.getString("스케줄_이름"));
@@ -378,7 +378,7 @@ public class PersonalUI {
 					String sql = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
 							+ "FROM 스케줄 "
 							+ "WHERE 스케줄_이름 = '"+selected+"' AND 유저_아이디 = "+id;
-					ResultSet rs = db.executeQurey(sql);
+					ResultSet rs = db.executeQuery(sql);
 					try {
 						while(rs.next()) {
 							titleField.setText(selected);
