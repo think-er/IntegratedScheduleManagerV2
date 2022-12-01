@@ -18,6 +18,8 @@ public class EventUI extends JPanel {
 	private int y;
 	public boolean eventMode = false;
 	// false == eventAddBtn / true == eventNameLabel
+	public boolean eventCompMode = false;
+	// false == 기본 모드 / true == eventComp 모드
 	private String eventName;
 	private String eventMemo;
 	private JButton eventAddBtn;
@@ -46,6 +48,10 @@ public class EventUI extends JPanel {
 		this.eventMode = Mode;
 	}
 	
+	public void setEventCompMode(Boolean CompMode) {
+		this.eventCompMode = CompMode;
+	}
+	
 	public void viewEventMode() {
 		if(!this.eventMode) {
 			eventAddBtn.setVisible(true);
@@ -57,16 +63,31 @@ public class EventUI extends JPanel {
 		}
 	}
 	
+	public void viewEventCompMode() {
+		if(!this.eventCompMode) {
+			eventCompBtn.setVisible(false);
+			viewEventMode();
+		}
+		else {
+			eventAddBtn.setVisible(false);
+			eventNameLabel.setVisible(false);
+			eventCompBtn.setVisible(true);
+		}
+	}
+	
 	public EventUI() {
 		
+		// 추가
 		eventAddBtn = new JButton("+");
 		eventAddBtn.setFont(new Font("나눔고딕", Font.BOLD, 15));
 		eventAddBtn.setBounds(0, 0, 90, 80);
 		
+		// 이벤트 보기
 		eventNameLabel = new JLabel();
 		eventNameLabel.setFont(new Font("나눔고딕", Font.BOLD, 10));
 		eventNameLabel.setBounds(0, 0, 90, 80);
 		
+		// 통합 일정 겹쳐지는 칸 보기
 		eventCompBtn = new JButton();
 		eventCompBtn.setBackground(new Color(0, 0, 0));
 		eventCompBtn.setBounds(0, 0, 90, 80);
