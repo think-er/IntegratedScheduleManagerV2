@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
-import Entity.Schedule;
+//import Entity.Schedule;
 import oracle.jdbc.OracleTypes;
 
 public class DB_Conn_Query {
