@@ -434,6 +434,41 @@ public class PersonalUI {
 		yoilField.setEnabled(false);
 		yoilField.setBounds(412, 146, 50, 25);
 		subFrame.getContentPane().add(yoilField);
+		
+		JButton refreshBtn = new JButton("새로고침");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel<String> listModel = new DefaultListModel<String>();
+				
+				String query = "SELECT 스케줄_이름 "
+						+ "FROM 스케줄,유저 "
+						+ "WHERE 스케줄.유저_아이디=유저.유저_아이디 "
+						+ "AND 유저.유저_아이디="+id;
+				ResultSet rs = db.executeQuery(query);
+				try {
+					while(rs.next()) {
+						listModel.addElement(rs.getString("스케줄_이름"));
+					}
+				}
+				catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+				personalList.setModel(listModel);
+				
+				titleField.setText("");
+				yoilField.setText("");
+				yearField.setText("");
+				monthBox.setSelectedIndex(0);
+				dayField.setText("");
+				stHourBox.setSelectedIndex(0);
+				edHourBox.setSelectedIndex(0);
+				memoArea.setText("");
+				fixBox.setSelected(false);
+				enabled("0");
+			}
+		});
+		refreshBtn.setBounds(565, 26, 97, 23);
+		subFrame.getContentPane().add(refreshBtn);
 	}
 	public void enabled(String b) {
 		Boolean tf=true;

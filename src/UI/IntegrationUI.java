@@ -22,6 +22,7 @@ import java.awt.Font;
 import java.awt.Rectangle;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
@@ -200,9 +201,9 @@ public class IntegrationUI extends JFrame {
 				listModel.addElement(rs.getString("통합스케줄_이름"));
 			}
 		}
-			catch (SQLException e) {
-				e.printStackTrace();
-			}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		integrationList.setModel(listModel);
 		
 		// 통합스케줄의 스케줄 클릭 시 
@@ -271,8 +272,42 @@ public class IntegrationUI extends JFrame {
 		yoilField.setBounds(412, 149, 50, 25);
 		Integration.getContentPane().add(yoilField);
 		yoilField.setColumns(10);
-		
+		//------------------------------새로고침 버튼 이벤트-------------------------------
 		JButton refreshBtn = new JButton("새로고침");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel<String> listModel = new DefaultListModel<String>();
+				
+				String query = "SELECT 통합스케줄_이름 "
+						+ "FROM 통합스케줄,소속 "
+						+ "WHERE 통합스케줄.팀_번호=소속.팀_번호 "
+						+ "AND 소속.유저_아이디="+id;
+				ResultSet rs = db.executeQuery(query);
+				try {
+					while(rs.next()) {
+						listModel.addElement(rs.getString("통합스케줄_이름"));
+					}
+				}
+				catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+				integrationList.setModel(listModel);
+				
+				titleField.setText("");
+				yoilField.setText("");
+				yearField.setText("");
+				monthBox.setSelectedIndex(0);
+				dayField.setText("");
+				stHourBox.setSelectedIndex(0);
+				edHourBox.setSelectedIndex(0);
+				memoArea.setText("");
+				fixBox.setSelected(false);
+				enabled("0");
+			}
+		});
+		
+		
+		//------------------------------새로고침 버튼 이벤트 end----------------------------
 		refreshBtn.setBounds(565, 26, 97, 23);
 		Integration.getContentPane().add(refreshBtn);
 		
