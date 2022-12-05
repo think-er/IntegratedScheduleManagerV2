@@ -118,10 +118,12 @@ public class PersonalUI {
 //		edMinuteLabel = new JLabel("분");
 		titleField = new JTextField();
 		yearField = new JTextField("2022");
+		
 		monthBox = new JComboBox(monthCb);
 		monthBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//월 선택시 dayBox 변경
+				dayBox.removeAllItems();
 				Calendar cal = Calendar.getInstance();
 				int year = Integer.parseInt(yearField.getText());
 				int month = Integer.parseInt((String) monthBox.getSelectedItem());
@@ -217,8 +219,18 @@ public class PersonalUI {
 		personalScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		personalScrollPane.setBounds(12, 66, 307, 290);
 		subFrame.getContentPane().add(personalScrollPane);
+		
 		dayBox = new JComboBox(new Object[]{});
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(2022, 0, 1);
+		int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		for(int i=1;i<=endDay;i++) {
+			dayBox.addItem(String.format("%02d", i));
+		}
+		
 		dayBox.setBounds(550, 106, 50, 25);
+		
 		subFrame.getContentPane().add(dayBox);
 		JLabel lblNewLabel = new JLabel("개인 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
