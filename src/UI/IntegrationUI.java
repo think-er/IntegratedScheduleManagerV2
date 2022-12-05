@@ -71,6 +71,8 @@ public class IntegrationUI extends JFrame {
 	public static String StartOfWeekFormat;
 	public static String EndOfWeekFormat;
 	
+	JList<String> integrationList;
+	
 	DB_Conn_Query db = new DB_Conn_Query();
 	
 	/**
@@ -209,7 +211,7 @@ public class IntegrationUI extends JFrame {
 		IntegrationScrollPane.setBounds(12, 66, 307, 290);
 		Integration.getContentPane().add(IntegrationScrollPane);
 		
-		JList<String> integrationList = new JList<String>();
+		integrationList = new JList<String>();
 		integrationList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		IntegrationScrollPane.setViewportView(integrationList);
 		
@@ -336,12 +338,8 @@ public class IntegrationUI extends JFrame {
 						System.out.print(query);
 						db.executeUpdate(query);
 						
-						// Field 초기화
-						titleField.setText("");  
-						yearField.setText("");
-						dayBox.setSelectedIndex(0);
-						memoArea.setText("");
-						JOptionPane.showMessageDialog(null,"일정 등록 성공");
+						// 등록 성공 : 새로고침
+						refresh();
 					}
 				
 			}
@@ -363,33 +361,7 @@ public class IntegrationUI extends JFrame {
 		JButton refreshBtn = new JButton("새로고침");
 		refreshBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultListModel<String> listModel = new DefaultListModel<String>();
-				
-				String query = "SELECT 통합스케줄_이름 "
-						+ "FROM 통합스케줄,소속 "
-						+ "WHERE 통합스케줄.팀_번호=소속.팀_번호 "
-						+ "AND 소속.유저_아이디="+id;
-				ResultSet rs = db.executeQuery(query);
-				try {
-					while(rs.next()) {
-						listModel.addElement(rs.getString("통합스케줄_이름"));
-					}
-				}
-				catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-				integrationList.setModel(listModel);
-				
-				titleField.setText("");
-				yoilField.setText("");
-				yearField.setText("2022");
-				monthBox.setSelectedIndex(0);
-				dayBox.setSelectedIndex(0);
-				stHourBox.setSelectedIndex(0);
-				edHourBox.setSelectedIndex(0);
-				memoArea.setText("");
-				fixBox.setSelected(false);
-				enabled("0");
+				refresh();
 			}
 		});
 		
@@ -423,5 +395,34 @@ public class IntegrationUI extends JFrame {
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
 		dayBox.setEnabled(!tf);
+	}
+	public void refresh() {
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		
+		String query = "SELECT 통합스케줄_이름 "
+				+ "FROM 통합스케줄,소속 "
+				+ "WHERE 통합스케줄.팀_번호=소속.팀_번호 "
+				+ "AND 소속.유저_아이디="+ID;
+		ResultSet rs = db.executeQuery(query);
+		try {
+			while(rs.next()) {
+				listModel.addElement(rs.getString("통합스케줄_이름"));
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		integrationList.setModel(listModel);
+		
+		titleField.setText("");
+		yoilField.setText("");
+		yearField.setText("2022");
+		monthBox.setSelectedIndex(0);
+		dayBox.setSelectedIndex(0);
+		stHourBox.setSelectedIndex(0);
+		edHourBox.setSelectedIndex(0);
+		memoArea.setText("");
+		fixBox.setSelected(false);
+		enabled("0");
 	}
 }
