@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -54,7 +55,7 @@ public class IntegrationUI extends JFrame {
 	private JTextField titleField;
 	private JTextField yearField;
 	private JComboBox monthBox;
-	private JTextField dayField;
+	private JComboBox dayBox;
 	private JCheckBox fixBox;
 	private JComboBox stHourBox;
 	private JComboBox edHourBox;
@@ -125,17 +126,30 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(titleField);
 		
 		yearField = new JTextField();
+		yearField.setText("2022");
 		yearField.setBounds(412, 106, 50, 25);
 		Integration.getContentPane().add(yearField);
 		
 		monthBox = new JComboBox(new Object[]{});
+		monthBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//월 선택시 dayBox 변경
+				Calendar cal = Calendar.getInstance();
+				int year = Integer.parseInt(yearField.getText());
+				int month = Integer.parseInt((String) monthBox.getSelectedItem());
+				
+				cal.set(year, month - 1, 1);
+				
+				int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				
+				for(int i=1;i<=endDay;i++) {
+					dayBox.addItem(String.format("%02d", i));
+				}
+			}
+		});
 		monthBox.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		monthBox.setBounds(482, 106, 50, 25);
 		Integration.getContentPane().add(monthBox);
-		
-		dayField = new JTextField();
-		dayField.setBounds(552, 106, 50, 25);
-		Integration.getContentPane().add(dayField);
 		
 		fixBox = new JCheckBox();
 		fixBox.addActionListener(new ActionListener() {
@@ -233,7 +247,7 @@ public class IntegrationUI extends JFrame {
 								SimpleDateFormat d_date = new SimpleDateFormat("dd");
 								yearField.setText(y_date.format(date));
 								monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
-								dayField.setText(d_date.format(date));
+								dayBox.setSelectedIndex(Integer.parseInt(d_date.format(date))-1);
 								
 							}
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
@@ -295,9 +309,9 @@ public class IntegrationUI extends JFrame {
 				
 				titleField.setText("");
 				yoilField.setText("");
-				yearField.setText("");
+				yearField.setText("2022");
 				monthBox.setSelectedIndex(0);
-				dayField.setText("");
+				dayBox.setSelectedIndex(0);
 				stHourBox.setSelectedIndex(0);
 				edHourBox.setSelectedIndex(0);
 				memoArea.setText("");
@@ -311,6 +325,10 @@ public class IntegrationUI extends JFrame {
 		refreshBtn.setBounds(565, 26, 97, 23);
 		Integration.getContentPane().add(refreshBtn);
 		
+		dayBox = new JComboBox(new Object[]{});
+		dayBox.setBounds(550, 106, 50, 25);
+		Integration.getContentPane().add(dayBox);
+		
 		Integration.setResizable(false);
 		Integration.setTitle("통합 일정 관리");
 	}
@@ -322,6 +340,6 @@ public class IntegrationUI extends JFrame {
 		yoilField.setEnabled(tf);
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
-		dayField.setEnabled(!tf);
+		dayBox.setEnabled(!tf);
 	}
 }

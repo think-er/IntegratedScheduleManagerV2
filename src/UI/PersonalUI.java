@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -67,7 +68,7 @@ public class PersonalUI {
 	private JTextField titleField;
 	private JTextField yearField;
 	private JComboBox monthBox;
-	private JTextField dayField;
+	private JComboBox dayBox;
 	private JCheckBox fixBox;
 	private JComboBox stHourBox;
 //	private JComboBox stMinuteBox;
@@ -116,9 +117,24 @@ public class PersonalUI {
 //		stMinuteLabel = new JLabel("분");
 //		edMinuteLabel = new JLabel("분");
 		titleField = new JTextField();
-		yearField = new JTextField();
+		yearField = new JTextField("2022");
 		monthBox = new JComboBox(monthCb);
-		dayField = new JTextField();
+		monthBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//월 선택시 dayBox 변경
+				Calendar cal = Calendar.getInstance();
+				int year = Integer.parseInt(yearField.getText());
+				int month = Integer.parseInt((String) monthBox.getSelectedItem());
+				
+				cal.set(year, month - 1, 1);
+				
+				int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+				
+				for(int i=1;i<=endDay;i++) {
+					dayBox.addItem(String.format("%02d", i));
+				}
+			}
+		});
 		fixBox = new JCheckBox();
 		fixBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -152,7 +168,6 @@ public class PersonalUI {
 		yearLabel.setBounds(462, 106, 60, 25);
 		monthBox.setBounds(482, 106, 50, 25);
 		monthLabel.setBounds(532, 106, 60,25);
-		dayField.setBounds(552, 106, 50, 25);
 		dayLabel.setBounds(602, 106, 60, 25);
 		fixLabel.setBounds(622, 106, 50, 25);
 		fixBox.setBounds(652,106,32,25);
@@ -181,7 +196,6 @@ public class PersonalUI {
 		subFrame.getContentPane().add(titleField);
 		subFrame.getContentPane().add(yearField);
 		subFrame.getContentPane().add(monthBox);
-		subFrame.getContentPane().add(dayField);
 		subFrame.getContentPane().add(fixBox);
 		subFrame.getContentPane().add(stHourBox);
 //		subFrame.add(stMinuteBox);
@@ -203,9 +217,9 @@ public class PersonalUI {
 		personalScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		personalScrollPane.setBounds(12, 66, 307, 290);
 		subFrame.getContentPane().add(personalScrollPane);
-		
-		
-		
+		dayBox = new JComboBox(new Object[]{});
+		dayBox.setBounds(550, 106, 50, 25);
+		subFrame.getContentPane().add(dayBox);
 		JLabel lblNewLabel = new JLabel("개인 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
 		lblNewLabel.setBounds(12, 26, 181, 30);
@@ -231,7 +245,7 @@ public class PersonalUI {
 				
 				int year = Integer.parseInt(yearField.getText());
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
-				int day = Integer.parseInt(dayField.getText());
+				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
 				
 				// 날짜 Date로 변환
 				String Days = year+"-"+month+"-"+day;
@@ -311,8 +325,8 @@ public class PersonalUI {
 					WEEK = "토";
 				}
 				
-				if(SCNAME.length()==0||yearField.getText().isEmpty()||dayField.getText().isEmpty()) {	//일정 제목과 날짜를 입력하지 않았을 때
-						JOptionPane.showMessageDialog(null,"일정 제목과 일정 날짜를 입력하세요.");
+				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	//일정 제목과 날짜를 입력하지 않았을 때
+						JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
 					}
 				else if(START>=END) { //시작시간이 종료시간보다 늦을 경우 경고창
 					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
@@ -334,7 +348,7 @@ public class PersonalUI {
 						// Field 초기화
 						titleField.setText("");  
 						yearField.setText("");
-						dayField.setText("");
+						dayBox.setSelectedIndex(0);
 						memoArea.setText("");
 						JOptionPane.showMessageDialog(null,"일정 등록 성공");
 					}
@@ -395,7 +409,7 @@ public class PersonalUI {
 								SimpleDateFormat d_date = new SimpleDateFormat("dd");
 								yearField.setText(y_date.format(date));
 								monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
-								dayField.setText(d_date.format(date));
+								dayBox.setSelectedIndex(Integer.parseInt(d_date.format(date))-1);
 								
 							}
 							stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
@@ -457,9 +471,9 @@ public class PersonalUI {
 				
 				titleField.setText("");
 				yoilField.setText("");
-				yearField.setText("");
+				yearField.setText("2022");
 				monthBox.setSelectedIndex(0);
-				dayField.setText("");
+				dayBox.setSelectedIndex(0);
 				stHourBox.setSelectedIndex(0);
 				edHourBox.setSelectedIndex(0);
 				memoArea.setText("");
@@ -469,6 +483,8 @@ public class PersonalUI {
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
 		subFrame.getContentPane().add(refreshBtn);
+		
+		
 	}
 	public void enabled(String b) {
 		Boolean tf=true;
@@ -478,6 +494,6 @@ public class PersonalUI {
 		yoilField.setEnabled(tf);
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
-		dayField.setEnabled(!tf);
+		dayBox.setEnabled(!tf);
 	}
 }
