@@ -258,9 +258,10 @@ public class PersonalUI {
 				int year = Integer.parseInt(yearField.getText());
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
-				
+				String day2 = (dayBox.getSelectedItem().toString());
+						
 				// 날짜 Date로 변환
-				String Days = year+"-"+month+"-"+day;
+				String Days = year+"-"+month+"-"+day2;
 				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
 				LocalDate DATE = LocalDate.parse(Days, sdf);
 				
