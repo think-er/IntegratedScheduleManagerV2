@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,6 +79,8 @@ public class PersonalUI {
 	private JScrollPane memoScrollPane;
 	private JButton delBtn;
 	
+	JList<String> personalList;
+	
 	public static String[] monthCb = {"01", "02", "03", "04", "05", "06"
 			, "07", "08", "09", "10", "11", "12"};
 	public static String[] hourCb = {"09", "10", "11", "12", "13", "14", "15", "16", "17",
@@ -86,6 +89,9 @@ public class PersonalUI {
 	protected static String selected;
 	private JLabel yoilLabel;
 	private JTextField yoilField;
+	
+	private int START;
+	private int END;
 	
 	public static void main(String[] args) {
 		new PersonalUI(ID);
@@ -258,17 +264,18 @@ public class PersonalUI {
 				int year = Integer.parseInt(yearField.getText());
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
+				String month2 = monthBox.getSelectedItem().toString();
 				String day2 = (dayBox.getSelectedItem().toString());
 						
 				// 날짜 Date로 변환
-				String Days = year+"-"+month+"-"+day2;
+				String Days = year+"-"+month2+"-"+day2;
 				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
 				LocalDate DATE = LocalDate.parse(Days, sdf);
-				
+				String DATE2 = "'"+DATE.toString()+"'";
 				System.out.println(DATE);
 				 
-				int START = Integer.parseInt(stHourBox.getSelectedItem().toString());
-				int END = Integer.parseInt(edHourBox.getSelectedItem().toString());
+				START = Integer.parseInt(stHourBox.getSelectedItem().toString());
+				END = Integer.parseInt(edHourBox.getSelectedItem().toString());
 				String MEMO = memoArea.getText();
 				
 				// 요일 구하는 식
@@ -338,34 +345,70 @@ public class PersonalUI {
 					WEEK = "토";
 				}
 				
-				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	//일정 제목과 날짜를 입력하지 않았을 때
-						JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
-					}
-				else if(START>=END) { //시작시간이 종료시간보다 늦을 경우 경고창
-					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
+				//-------------------------------------------예외 조건--------------------------------------------
+				Boolean success=true;
+				Boolean s=true;
+				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
+				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
+					JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
+					success=false;
 				}
-					else {
-						if(fixBox.isSelected()) {
-							FIX = "1";
-							DATE = null;
+				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
+				else if(START>=END) { 
+					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
+					success=false;
+				}
+				//예외 3 : 일정이 중복될 경우
+				//고정 : 시간 중복 check
+				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
+				//(통합스케줄도 비교해야됨)
+				success = timeCheck("1");	//고정스케줄과 시간 같은지 체크
+				if(fixBox.isSelected()) {	
+					FIX = "1";
+					DATE2 = null;
+				}
+				//비고정 : 날짜 중복 check -> 시간 중복 check
+				//비고정 일정들 : 날짜가 다르면 시간이 같아도 됨
+				else {
+					FIX = "0";
+					String sql = "SELECT 날짜,시작시간,종료시간 "	//비고정 스케줄 가져옴
+							+ "FROM 스케줄 "
+							+ "WHERE 유저_아이디 = " + ID + " AND "
+							+ "고정여부 = '0'";
+					ResultSet src = db.executeQuery(sql);
+					Date dateData;
+					ZoneId defaultZoneId = ZoneId.systemDefault();
+					Date date = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
+					try {
+						while(src.next()) {
+							dateData = src.getDate(1);
+							//날짜가 같을 시 비고정 스케줄과 시간 비교
+							if(date == dateData) {	
+								s = timeCheck("0");
+							}
 						}
-						else {
-							FIX = "0";
-						}
-							
-						SCNUM+=1;
-						DB_Conn_Query db = new DB_Conn_Query();
-						String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"','"+DATE+"','"+MEMO+"')";
-						System.out.print(query);
-						db.executeUpdate(query);
-						// Field 초기화
-						titleField.setText("");  
-						yearField.setText("");
-						dayBox.setSelectedIndex(0);
-						memoArea.setText("");
-						JOptionPane.showMessageDialog(null,"일정 등록 성공");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
-				}	
+				}
+				
+				//-------------------------------------------예외 조건 end-----------------------------------------
+				//등록
+				if(success&&s){
+					SCNUM+=1;
+					DB_Conn_Query db = new DB_Conn_Query();
+					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+DATE2+",'"+MEMO+"')";
+					System.out.print(query);
+					db.executeUpdate(query);
+					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
+					//등록 성공 : 새로고침
+					refresh();
+				}
+				else {
+					System.out.println(success+" "+s);
+					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+				}
+			}	
 		});
 		
 		addBtn.setBounds(462, 366, 60, 25);
@@ -377,7 +420,7 @@ public class PersonalUI {
 		subFrame.setSize(700,440);
 		subFrame.setVisible(true);
 		
-		JList<String> personalList = new JList<String>();
+		personalList = new JList<String>();
 		
 		personalList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
@@ -465,33 +508,7 @@ public class PersonalUI {
 		JButton refreshBtn = new JButton("새로고침");
 		refreshBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultListModel<String> listModel = new DefaultListModel<String>();
-				
-				String query = "SELECT 스케줄_이름 "
-						+ "FROM 스케줄,유저 "
-						+ "WHERE 스케줄.유저_아이디=유저.유저_아이디 "
-						+ "AND 유저.유저_아이디="+id;
-				ResultSet rs = db.executeQuery(query);
-				try {
-					while(rs.next()) {
-						listModel.addElement(rs.getString("스케줄_이름"));
-					}
-				}
-				catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-				personalList.setModel(listModel);
-				
-				titleField.setText("");
-				yoilField.setText("");
-				yearField.setText("2022");
-				monthBox.setSelectedIndex(0);
-				dayBox.setSelectedIndex(0);
-				stHourBox.setSelectedIndex(0);
-				edHourBox.setSelectedIndex(0);
-				memoArea.setText("");
-				fixBox.setSelected(false);
-				enabled("0");
+				refresh();
 			}
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
@@ -508,5 +525,58 @@ public class PersonalUI {
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
 		dayBox.setEnabled(!tf);
+	}
+	public boolean timeCheck(String fix) {
+		String sql = "SELECT 시작시간, 종료시간 "
+				+ "FROM 스케줄 "
+				+ "WHERE 유저_아이디 = " + ID + " AND "
+				+ "요일 = '"+WEEK+"' AND "
+				+ "고정여부 = '" + fix + "'";
+		ResultSet src = db.executeQuery(sql);
+		
+		int stTime, edTime;
+		
+		try {
+			while(src.next()) {
+				stTime = src.getInt(1);
+				edTime = src.getInt(2);
+				
+				if(START >= stTime && END <= edTime) {
+					return false;
+				}
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return true;
+	}
+	public void refresh() {
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		
+		String query = "SELECT 스케줄_이름 "
+				+ "FROM 스케줄,유저 "
+				+ "WHERE 스케줄.유저_아이디=유저.유저_아이디 "
+				+ "AND 유저.유저_아이디="+ID;
+		ResultSet rs = db.executeQuery(query);
+		try {
+			while(rs.next()) {
+				listModel.addElement(rs.getString("스케줄_이름"));
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		personalList.setModel(listModel);
+		
+		titleField.setText("");
+		yoilField.setText("");
+		yearField.setText("2022");
+		monthBox.setSelectedIndex(0);
+		dayBox.setSelectedIndex(0);
+		stHourBox.setSelectedIndex(0);
+		edHourBox.setSelectedIndex(0);
+		memoArea.setText("");
+		fixBox.setSelected(false);
+		enabled("0");
 	}
 }
