@@ -14,9 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -34,6 +37,7 @@ import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -53,6 +57,7 @@ public class IntegrationUI extends JFrame {
 	private static String ID;
 	protected static String selected;
 	JFrame Integration;
+	public static String FIX;
 	private JTextField titleField;
 	private JTextField yearField;
 	private JComboBox monthBox;
@@ -62,6 +67,9 @@ public class IntegrationUI extends JFrame {
 	private JComboBox edHourBox;
 	private JTextArea memoArea;
 	private JTextField yoilField;
+	
+	public static String StartOfWeekFormat;
+	public static String EndOfWeekFormat;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
 	
@@ -274,20 +282,68 @@ public class IntegrationUI extends JFrame {
 		modifyBtn.setBounds(532, 366, 60, 25);
 		Integration.getContentPane().add(modifyBtn);
 		
+		
+		// 통합스케줄 추가
 		JButton addBtn = new JButton("등록");
 		addBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String SCNAME = titleField.getText();
-				int year = Integer.parseInt(yearField.getText());
+				ResultSet rs = db.executeQuery("SELECT 통합_번호, 팀_번호 from 통합스케줄");
+				int SCNUM=0;
+				int TEAM_NUM=0;
+				try {
+					while(rs.next()) {
+						SCNUM = rs.getInt(1);
+						TEAM_NUM = rs.getInt(2);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				String SCNAME = titleField.getText(); // 통합스케줄 이름
+				int year = Integer.parseInt(yearField.getText()); 
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
-				int day = Integer.parseInt(dayBox.getSelectedItem().toString());		
-				String.format("%02d", month);
-				String.format("%02d", day);
-				System.out.println(year+"-"+month+"-"+day);
-//				LocalDate date = LocalDate.of(year, month,day);
-//				System.out.println(SCNAME);
-//				System.out.println(date);	
+				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
+				int START = Integer.parseInt(stHourBox.getSelectedItem().toString());
+				int END = Integer.parseInt(edHourBox.getSelectedItem().toString());
+				String MEMO = memoArea.getText();
+//				System.out.println(year+"-"+String.format("%02d", month)+"-"+String.format("%02d", day));
+				LocalDate date = LocalDate.of(year, month,day);
+				System.out.println(date);
+				DayOfWeek dayOfWeek = date.getDayOfWeek();
+				System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
+				String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+				
+				if (titleField.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
+				}
+					else if (fixBox.isSelected()) {
+						FIX = "1";
+						date = null;
+						
+					}
+					else {
+						FIX = "0";
+						
+						if (yearField.getText().isEmpty()) {
+							JOptionPane.showMessageDialog(null,"년도를 입력해주세요.");
+						}
+						SCNUM+=1;
+						String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM+",'"+SCNAME+"','"
+								+date+"','"+yoil+"','"+FIX+"',"+START+","+END+",'"+MEMO+"')";
+						
+						System.out.print(query);
+						db.executeUpdate(query);
+						
+						// Field 초기화
+						titleField.setText("");  
+						yearField.setText("");
+						dayBox.setSelectedIndex(0);
+						memoArea.setText("");
+						JOptionPane.showMessageDialog(null,"일정 등록 성공");
+					}
+				
 			}
 		});
 		addBtn.setBounds(462, 366, 60, 25);
