@@ -73,6 +73,7 @@ import java.awt.GridLayout;
 import java.awt.BorderLayout;
 
 import java.util.ArrayList;
+import javax.swing.SwingConstants;
 
 public class HomeUI extends JFrame{
 	
@@ -243,35 +244,63 @@ public class HomeUI extends JFrame{
 		
 		homeScheduleColumnPanel.add(homeScheduleColumn_0);
 		homeScheduleColumnPanel.add(homeScheduleColumn_1);
+		homeScheduleColumn_1.setLayout(null);
+		
+		JLabel SunLabel = new JLabel();
+		SunLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		SunLabel.setBounds(8, 28, 75, 15);
+		SunLabel.setText("일");
+		SunLabel.setForeground(Color.RED);
+		homeScheduleColumn_1.add(SunLabel);
 		
 		//----------------------------------- 캘린더에서 년 월 일 받아오는 코드----------------------------------------\\
 		
 		JLabel Sun = new JLabel();
+		Sun.setHorizontalAlignment(SwingConstants.CENTER);
+		Sun.setBounds(8, 10, 75, 15);
 		Sun.setForeground(Color.RED);
 		homeScheduleColumn_1.add(Sun);
 		homeScheduleColumnPanel.add(homeScheduleColumn_2);
+		homeScheduleColumn_2.setLayout(null);
 		
 		JLabel Mon = new JLabel();
+		Mon.setHorizontalAlignment(SwingConstants.CENTER);
+		Mon.setBounds(8, 10, 75, 15);
 		homeScheduleColumn_2.add(Mon);
 		homeScheduleColumnPanel.add(homeScheduleColumn_3);
+		homeScheduleColumn_3.setLayout(null);
 		
 		JLabel Tue = new JLabel();
+		Tue.setHorizontalAlignment(SwingConstants.CENTER);
+		Tue.setBounds(8, 10, 75, 15);
 		homeScheduleColumn_3.add(Tue);
 		homeScheduleColumnPanel.add(homeScheduleColumn_4);
+		homeScheduleColumn_4.setLayout(null);
 		
 		JLabel Wed = new JLabel();
+		Wed.setHorizontalAlignment(SwingConstants.CENTER);
+		Wed.setBounds(8, 10, 75, 15);
 		homeScheduleColumn_4.add(Wed);
 		homeScheduleColumnPanel.add(homeScheduleColumn_5);
+		homeScheduleColumn_5.setLayout(null);
 		
 		JLabel Thu = new JLabel();
+		Thu.setHorizontalAlignment(SwingConstants.CENTER);
+		Thu.setBounds(8, 10, 75, 15);
 		homeScheduleColumn_5.add(Thu);
 		homeScheduleColumnPanel.add(homeScheduleColumn_6);
+		homeScheduleColumn_6.setLayout(null);
 		
 		JLabel Fri = new JLabel();
+		Fri.setHorizontalAlignment(SwingConstants.CENTER);
+		Fri.setBounds(8, 10, 75, 15);
 		homeScheduleColumn_6.add(Fri);
 		homeScheduleColumnPanel.add(homeScheduleColumn_7);
+		homeScheduleColumn_7.setLayout(null);
 		
 		JLabel Sat = new JLabel();
+		Sat.setHorizontalAlignment(SwingConstants.CENTER);
+		Sat.setBounds(8, 10, 75, 15);
 		Sat.setForeground(Color.BLUE);
 		homeScheduleColumn_7.add(Sat);
 		
@@ -300,21 +329,58 @@ public class HomeUI extends JFrame{
 		//    System.out.println(printDate.format(formatter));
 		//    printDate = printDate.plusDays(1);
 		//}
-		Sun.setText(printDate.format(formatter));
+		Sun.setText("2022-12-04");
 		StartOfWeekFormat = printDate.format(formatter);
 		
 		printDate = printDate.plusDays(1);
 		Mon.setText(printDate.format(formatter));
+		
+		JLabel MonLabel = new JLabel();
+		MonLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		MonLabel.setText("월");
+		MonLabel.setBounds(15, 28, 60, 15);
+		homeScheduleColumn_2.add(MonLabel);
 		printDate = printDate.plusDays(1);
 		Tue.setText(printDate.format(formatter));
+		
+		JLabel TueLabel = new JLabel();
+		TueLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		TueLabel.setText("화");
+		TueLabel.setBounds(15, 28, 60, 15);
+		homeScheduleColumn_3.add(TueLabel);
 		printDate = printDate.plusDays(1);
 		Wed.setText(printDate.format(formatter));
+		
+		JLabel WedLabel = new JLabel();
+		WedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		WedLabel.setText("수");
+		WedLabel.setBounds(15, 28, 60, 15);
+		homeScheduleColumn_4.add(WedLabel);
 		printDate = printDate.plusDays(1);
 		Thu.setText(printDate.format(formatter));
+		
+		JLabel ThuLabel = new JLabel();
+		ThuLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		ThuLabel.setBounds(15, 28, 60, 15);
+		ThuLabel.setText("목");
+		homeScheduleColumn_5.add(ThuLabel);
 		printDate = printDate.plusDays(1);
 		Fri.setText(printDate.format(formatter));
+		
+		JLabel Fri_1 = new JLabel();
+		Fri_1.setHorizontalAlignment(SwingConstants.CENTER);
+		Fri_1.setText("금");
+		Fri_1.setBounds(15, 28, 60, 15);
+		homeScheduleColumn_6.add(Fri_1);
 		printDate = printDate.plusDays(1);
 		Sat.setText(printDate.format(formatter));
+		
+		JLabel SatLabel = new JLabel();
+		SatLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		SatLabel.setText("토");
+		SatLabel.setForeground(Color.BLUE);
+		SatLabel.setBounds(15, 28, 60, 15);
+		homeScheduleColumn_7.add(SatLabel);
 		
 		EndOfWeekFormat = printDate.plusDays(1).format(formatter);
 		
