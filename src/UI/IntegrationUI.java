@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -274,6 +275,21 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(modifyBtn);
 		
 		JButton addBtn = new JButton("등록");
+		addBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String SCNAME = titleField.getText();
+				int year = Integer.parseInt(yearField.getText());
+				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
+				int day = Integer.parseInt(dayBox.getSelectedItem().toString());		
+				String.format("%02d", month);
+				String.format("%02d", day);
+				System.out.println(year+"-"+month+"-"+day);
+//				LocalDate date = LocalDate.of(year, month,day);
+//				System.out.println(SCNAME);
+//				System.out.println(date);	
+			}
+		});
 		addBtn.setBounds(462, 366, 60, 25);
 		Integration.getContentPane().add(addBtn);
 		
