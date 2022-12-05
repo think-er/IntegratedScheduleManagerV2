@@ -431,6 +431,7 @@ public class PersonalUI {
 		subFrame.getContentPane().add(yoilLabel);
 		
 		yoilField = new JTextField();
+		yoilField.setEnabled(false);
 		yoilField.setBounds(412, 146, 50, 25);
 		subFrame.getContentPane().add(yoilField);
 	}

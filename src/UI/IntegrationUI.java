@@ -267,6 +267,7 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(yoilLabel);
 		
 		yoilField = new JTextField();
+		yoilField.setEnabled(false);
 		yoilField.setBounds(412, 149, 50, 25);
 		Integration.getContentPane().add(yoilField);
 		yoilField.setColumns(10);
