@@ -701,10 +701,15 @@ public class HomeUI extends JFrame{
 		}
 		// 데이터베이스에서 로그인한 개인 시간표 가져오기
 		try {
-			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디="+id +
+			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE (유저_아이디="+id +
 					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
-					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')" +
-					"OR 고정여부=1";
+					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
+					"OR (유저_아이디="+id +
+					"AND 고정여부='1')";
+					
+//					"OR (유저_아이디="+id +
+//					"AND 고정여부='1'";
+//					"OR 고정여부=1";
 
 			ResultSet rs = db.executeQuery(sql);
 			while(rs.next()) {
@@ -743,43 +748,36 @@ public class HomeUI extends JFrame{
 			e.printStackTrace();
 		};
 		
-		try {
-			
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+ID;
-			ResultSet rs = db.executeQuery(sql);
-			String _teamNum = "";
-			while(rs.next()) {
-				_teamNum = rs.getString(1);
-			}
-			
-			// 팀 가져와야한다. 
-			sql = "SELECT 통합스케줄_이름, 시작시간, 종료시간, 날짜, 메모 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
-					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
-					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
-
-			rs = db.executeQuery(sql);
-			while(rs.next()) {
-				String _teamName = rs.getString(1);
-				// 요일 문자가 아닌 숫자로 받기
-				String _teamDays = rs.getString(4);	
-				
-				System.out.println(_teamDays);
-				
-				
-				int startTime = rs.getInt(2);
-				int endTime = rs.getInt(3);
-				String memo = rs.getString(5);
-				
-//				for(int i=startTime - 9; i <= endTime - 9; i++) {
-//					event[i][days2].setEventName(teamName, event[i][days2]);
-//					event[i][days2].setEventMemo(memo);
-//					event[i][days2].setEventMode(true);
-//					event[i][days2].viewEventMode();
-//				}
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		};
+//		try {
+//			
+//			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
+//			ResultSet rs = db.executeQuery(sql);
+//			String _teamNum = "";
+//			while(rs.next()) {
+//				_teamNum = rs.getString(1);
+//			}
+//			
+//			// 팀 가져와야한다. 
+//			sql = "SELECT 통합스케줄_이름, 시작시간, 종료시간, 날짜, 메모 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
+//					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
+//					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
+//
+//			rs = db.executeQuery(sql);
+//			while(rs.next()) {
+//				String _teamName = rs.getString(1);
+//				// 요일 문자가 아닌 숫자로 받기
+//				String _teamDays = rs.getString(4);	
+//				
+//				System.out.println(_teamDays);
+//				
+//				
+//				int startTime = rs.getInt(2);
+//				int endTime = rs.getInt(3);
+//				String memo = rs.getString(5);
+//			}
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		};
 		
 	}
 }
