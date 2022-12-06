@@ -28,6 +28,7 @@ public class RegisterUI {
 	public static String ID = "";
 	public static String PW = "";
 	public static String TF;
+	public static String names;
 	public static String Admin = "1234";
 	
 	public JPanel registerPanel;
@@ -42,6 +43,7 @@ public class RegisterUI {
 	private JTextField registerManagerAuthField;
 	private JCheckBox registerManagerAuthCheck;
 	private JButton toLoginBtn;
+	private JComboBox teamBox;
 	
 	public final static int	REGISTER_MANAGERAUTH_CHECK_X = LoginUI.LOGIN_BTN_X;
 	public final static int	REGISTER_MANAGERAUTH_CHECK_Y = LoginUI.LOGIN_BTN_Y - 40;
@@ -102,7 +104,26 @@ public class RegisterUI {
 		registerManagerAuthField.setEnabled(false);
 		registerManagerAuthField.setBackground(Color.LIGHT_GRAY);
 		registerPanel.add(registerManagerAuthField);
-			
+		
+		teamBox = new JComboBox();
+		teamBox.setBounds(67, 254, 100, 30);
+		registerPanel.add(teamBox);
+		
+		// 팀에서 팀이름 리스트 콤보박스로 받아오기
+		try {
+			String sql = "SELECT 팀_이름 FROM 팀";
+	        ResultSet rs = db.executeQuery(sql);
+
+	        while(rs.next()) 
+	        {
+	           names = rs.getString("팀_이름");
+	           teamBox.addItem(names);
+	        }
+	         
+	        } catch(SQLException s) {
+	           s.printStackTrace();
+	        }
+		
 		registerBtn = new JButton("회원가입");
 		registerBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,9 +152,23 @@ public class RegisterUI {
 						TF = "0";
 				}
 				if(SF) {
+					String Steam;
+					Steam=teamBox.getSelectedItem().toString();
+					ResultSet rs2 = db.executeQuery("SELECT 팀_번호 FROM 팀 WHERE 팀_이름= '"+Steam+"'");
+					System.out.println("SELECT 팀_번호 FROM 팀 WHERE 팀_이름= '"+Steam+"'");
+					int TNUM=0;
+					try {
+						while(rs2.next()) {
+							TNUM = rs2.getInt(1);
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 					DB_Conn_Query db = new DB_Conn_Query();
 					String query = "insert into 유저 values("+ID+",'"+PW+"','"+TF+"','"+NAME+"','"+TELL+"',"+GRADE+")";
+					String query2 = "insert into 소속 values("+TNUM+","+ID+")";
 					db.executeUpdate(query);
+					db.executeUpdate(query2);
 					
 					JOptionPane.showMessageDialog(null,"회원가입 성공");
 					registerPanel.setVisible(false);
@@ -205,25 +240,6 @@ public class RegisterUI {
 		JLabel registerLabel5 = new JLabel("팀명");
 		registerLabel5.setBounds(12, 250, 60, 30);
 		registerPanel.add(registerLabel5);
-		
-		JComboBox teamBox = new JComboBox();
-		teamBox.setBounds(67, 254, 100, 30);
-		registerPanel.add(teamBox);
-		
-		// 팀에서 팀이름 리스트 콤보박스로 받아오기
-		try {
-			String sql = "SELECT 팀_이름 FROM 팀";
-	         ResultSet rs = db.executeQuery(sql);
-
-	         while(rs.next()) 
-	         {
-	            String names = rs.getString("팀_이름");
-	            teamBox.addItem(names);
-	         }
-	         
-	         } catch(SQLException s) {
-	            s.printStackTrace();
-	         }
 			
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_WIDTH);
