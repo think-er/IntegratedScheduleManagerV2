@@ -5,6 +5,10 @@ package UI;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,6 +52,7 @@ public class RegisterUI {
 	private JTextField registerTellField;
 	private JTextField registerGradeField;
 	
+	DB_Conn_Query db = new DB_Conn_Query();
 	
 	public RegisterUI() {
 		init();
@@ -65,34 +70,34 @@ public class RegisterUI {
 //		registerPanel.add(registerTitle);
 		
 		registerIdLabel = new JLabel("학번");
-		registerIdLabel.setBounds(25, 65,
+		registerIdLabel.setBounds(12, 50,
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerIdLabel);
 		registerPanel.setVisible(true);
 		
 		registerIdField = new JTextField();
-		registerIdField.setBounds(80, 66,
+		registerIdField.setBounds(67, 51,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerIdField.setColumns(10);
 		registerPanel.add(registerIdField);
 		
 		registerPwLabel = new JLabel("비밀번호");
-		registerPwLabel.setBounds(25, 105, 
+		registerPwLabel.setBounds(12, 90, 
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerPwLabel);
 			
 		registerPwField = new JPasswordField();
-		registerPwField.setBounds(80, 105,
+		registerPwField.setBounds(67, 90,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerPanel.add(registerPwField);
 		
 		registerManagerAuthLabel = new JLabel("인증번호");
-		registerManagerAuthLabel.setBounds(25, 318, 
+		registerManagerAuthLabel.setBounds(12, 303, 
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerManagerAuthLabel);
 		
 		registerManagerAuthField = new JTextField();
-		registerManagerAuthField.setBounds(80, 319,
+		registerManagerAuthField.setBounds(67, 304,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerManagerAuthField.setEnabled(false);
 		registerManagerAuthField.setBackground(Color.LIGHT_GRAY);
@@ -138,7 +143,7 @@ public class RegisterUI {
 				
 			}
 		});
-		registerBtn.setBounds(292, 318, 
+		registerBtn.setBounds(279, 303, 
 				LoginUI.LOGIN_BTN_WIDTH, LoginUI.LOGIN_BTN_HEIGHT);
 		registerPanel.add(registerBtn);
 		
@@ -155,7 +160,7 @@ public class RegisterUI {
 		registerPanel.add(toLoginBtn);
 		
 		registerManagerAuthCheck = new JCheckBox("관리자");
-		registerManagerAuthCheck.setBounds(302, 265,
+		registerManagerAuthCheck.setBounds(289, 250,
 				REGISTER_MANAGERAUTH_CHECK_WIDTH, REGISTER_MANAGERAUTH_CHECK_HEIGHT);
 		registerManagerAuthCheck.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e)
@@ -171,40 +176,55 @@ public class RegisterUI {
 		MainFrame.frame.getContentPane().add(registerPanel);
 		
 		registerLabel2 = new JLabel("이름");
-		registerLabel2.setBounds(25, 145, 60, 30);
+		registerLabel2.setBounds(12, 130, 60, 30);
 		registerPanel.add(registerLabel2);
 		
 		registerNameField = new JTextField();
 		registerNameField.setColumns(10);
-		registerNameField.setBounds(80, 145, 200, 30);
+		registerNameField.setBounds(67, 130, 200, 30);
 		registerPanel.add(registerNameField);
 		
 		JLabel registerLabel3 = new JLabel("전화번호");
-		registerLabel3.setBounds(25, 185, 60, 30);
+		registerLabel3.setBounds(12, 170, 60, 30);
 		registerPanel.add(registerLabel3);
 		
 		JLabel registerLabel4 = new JLabel("학년");
-		registerLabel4.setBounds(25, 225, 60, 30);
+		registerLabel4.setBounds(12, 210, 60, 30);
 		registerPanel.add(registerLabel4);
 		
 		registerTellField = new JTextField();
 		registerTellField.setColumns(10);
-		registerTellField.setBounds(80, 185, 200, 30);
+		registerTellField.setBounds(67, 170, 200, 30);
 		registerPanel.add(registerTellField);
 		
 		registerGradeField = new JTextField();
 		registerGradeField.setColumns(10);
-		registerGradeField.setBounds(80, 225, 200, 30);
+		registerGradeField.setBounds(67, 210, 200, 30);
 		registerPanel.add(registerGradeField);
 		
 		JLabel registerLabel5 = new JLabel("팀명");
-		registerLabel5.setBounds(25, 265, 60, 30);
+		registerLabel5.setBounds(12, 250, 60, 30);
 		registerPanel.add(registerLabel5);
 		
 		JComboBox teamBox = new JComboBox();
-		teamBox.setBounds(80, 269, 60, 30);
+		teamBox.setBounds(67, 254, 100, 30);
 		registerPanel.add(teamBox);
 		
+		// 팀에서 팀이름 리스트 콤보박스로 받아오기
+		try {
+			String sql = "SELECT 팀_이름 FROM 팀";
+	         ResultSet rs = db.executeQuery(sql);
+
+	         while(rs.next()) 
+	         {
+	            String names = rs.getString("팀_이름");
+	            teamBox.addItem(names);
+	         }
+	         
+	         } catch(SQLException s) {
+	            s.printStackTrace();
+	         }
+			
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_WIDTH);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
