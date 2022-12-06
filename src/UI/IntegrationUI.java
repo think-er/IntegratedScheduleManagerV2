@@ -248,8 +248,10 @@ public class IntegrationUI extends JFrame {
 						String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
 						db.executeUpdate(query2);
 						}
+					JOptionPane.showMessageDialog(null,"통합 스케줄을 삭제하였습니다.");
 				}
-					// 등록 성공 : 새로고침
+				
+				// 등록 성공 : 새로고침
 				refresh();
 			}
 		});
@@ -419,6 +421,7 @@ public class IntegrationUI extends JFrame {
 							System.out.print(query);
 							db.executeUpdate(query);
 							// 등록 성공 : 새로고침
+							JOptionPane.showMessageDialog(null,"통합 스케줄을 추가하였습니다.");
 							refresh();
 						}
 					}
