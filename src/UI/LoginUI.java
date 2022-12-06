@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
 import java.awt.Font;
-public class LoginUI {
+public class LoginUI extends JFrame {
 	
 	public JPanel loginPanel;
 	private JLabel loginTitleLabel; // 프로그램 제목
@@ -136,6 +136,21 @@ public class LoginUI {
 		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 33));
 		titleLabel.setBounds(92, 35, 234, 123);
 		loginPanel.add(titleLabel);
+		
+		//------------------------------------------ 팀 만들기 버튼
+		
+		JButton createTeamBtn = new JButton("팀 만들기...");
+		createTeamBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getContentPane().setVisible(false);
+				AdminAuth AuthPad = new AdminAuth();
+				AuthPad.setVisible(true);
+			}
+		});
+		
+		
+		createTeamBtn.setBounds(161, 316, 97, 23);
+		loginPanel.add(createTeamBtn);
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
