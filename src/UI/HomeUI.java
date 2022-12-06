@@ -485,14 +485,14 @@ public class HomeUI extends JFrame{
 				if (viewCompEventBoolean == false) {
 					viewCompEventBtn.setText("공통 시간 끄기");
 					viewCompEventBoolean = true;
-					view_CompSchedule(viewCompEventBoolean);
+					view_CompSchedule(viewCompEventBoolean, viewUser);
 				}
 				
 				// 공통 시간 끄기
 				else {
 					viewCompEventBtn.setText("공통 시간 켜기");
 					viewCompEventBoolean = false;
-					view_CompSchedule(viewCompEventBoolean);
+					view_CompSchedule(viewCompEventBoolean, viewUser);
 				}
 			}
 		});
@@ -600,9 +600,9 @@ public class HomeUI extends JFrame{
 		
 	}
 	
-	public void view_CompSchedule(boolean mode) {
+	public void view_CompSchedule(boolean mode, String id) {
 		try {
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+ID;
+			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
 			ResultSet rs = db.executeQuery(sql);
 			
 			String _teamNum = "";
@@ -611,34 +611,6 @@ public class HomeUI extends JFrame{
 			while(rs.next()) {
 				_teamNum = rs.getString(1);
 			}
-			
-			sql = "SELECT 통합스케줄_이름, 날짜, 시작시간, 종료시간 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
-					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
-					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
-			rs = db.executeQuery(sql);
-			
-			while(rs.next()) {
-				String _date = rs.getString(2);
-				String _dateFormat[] = _date.split("-");
-				
-				int year = Integer.parseInt(_dateFormat[0]);
-				int month = Integer.parseInt(_dateFormat[1]);
-				int day = Integer.parseInt(_dateFormat[2].substring(0, 2));
-				
-				LocalDate date = LocalDate.of(year, month, day);
-				DayOfWeek dayOfWeek = date.getDayOfWeek();
-				
-				int yoil = dayOfWeek.getValue();
-				
-				int startTime = rs.getInt(3);
-				int endTime = rs.getInt(4);
-				
-				for(int i=startTime - 9; i <= endTime - 9; i++) {
-					event[i][yoil].setEventCompMode(mode);
-					event[i][yoil].viewEventCompMode();
-				}
-			}
-			
 			
 			sql = "SELECT 유저_아이디 FROM 소속 WHERE 팀_번호 = "+_teamNum;
 			rs = db.executeQuery(sql);
@@ -651,7 +623,8 @@ public class HomeUI extends JFrame{
 				sql = "SELECT 요일, 시작시간, 종료시간 FROM 스케줄 WHERE 유저_아이디="+_teamUser.get(k) +
 						"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
 						"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')" +
-						"OR 고정여부=1";
+						"OR (유저_아이디="+id +
+						"AND 고정여부='1')";
 				System.out.println("팀원 = " + _teamUser.get(k));
 				rs = db.executeQuery(sql);
 				while(rs.next()) {
@@ -681,7 +654,7 @@ public class HomeUI extends JFrame{
 					
 					
 					for(int i=startTime - 9; i <= endTime - 9; i++) {
-						event[i][days2].setEventCompMode(mode);
+						event[i][days2].setEventCompViewMode(mode);
 						event[i][days2].viewEventCompMode();
 					}
 				}
@@ -706,10 +679,6 @@ public class HomeUI extends JFrame{
 					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
 					"OR (유저_아이디="+id +
 					"AND 고정여부='1')";
-					
-//					"OR (유저_아이디="+id +
-//					"AND 고정여부='1'";
-//					"OR 고정여부=1";
 
 			ResultSet rs = db.executeQuery(sql);
 			while(rs.next()) {
@@ -739,7 +708,6 @@ public class HomeUI extends JFrame{
 				
 				for(int i=startTime - 9; i <= endTime - 9; i++) {
 					event[i][days2].setEventName(name, event[i][days2]);
-					event[i][days2].setEventMemo(memo);
 					event[i][days2].setEventMode(true);
 					event[i][days2].viewEventMode();
 				}
@@ -748,36 +716,71 @@ public class HomeUI extends JFrame{
 			e.printStackTrace();
 		};
 		
-//		try {
-//			
-//			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
-//			ResultSet rs = db.executeQuery(sql);
-//			String _teamNum = "";
-//			while(rs.next()) {
-//				_teamNum = rs.getString(1);
-//			}
-//			
-//			// 팀 가져와야한다. 
-//			sql = "SELECT 통합스케줄_이름, 시작시간, 종료시간, 날짜, 메모 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
-//					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
-//					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
-//
-//			rs = db.executeQuery(sql);
-//			while(rs.next()) {
-//				String _teamName = rs.getString(1);
-//				// 요일 문자가 아닌 숫자로 받기
-//				String _teamDays = rs.getString(4);	
-//				
-//				System.out.println(_teamDays);
-//				
-//				
-//				int startTime = rs.getInt(2);
-//				int endTime = rs.getInt(3);
-//				String memo = rs.getString(5);
-//			}
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		};
 		
+		
+		// 통합 스케줄 보이기------------------------------------------------------------------------
+		try {
+			
+			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
+			ResultSet rs = db.executeQuery(sql);
+			String _teamNum = "";
+			while(rs.next()) {
+				_teamNum = rs.getString(1);
+			}
+			
+			// 팀 가져와야한다. 
+			sql = "SELECT 통합스케줄_이름, 요일, 시작시간, 종료시간 FROM 통합스케줄 WHERE (팀_번호="+_teamNum +
+					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
+					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
+					"OR (팀_번호=" + _teamNum +
+					"AND 고정여부='1')";
+
+			rs = db.executeQuery(sql);
+			while(rs.next()) {
+				String _teamName = rs.getString(1);
+				// 요일 문자가 아닌 숫자로 받기
+//				String _date = rs.getString(2);
+//				String _dateFormat[] = _date.split("-");		
+				// 날짜를 읽어서 변환하는 것을 만들었지만 요일을 읽으면 되므로 필요없음.
+//				int year = Integer.parseInt(_dateFormat[0]);
+//				int month = Integer.parseInt(_dateFormat[1]);
+//				int day = Integer.parseInt(_dateFormat[2].substring(0, 2));
+//				
+//				LocalDate date = LocalDate.of(year, month, day);
+//				DayOfWeek dayOfWeek = date.getDayOfWeek();
+//				
+//				int yoil = dayOfWeek.getValue();
+//				
+				String days = rs.getString(2);	
+				
+				int days2 = 0;
+				
+				if (days.equals("일"))
+					days2 = 0;
+				else if (days.equals("월"))
+					days2 = 1;
+				else if (days.equals("화"))
+					days2 = 2;
+				else if (days.equals("수"))
+					days2 = 3;
+				else if (days.equals("목"))
+					days2 = 4;
+				else if (days.equals("금"))
+					days2 = 5;
+				else if (days.equals("토"))
+					days2 = 6;
+				int startTime = rs.getInt(3);
+				int endTime = rs.getInt(4);
+//				String memo = rs.getString(6);
+				
+				for(int i=startTime - 9; i <= endTime - 9; i++) {
+					event[i][days2].setEventName(_teamName, event[i][days2]);
+					event[i][days2].setEventCompMode(true);
+					event[i][days2].viewEventMode();
+				}
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		};
 	}
 }
