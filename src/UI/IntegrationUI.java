@@ -16,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +45,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Control.duplicatedCheck;
 import DB.DB_Conn_Query;
 
 import javax.swing.JScrollPane;
@@ -55,9 +58,13 @@ import javax.swing.DefaultListModel;
 
 public class IntegrationUI extends JFrame {
 	private static String ID;
+	public static String WEEK = "";
+	public static String FIX;
+	private int START;
+	private int END;
+	
 	protected static String selected;
 	JFrame Integration;
-	public static String FIX;
 	private JTextField titleField;
 	private JTextField yearField;
 	private JComboBox monthBox;
@@ -74,6 +81,7 @@ public class IntegrationUI extends JFrame {
 	JList<String> integrationList;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
+	duplicatedCheck dc = new duplicatedCheck();
 	
 	/**
 	 * Create the application.
@@ -357,75 +365,94 @@ public class IntegrationUI extends JFrame {
 				int year = Integer.parseInt(yearField.getText()); 
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
-				int START = Integer.parseInt(stHourBox.getSelectedItem().toString());
-				int END = Integer.parseInt(edHourBox.getSelectedItem().toString());
+				START = Integer.parseInt(stHourBox.getSelectedItem().toString());
+				END = Integer.parseInt(edHourBox.getSelectedItem().toString());
 				String MEMO = memoArea.getText();
 //				System.out.println(year+"-"+String.format("%02d", month)+"-"+String.format("%02d", day));
 				LocalDate date = LocalDate.of(year, month,day);
+				String date2 = "'"+date+"'";
 				System.out.println(date);
 				DayOfWeek dayOfWeek = date.getDayOfWeek();
 				System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
 				String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+				WEEK = yoil;
+				String month2 = monthBox.getSelectedItem().toString();
+				String day2 = (dayBox.getSelectedItem().toString());
+						
+				// 날짜 Date로 변환
+				String Days = year+"-"+month2+"-"+day2;
+				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+				LocalDate DATE = LocalDate.parse(Days, sdf);
+				ZoneId defaultZoneId = ZoneId.systemDefault();
+				Date d = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
 				
+				if(fixBox.isSelected()) {	//고정
+					FIX = "1";
+					date = null;
+					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+				}
+				else {	//비고정
+					FIX = "0";
+				}
+				
+				//-------------------------------------------예외 조건--------------------------------------------
 				// 예외처리 - 통합스케줄 등록
 				Boolean success=true;
-				Boolean s=true;
-				// 예외처리 1번 - 일정 제목과 년도가 비었을 때
+				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
 				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
 					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
 					success=false;
 				}
-				// 예외처리 2번 - 시작 시간이 종료 시간과 같거나 늦을 경우
+				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
 				else if(START>=END) { 
 					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
 					success=false;
 				}
-				// 예외처리 3번 - 일정 중복까지
-				// 고정 - 시간 중복을 체크함
-				// 같은 요일 데이터를 가져와서 시작시간과 종료시간이 겹치면 false
-				// 통합스케줄은 개인스케줄과 통합스케줄 모두를 비교해야함.
-					else if (fixBox.isSelected()) {
-						// 일정에 고정 체크시
-						FIX = "1";
-						date = null;
-						
-					}
-					else {
-						// 고정 여부 체크하지 않았을 때
-						
-						FIX = "0";
-						
-						if (yearField.getText().isEmpty()) {
-							// 년도 입력 안했을 시
-							JOptionPane.showMessageDialog(null,"년도를 입력해주세요.");
-						}
-						else {
-							// 충족 조건 달성 시
-							int TEAM_NUM2=0;
-							ResultSet rs2 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
-							try {
-								while(rs2.next()) {
-									TEAM_NUM2 = rs2.getInt(1);
-								}
-							} catch (SQLException e2) {
-								// TODO Auto-generated catch block
-								e2.printStackTrace();
-							}
-							
-							SCNUM+=1;
-							String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM2+",'"+SCNAME+"','"
-									+yoil+"',"+START+","+END+",'"+FIX+"','"+date+"','"+MEMO+"')";
-							
-							// INSERT INTO 통합스케줄 VALUES(1, 1,'회의','금' , 17, 18,'0','2022/11/15', '첫번째 회의');
-							
-							System.out.print(query);
-							db.executeUpdate(query);
-							// 등록 성공 : 새로고침
-							JOptionPane.showMessageDialog(null,"통합 스케줄을 추가하였습니다.");
-							refresh();
-						}
-					}
+				//예외 3 : 일정이 중복될 경우
+				//고정 : 시간 중복 check
+				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
+				//(통합스케줄도 비교해야됨)
 				
+				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
+				dc.getData(id, d, WEEK, FIX, START, END);
+				//duplicatedCheck에서 예외처리
+				success = dc.IntegrationDC();
+				
+				if (yearField.getText().isEmpty()) {
+					// 년도 입력 안했을 시
+					JOptionPane.showMessageDialog(null,"년도를 입력해주세요.");
+				}
+				//-------------------------------------------예외 조건 end-----------------------------------------
+				
+				//등록
+				if(success){
+					// 충족 조건 달성 시
+					int TEAM_NUM2=0;
+					ResultSet rs2 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
+					try {
+						while(rs2.next()) {
+							TEAM_NUM2 = rs2.getInt(1);
+						}
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					
+					SCNUM+=1;
+					String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM2+",'"+SCNAME+"','"
+							+yoil+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
+					
+					// INSERT INTO 통합스케줄 VALUES(1, 1,'회의','금' , 17, 18,'0','2022/11/15', '첫번째 회의');
+					
+					System.out.print(query);
+					db.executeUpdate(query);
+					// 등록 성공 : 새로고침
+					JOptionPane.showMessageDialog(null,"통합 스케줄을 추가하였습니다.");
+					refresh();
+				}
+				else {
+					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+				}
 			}
 		});
 		addBtn.setBounds(462, 366, 60, 25);

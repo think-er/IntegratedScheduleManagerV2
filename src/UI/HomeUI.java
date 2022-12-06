@@ -172,7 +172,7 @@ public class HomeUI extends JFrame{
 		MainFrame.frame.getContentPane().add(homePanel);
 		
 		// 홈 패널: 학번
-		homeUserLabel = new JLabel(String.format("학번: %s", RegisterUI.ID));
+		homeUserLabel = new JLabel("학번: ");
 		homeUserLabel.setBounds(850, 30, 
 				49, 30);
 		homePanel.add(homeUserLabel);
