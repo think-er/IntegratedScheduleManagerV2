@@ -68,6 +68,15 @@ public class EventUI extends JPanel {
 			eventAddBtn.setVisible(false);
 			eventNameLabel.setVisible(true);
 		}
+		
+		if(!this.eventCompMode) {
+			eventAddBtn.setVisible(true);
+			eventNameLabel.setVisible(false);
+		}
+		else {
+			eventAddBtn.setVisible(false);
+			eventNameLabel.setVisible(true);
+		}
 	}
 	
 	public void viewEventCompMode() {
