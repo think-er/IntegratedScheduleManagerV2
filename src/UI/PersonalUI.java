@@ -157,8 +157,59 @@ public class PersonalUI {
 		stHourBox = new JComboBox(hourCb);
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
 		edHourBox = new JComboBox(hourCb);
-		delBtn = new JButton("삭제");
 		
+		//----------------------------------------------- 개인스케줄 삭제-------------------------------------//
+
+		delBtn = new JButton("삭제");
+		delBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String SC_NAME = titleField.getText();
+				
+				ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+SC_NAME+"'");
+				int SC_NUM=0;
+				try {
+					while(rs.next()) {
+						SC_NUM = rs.getInt(1);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				// 예외 처리 1) titleField가 비어있을 시
+				if (titleField.getText()=="")
+				{
+					JOptionPane.showMessageDialog(null,"삭제할 스케줄명이 없습니다.");
+				}
+				else {
+					String query = "DELETE FROM 스케줄 where 스케줄_번호= "+SC_NUM;
+					
+					System.out.print(query);
+					db.executeUpdate(query);
+					
+					// ------------- 등록 성공 후 스케줄 인덱스 재조정---------------
+				
+					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
+					// 실제 존재하고 있는 스케줄 갯수
+					int actual_scCount = 0;
+					try {
+						while(rs2.next()) {
+							actual_scCount = rs2.getInt(1);
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+					}
+					// 1 2 3 4 5 (2) 1 / 3 4 5
+					for (int i=SC_NUM; i<=actual_scCount; i++) {
+						String query2 = "UPDATE 스케줄 SET 스케줄_번호="+i+" WHERE 스케줄_번호= "+(i+1)+"";
+						db.executeUpdate(query2);
+						}
+					JOptionPane.showMessageDialog(null,"스케줄이 삭제되었습니다.");
+				}
+					// 등록 성공 : 새로고침
+				refresh();
+			}
+		});
 		
 		subFrame.getContentPane().setLayout(null);
 		
@@ -365,7 +416,6 @@ public class PersonalUI {
 				dc.getData(id, date, WEEK, FIX, START, END);
 				//duplicatedCheck에서 예외처리
 				success = dc.PersonalDC();
-				
 				
 				//-------------------------------------------예외 조건 end-----------------------------------------
 				//등록
