@@ -120,8 +120,6 @@ public class PersonalUI {
 		dayLabel = new JLabel("일");
 		stHourLabel = new JLabel("시");
 		edHourLabel = new JLabel("시");
-//		stMinuteLabel = new JLabel("분");
-//		edMinuteLabel = new JLabel("분");
 		titleField = new JTextField();
 		yearField = new JTextField("2022");
 		
@@ -181,12 +179,8 @@ public class PersonalUI {
 		fixBox.setBounds(652,106,32,25);
 		stHourBox.setBounds(412, 181, 50,25);
 		stHourLabel.setBounds(462, 181, 60, 25);
-//		stMinuteBox.setBounds(x+140, y+80, 50, 25);
-//		stMinuteLabel.setBounds(x+190, y+80, 60, 25);
 		edHourBox.setBounds(412, 221, 50,25);
 		edHourLabel.setBounds(462, 221, 60, 25);
-//		edMinuteBox.setBounds(x+140, y+120, 50, 25);
-//		edMinuteLabel.setBounds(x+190, y+120, 60, 25);
 		memoScrollPane = new JScrollPane();
 		memoScrollPane.setBounds(412, 261, 250, 95);
 		delBtn.setBounds(602, 366, 60, 25);
@@ -206,17 +200,11 @@ public class PersonalUI {
 		subFrame.getContentPane().add(monthBox);
 		subFrame.getContentPane().add(fixBox);
 		subFrame.getContentPane().add(stHourBox);
-//		subFrame.add(stMinuteBox);
 		subFrame.getContentPane().add(stHourLabel);
-//		subFrame.add(stMinuteLabel);
 		subFrame.getContentPane().add(edHourBox);
 		subFrame.getContentPane().add(stHourBox);
 		subFrame.getContentPane().add(edHourLabel);
-//		subFrame.add(edMinuteBox);
-//		subFrame.add(edMinuteLabel);
 		subFrame.getContentPane().add(memoScrollPane);
-		//		stMinuteBox = new JComboBox(minuteCb);
-		//		edMinuteBox = new JComboBox(minuteCb);
 		memoArea = new JTextArea();
 		memoScrollPane.setViewportView(memoArea);
 		subFrame.getContentPane().add(delBtn);
