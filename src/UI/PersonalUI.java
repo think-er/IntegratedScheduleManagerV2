@@ -12,6 +12,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Control.duplicatedCheck;
 import DB.DB_Conn_Query;
 
 import javax.swing.JList;
@@ -44,6 +45,7 @@ public class PersonalUI {
 	public static String WEEK = "";
 	public static String FIX;
 	DB_Conn_Query db = new DB_Conn_Query();
+	duplicatedCheck dc = new duplicatedCheck();
 	//----------------------------
 	
 	private JFrame subFrame;
@@ -332,10 +334,18 @@ public class PersonalUI {
 				if(dow==6) {
 					WEEK = "토";
 				}
-				
+				ZoneId defaultZoneId = ZoneId.systemDefault();
+				Date date = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
+				if(fixBox.isSelected()) {	//고정
+					FIX = "1";
+					DATE2 = null;
+					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+				}
+				else {	//비고정
+					FIX = "0";
+				}
 				//-------------------------------------------예외 조건--------------------------------------------
 				Boolean success=true;
-				Boolean s=true;
 				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
 				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
 					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
@@ -350,39 +360,16 @@ public class PersonalUI {
 				//고정 : 시간 중복 check
 				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
 				//(통합스케줄도 비교해야됨)
-				success = timeCheck("1");	//고정스케줄과 시간 같은지 체크
-				if(fixBox.isSelected()) {	
-					FIX = "1";
-					DATE2 = null;
-				}
-				//비고정 : 날짜 중복 check -> 시간 중복 check
-				//비고정 일정들 : 날짜가 다르면 시간이 같아도 됨
-				else {
-					FIX = "0";
-					String sql = "SELECT 날짜,시작시간,종료시간 "	//비고정 스케줄 가져옴
-							+ "FROM 스케줄 "
-							+ "WHERE 유저_아이디 = " + ID + " AND "
-							+ "고정여부 = '0'";
-					ResultSet src = db.executeQuery(sql);
-					Date dateData;
-					ZoneId defaultZoneId = ZoneId.systemDefault();
-					Date date = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
-					try {
-						while(src.next()) {
-							dateData = src.getDate(1);
-							//날짜가 같을 시 비고정 스케줄과 시간 비교
-							if(date == dateData) {	
-								s = timeCheck("0");
-							}
-						}
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
+				
+				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
+				dc.getData(id, date, WEEK, FIX, START, END);
+				//duplicatedCheck에서 예외처리
+				success = dc.duplicatedCheck();
+				
 				
 				//-------------------------------------------예외 조건 end-----------------------------------------
 				//등록
-				if(success&&s){
+				if(success){
 					SCNUM+=1;
 					DB_Conn_Query db = new DB_Conn_Query();
 					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+DATE2+",'"+MEMO+"')";
@@ -393,7 +380,6 @@ public class PersonalUI {
 					refresh();
 				}
 				else {
-					System.out.println(success+" "+s);
 					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
 				}
 			}	
@@ -504,7 +490,7 @@ public class PersonalUI {
 		
 		
 	}
-	public void enabled(String b) {
+	public void enabled(String b) {	//고정여부에 따라 컴포넌트 enable 설정하는 함수
 		Boolean tf=true;
 		if(b.equals("0"))tf=false;
 		
@@ -514,31 +500,7 @@ public class PersonalUI {
 		monthBox.setEnabled(!tf);
 		dayBox.setEnabled(!tf);
 	}
-	public boolean timeCheck(String fix) {
-		String sql = "SELECT 시작시간, 종료시간 "
-				+ "FROM 스케줄 "
-				+ "WHERE 유저_아이디 = " + ID + " AND "
-				+ "요일 = '"+WEEK+"' AND "
-				+ "고정여부 = '" + fix + "'";
-		ResultSet src = db.executeQuery(sql);
-		
-		int stTime, edTime;
-		
-		try {
-			while(src.next()) {
-				stTime = src.getInt(1);
-				edTime = src.getInt(2);
-				
-				if(edTime > START && stTime < END) {
-					return false;
-				}
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		return true;
-	}
-	public void refresh() {
+	public void refresh() {	//새로고침 함수
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
 		String query = "SELECT 스케줄_이름 "
