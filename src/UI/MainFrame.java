@@ -1,7 +1,7 @@
 package UI;
 
 import javax.swing.JFrame;
-public class MainFrame {
+public class MainFrame extends JFrame{
 	public static JFrame frame;
 	public MainFrame() {
 		init();
@@ -9,6 +9,7 @@ public class MainFrame {
 	
 	private void init() {
 		frame = new JFrame();
+		frame.setLocationRelativeTo(null);	//화면 중앙 배치
 		new LoginUI();
 		frame.setVisible(true);
 	}

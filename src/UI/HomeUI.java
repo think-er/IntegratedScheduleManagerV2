@@ -156,6 +156,9 @@ public class HomeUI extends JFrame{
 	}
 
 	public HomeUI(String id, String level) {
+		setLocationRelativeTo(null);	//화면 중앙 배치
+		setResizable(false);			// 화면 사이즈 고정
+		
 		viewUser = id;
 		ID=id;
 		LEVEL=level;

@@ -21,16 +21,17 @@ public class CreateTeam extends JFrame {
 		
 		this.setTitle("팀 만들기");
 		this.setVisible(true);
-		this.setSize(300,300);
-		
+		this.setSize(278,199);
+		setLocationRelativeTo(null);	//화면 중앙 배치
+		setResizable(false);			// 화면 사이즈 고정
 		getContentPane().setLayout(null);
 		
 		JLabel teamNameLabel = new JLabel("생성할 팀명을 입력하세요.");
-		teamNameLabel.setBounds(84, 38, 161, 15);
+		teamNameLabel.setBounds(50, 38, 161, 15);
 		getContentPane().add(teamNameLabel);
 		
 		varField = new JTextField();
-		varField.setBounds(68, 72, 177, 21);
+		varField.setBounds(42, 72, 177, 21);
 		getContentPane().add(varField);
 		varField.setColumns(10);
 		
@@ -54,15 +55,14 @@ public class CreateTeam extends JFrame {
 					String query = "INSERT INTO 팀 VALUES("+(count+1)+",'"+name+"',null)";
 					
 					db.executeUpdate(query);
+					
 					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
-					
-					getContentPane().setVisible(false);
+					setVisible(false);
 					new MainFrame();
-					
 				}
 			}
 		});
-		OKBtn.setBounds(115, 112, 83, 23);
+		OKBtn.setBounds(89, 112, 83, 23);
 		getContentPane().add(OKBtn);
 		init();
 	}

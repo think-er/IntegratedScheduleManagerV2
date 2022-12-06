@@ -61,7 +61,6 @@ public class LoginUI extends JFrame {
 	}
 	
 	private void init() {
-		
 		loginPanel = new JPanel();
 		loginPanel.setBounds(LOGIN_FRAME_X, LOGIN_FRAME_Y, 
 				LOGIN_FRAME_WIDTH, LOGIN_FRAME_HEIGHT);
@@ -142,9 +141,8 @@ public class LoginUI extends JFrame {
 		JButton createTeamBtn = new JButton("팀 만들기...");
 		createTeamBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getContentPane().setVisible(false);
-				AdminAuth AuthPad = new AdminAuth();
-				AuthPad.setVisible(true);
+				MainFrame.frame.setVisible(false);
+				new AdminAuthUI();
 			}
 		});
 		
