@@ -350,7 +350,7 @@ public class PersonalUI {
 				Boolean s=true;
 				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
 				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
-					JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
+					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
 					success=false;
 				}
 				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창

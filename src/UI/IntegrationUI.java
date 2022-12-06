@@ -287,9 +287,9 @@ public class IntegrationUI extends JFrame {
 		
 		// 통합스케줄 추가
 		JButton addBtn = new JButton("등록");
-		addBtn.addMouseListener(new MouseAdapter() {
+		addBtn.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ResultSet rs = db.executeQuery("SELECT 통합_번호, 팀_번호 from 통합스케줄");
 				int SCNUM=0;
 				int TEAM_NUM=0;
@@ -317,29 +317,51 @@ public class IntegrationUI extends JFrame {
 				System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
 				String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
 				
-				if (titleField.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,"일정 제목을 입력하세요.");
+				// 예외처리 - 통합스케줄 등록
+				Boolean success=true;
+				Boolean s=true;
+				// 예외처리 1번 - 일정 제목과 년도가 비었을 때
+				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
+					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
+					success=false;
 				}
+				// 예외처리 2번 - 시작 시간이 종료 시간과 같거나 늦을 경우
+				else if(START>=END) { 
+					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
+					success=false;
+				}
+				// 예외처리 3번 - 일정 중복까지
+				// 고정 - 시간 중복을 체크함
+				// 같은 요일 데이터를 가져와서 시작시간과 종료시간이 겹치면 false
+				// 통합스케줄은 개인스케줄과 통합스케줄 모두를 비교해야함.
+				
 					else if (fixBox.isSelected()) {
+						// 일정에 고정 체크시
 						FIX = "1";
 						date = null;
 						
 					}
 					else {
+						// 고정 여부 체크하지 않았을 때
+						
 						FIX = "0";
 						
 						if (yearField.getText().isEmpty()) {
+							// 년도 입력 안했을 시
 							JOptionPane.showMessageDialog(null,"년도를 입력해주세요.");
 						}
-						SCNUM+=1;
-						String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM+",'"+SCNAME+"','"
-								+date+"','"+yoil+"','"+FIX+"',"+START+","+END+",'"+MEMO+"')";
-						
-						System.out.print(query);
-						db.executeUpdate(query);
-						
-						// 등록 성공 : 새로고침
-						refresh();
+						else {
+							// 충족 조건 달성 시
+							SCNUM+=1;
+							String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM+",'"+SCNAME+"','"
+									+date+"','"+yoil+"','"+FIX+"',"+START+","+END+",'"+MEMO+"')";
+							
+							System.out.print(query);
+							db.executeUpdate(query);
+							
+							// 등록 성공 : 새로고침
+							refresh();
+						}
 					}
 				
 			}
