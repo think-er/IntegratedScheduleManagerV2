@@ -364,7 +364,7 @@ public class PersonalUI {
 				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
 				dc.getData(id, date, WEEK, FIX, START, END);
 				//duplicatedCheck에서 예외처리
-				success = dc.duplicatedCheck();
+				success = dc.PersonalDC();
 				
 				
 				//-------------------------------------------예외 조건 end-----------------------------------------
