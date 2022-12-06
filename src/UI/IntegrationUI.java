@@ -202,7 +202,57 @@ public class IntegrationUI extends JFrame {
 		memoArea = new JTextArea();
 		memoScrollPane.setViewportView(memoArea);
 		
+		//----------------------------------------------- 통합스케줄 삭제-------------------------------------//
+		
 		JButton delBtn = new JButton("삭제");
+		delBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String SC_NAME = titleField.getText();
+				
+				ResultSet rs = db.executeQuery("select 통합_번호 FROM 통합스케줄 where 통합스케줄_이름 = '"+SC_NAME+"'");
+				int TEAM_NUM=0;
+				try {
+					while(rs.next()) {
+						TEAM_NUM = rs.getInt(1);
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				// 예외 처리 1) titleField가 비어있을 시
+				if (titleField.getText()=="")
+				{
+					JOptionPane.showMessageDialog(null,"삭제할 스케줄명이 없습니다.");
+				}
+				else {
+					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+TEAM_NUM;
+					
+					System.out.print(query);
+					db.executeUpdate(query);
+					
+					// ------------- 등록 성공 후 통합스케줄 인덱스 재조정---------------
+				
+					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 통합스케줄");
+					// 실제 존재하고 있는 스케줄 갯수
+					int actual_scCount = 0;
+					try {
+						while(rs2.next()) {
+							actual_scCount = rs2.getInt(1);
+						}
+					} catch (SQLException e2) {
+						e2.printStackTrace();
+					}
+					// 1 2 3 4 5 (2) 1 / 3 4 5
+					for (int i=TEAM_NUM; i<=actual_scCount; i++) {
+						String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
+						db.executeUpdate(query2);
+						}
+				}
+					// 등록 성공 : 새로고침
+				refresh();
+			}
+		});
 		delBtn.setBounds(602, 366, 60, 25);
 		Integration.getContentPane().add(delBtn);
 		
@@ -290,13 +340,11 @@ public class IntegrationUI extends JFrame {
 		addBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ResultSet rs = db.executeQuery("SELECT 통합_번호, 팀_번호 from 통합스케줄");
+				ResultSet rs = db.executeQuery("SELECT COUNT(*) from 통합스케줄");
 				int SCNUM=0;
-				int TEAM_NUM=0;
 				try {
 					while(rs.next()) {
 						SCNUM = rs.getInt(1);
-						TEAM_NUM = rs.getInt(2);
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -334,7 +382,6 @@ public class IntegrationUI extends JFrame {
 				// 고정 - 시간 중복을 체크함
 				// 같은 요일 데이터를 가져와서 시작시간과 종료시간이 겹치면 false
 				// 통합스케줄은 개인스케줄과 통합스케줄 모두를 비교해야함.
-				
 					else if (fixBox.isSelected()) {
 						// 일정에 고정 체크시
 						FIX = "1";
@@ -352,13 +399,25 @@ public class IntegrationUI extends JFrame {
 						}
 						else {
 							// 충족 조건 달성 시
+							int TEAM_NUM2=0;
+							ResultSet rs2 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
+							try {
+								while(rs2.next()) {
+									TEAM_NUM2 = rs2.getInt(1);
+								}
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+							
 							SCNUM+=1;
-							String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM+",'"+SCNAME+"','"
-									+date+"','"+yoil+"','"+FIX+"',"+START+","+END+",'"+MEMO+"')";
+							String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM2+",'"+SCNAME+"','"
+									+yoil+"',"+START+","+END+",'"+FIX+"','"+date+"','"+MEMO+"')";
+							
+							// INSERT INTO 통합스케줄 VALUES(1, 1,'회의','금' , 17, 18,'0','2022/11/15', '첫번째 회의');
 							
 							System.out.print(query);
 							db.executeUpdate(query);
-							
 							// 등록 성공 : 새로고침
 							refresh();
 						}
