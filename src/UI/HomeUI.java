@@ -430,11 +430,11 @@ public class HomeUI extends JFrame{
 				// determine country (Locale) specific first day of current week
 				DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
 				LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
-
+				
 				// determine last day of current week
-				DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(6); // or minus(1)
+				DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(6); // or minus(1
 				LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
-
+				
 				// Print the dates of the current week
 				LocalDate printDate = startOfCurrentWeek;
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -610,8 +610,35 @@ public class HomeUI extends JFrame{
 			
 			while(rs.next()) {
 				_teamNum = rs.getString(1);
-				System.out.println("팀_번호 = " + _teamNum);
 			}
+			
+			sql = "SELECT 통합스케줄_이름, 날짜, 시작시간, 종료시간 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
+					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
+					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
+			rs = db.executeQuery(sql);
+			
+			while(rs.next()) {
+				String _date = rs.getString(2);
+				String _dateFormat[] = _date.split("-");
+				
+				int year = Integer.parseInt(_dateFormat[0]);
+				int month = Integer.parseInt(_dateFormat[1]);
+				int day = Integer.parseInt(_dateFormat[2].substring(0, 2));
+				
+				LocalDate date = LocalDate.of(year, month, day);
+				DayOfWeek dayOfWeek = date.getDayOfWeek();
+				
+				int yoil = dayOfWeek.getValue();
+				
+				int startTime = rs.getInt(3);
+				int endTime = rs.getInt(4);
+				
+				for(int i=startTime - 9; i <= endTime - 9; i++) {
+					event[i][yoil].setEventCompMode(mode);
+					event[i][yoil].viewEventCompMode();
+				}
+			}
+			
 			
 			sql = "SELECT 유저_아이디 FROM 소속 WHERE 팀_번호 = "+_teamNum;
 			rs = db.executeQuery(sql);
@@ -621,7 +648,7 @@ public class HomeUI extends JFrame{
 			}
 			
 			for(int k=0; k<_teamUser.size(); k++) {
-				sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE 유저_아이디="+_teamUser.get(k) +
+				sql = "SELECT 요일, 시작시간, 종료시간 FROM 스케줄 WHERE 유저_아이디="+_teamUser.get(k) +
 						"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
 						"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')" +
 						"OR 고정여부=1";
@@ -629,8 +656,8 @@ public class HomeUI extends JFrame{
 				rs = db.executeQuery(sql);
 				while(rs.next()) {
 					String days = rs.getString(1);
-					int startTime = rs.getInt(3);
-					int endTime = rs.getInt(4);
+					int startTime = rs.getInt(2);
+					int endTime = rs.getInt(3);
 					
 					System.out.println(_teamUser.get(k) + " : " + startTime + " : " + endTime);
 					
@@ -685,17 +712,6 @@ public class HomeUI extends JFrame{
 				// 요일 문자가 아닌 숫자로 받기
 				String days = rs.getString(2);	
 				
-//				String date = rs.getString(6);
-//				String[] dateFormat;
-				
-				// 고정일 경우 필요 없음
-//				if(fix.equals("0")) {
-//					dateFormat = date.split("-");
-//					int year = Integer.parseInt(dateFormat[0]);
-//					int month = Integer.parseInt(dateFormat[1]);
-//					int day = Integer.parseInt(dateFormat[2].substring(0,2));
-//				}
-//				
 				int days2 = 0;
 				
 				if (days.equals("일"))
@@ -726,5 +742,44 @@ public class HomeUI extends JFrame{
 		} catch(SQLException e) {
 			e.printStackTrace();
 		};
+		
+		try {
+			
+			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+ID;
+			ResultSet rs = db.executeQuery(sql);
+			String _teamNum = "";
+			while(rs.next()) {
+				_teamNum = rs.getString(1);
+			}
+			
+			// 팀 가져와야한다. 
+			sql = "SELECT 통합스케줄_이름, 시작시간, 종료시간, 날짜, 메모 FROM 통합스케줄 WHERE 팀_번호="+_teamNum +
+					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
+					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')";
+
+			rs = db.executeQuery(sql);
+			while(rs.next()) {
+				String _teamName = rs.getString(1);
+				// 요일 문자가 아닌 숫자로 받기
+				String _teamDays = rs.getString(4);	
+				
+				System.out.println(_teamDays);
+				
+				
+				int startTime = rs.getInt(2);
+				int endTime = rs.getInt(3);
+				String memo = rs.getString(5);
+				
+//				for(int i=startTime - 9; i <= endTime - 9; i++) {
+//					event[i][days2].setEventName(teamName, event[i][days2]);
+//					event[i][days2].setEventMemo(memo);
+//					event[i][days2].setEventMode(true);
+//					event[i][days2].viewEventMode();
+//				}
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		};
+		
 	}
 }

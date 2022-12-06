@@ -18,8 +18,10 @@ public class EventUI extends JPanel {
 	private int y;
 	public boolean eventMode = false;
 	// false == eventAddBtn / true == eventNameLabel
-	public boolean eventCompMode = false;
+	public boolean eventCompViewMode = false;
 	// false == 기본 모드 / true == eventComp 모드
+	public boolean eventCompMode = false;
+	
 	private String eventName;
 	private String eventMemo;
 	private JButton eventAddBtn;
@@ -48,6 +50,11 @@ public class EventUI extends JPanel {
 		this.eventMode = Mode;
 	}
 	
+	// 공통 시간을 보여주는 모드
+	public void setEventCompViewMode(Boolean CompViewMode) {
+		this.eventCompViewMode = CompViewMode;
+	}
+	
 	public void setEventCompMode(Boolean CompMode) {
 		this.eventCompMode = CompMode;
 	}
@@ -64,7 +71,7 @@ public class EventUI extends JPanel {
 	}
 	
 	public void viewEventCompMode() {
-		if(!this.eventCompMode) {
+		if(!this.eventCompViewMode) {
 			eventCompBtn.setVisible(false);
 			viewEventMode();
 		}
