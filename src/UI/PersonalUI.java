@@ -541,7 +541,7 @@ public class PersonalUI {
 				stTime = src.getInt(1);
 				edTime = src.getInt(2);
 				
-				if(START >= stTime && END <= edTime) {
+				if(edTime > START && stTime < END) {
 					return false;
 				}
 			}
