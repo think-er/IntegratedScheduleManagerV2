@@ -22,7 +22,7 @@ public class duplicatedCheck {
 		START=start;
 		END=end;
 	}
-	public boolean duplicatedCheck() {
+	public boolean PersonalDC() {
 		boolean success=true;
 		boolean s=true;
 		
