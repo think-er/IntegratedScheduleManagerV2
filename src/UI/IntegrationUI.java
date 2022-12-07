@@ -56,6 +56,10 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 
+import Control.UpdateSchedule;
+import Control.ViewCompSchedule;
+
+
 public class IntegrationUI extends JFrame {
 	private static String ID;
 	public static String WEEK = "";
@@ -271,6 +275,8 @@ public class IntegrationUI extends JFrame {
 						JOptionPane.showMessageDialog(null,"통합 스케줄을 삭제하였습니다.");
 						// 삭제 성공 : 새로고침
 						refresh();
+						new UpdateSchedule();
+						new ViewCompSchedule();
 					}
 				}
 				
@@ -441,6 +447,9 @@ public class IntegrationUI extends JFrame {
 							JOptionPane.showMessageDialog(null,"수정을 성공했습니다.");
 							//수정 성공 : 새로고침
 							refresh();
+							
+							new UpdateSchedule();
+							new ViewCompSchedule();
 						}
 					}
 				}
@@ -547,6 +556,8 @@ public class IntegrationUI extends JFrame {
 						JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
 						//등록 성공 : 새로고침
 						refresh();
+						new UpdateSchedule();
+						new ViewCompSchedule();
 					}
 				}
 			}
