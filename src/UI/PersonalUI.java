@@ -507,17 +507,16 @@ public class PersonalUI extends JFrame{
 			}
 		});
 		JButton modifyBtn = new JButton("수정");
-		modifyBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		modifyBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				if(selected == null) 
 					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
 				else {
 					
 				}
-				
 			}
 		});
+	
 		modifyBtn.setBounds(532, 366, 60, 25);
 		subFrame.getContentPane().add(modifyBtn);
 		
