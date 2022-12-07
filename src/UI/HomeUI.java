@@ -135,7 +135,7 @@ public class HomeUI extends JFrame{
 	private JLabel idLabel;
 	private JLabel levelLabel;
 	
-	private String ID;
+	public static String ID;
 	private String LEVEL;
 	
 	private JPanel homeScheduleColumnPanel;
@@ -153,6 +153,8 @@ public class HomeUI extends JFrame{
 	// 프로그램이 돌아가는 와중 켜져있는지 확인한다.
 	public static Boolean viewCompEventMode = false;
 	
+	
+	public static LocalDate startOfCurrentWeek;
 	DB_Conn_Query db = new DB_Conn_Query();
 	
 	public HomeUI() {
@@ -357,8 +359,8 @@ public class HomeUI extends JFrame{
 
 		// determine country (Locale) specific first day of current week
 		DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
-		LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
-
+		startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+		
 		// determine last day of current week
 		DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(6); // or minus(1)
 		LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
@@ -477,9 +479,11 @@ public class HomeUI extends JFrame{
 				
 				LocalDate now = LocalDate.of(Y, M+1, D); 
 
+				System.out.println(now);
+				
 				// determine country (Locale) specific first day of current week
 				DayOfWeek firstDayOfWeek = WeekFields.of(Locale.getDefault()).getFirstDayOfWeek();
-				LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+				startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
 				
 				// determine last day of current week
 				DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(6); // or minus(1

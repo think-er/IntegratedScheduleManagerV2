@@ -144,9 +144,9 @@ public class LoginUI extends JFrame {
 		
 		MainFrame.frame.getContentPane().add(loginPanel);
 		
-		titleLabel = new JLabel("<html><body><center>통합 일정 관리<br>프로그램</center></body></html>");
+		titleLabel = new JLabel("<html><body><center>통합 일정 관리 프로그램</center></body></html>", JLabel.CENTER);
 		titleLabel.setFont(new Font("나눔고딕", Font.PLAIN, 20));
-		titleLabel.setBounds(92, 35, 234, 123);
+		titleLabel.setBounds(92, 120, 234, 56);
 		loginPanel.add(titleLabel);
 		
 		//------------------------------------------ 팀 만들기 버튼
@@ -158,7 +158,6 @@ public class LoginUI extends JFrame {
 				new AdminAuthUI();
 			}
 		});
-		
 		
 		createTeamBtn.setBounds(161, 316, 97, 23);
 		loginPanel.add(createTeamBtn);
