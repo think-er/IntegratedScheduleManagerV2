@@ -104,7 +104,7 @@ public class duplicatedCheck {
 				+ "요일 = '" + WEEK + "' AND "
 				+ "고정여부 = '" + fix + "'";
 		ResultSet src = db.executeQuery(sql);
-		
+		//System.out.println("timeCheck : " + sql);
 		int stTime, edTime;
 		boolean s=true;
 		try {
@@ -135,8 +135,8 @@ public class duplicatedCheck {
 				+ "팀.팀_번호 = 소속.팀_번호 AND "
 				+ "통합스케줄.팀_번호 = 소속.팀_번호 AND "
 				+ "고정여부 = '0'";
-		System.out.println(sql);
-		ResultSet src = db.executeQuery(sql);
+		//System.out.println("dateCheck : " + sql);
+		ResultSet src = db.executeQuery2(sql);
 		
 		try {
 			while(src.next()) {

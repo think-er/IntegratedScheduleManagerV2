@@ -14,6 +14,7 @@ import oracle.jdbc.OracleTypes;
 public class DB_Conn_Query {
    public Connection con = null;
    public Statement stmt = null;
+   public Statement stmt2 = null;
    String url = "jdbc:oracle:thin:@localhost:1521:XE";
    String id = "suser";      String password = "1234";
    
@@ -27,6 +28,7 @@ public class DB_Conn_Query {
          con = DriverManager.getConnection(url, id, password);
          System.out.println("DB 연결 성공");
          stmt = con.createStatement();
+         stmt2 = con.createStatement();
      } catch (SQLException e) {         System.out.println("Connection Fail");      }
    }
    
@@ -56,5 +58,21 @@ public class DB_Conn_Query {
 			return -1;
 		}
 		return n;
+	}
+	
+	public ResultSet executeQuery2(String sql) {
+		//SQL문 실행하기 위한 메소드 - Parameter : String객체로 만든 SQL문
+		//실행결과는 ResultSet으로 반환
+		
+		ResultSet src = null;
+		try {
+			src = stmt2.executeQuery(sql);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.out.println("SQL 실행 에러");
+			return null;
+		}
+		
+		return src;
 	}
 }
