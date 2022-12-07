@@ -475,6 +475,8 @@ public class HomeUI extends JFrame{
 		homeScheduleScrollPane = new JScrollPane(homeSchedulePanel);
 		homeScheduleScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		homeScheduleScrollPane.setBounds(212, 136, 750, 407);
+		homeScheduleScrollPane.getVerticalScrollBar().setUnitIncrement(50);
+		
 		homePanel.add(homeScheduleScrollPane);	
 		// -----------------------------------------------------------------
 		
