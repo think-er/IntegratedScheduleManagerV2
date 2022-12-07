@@ -90,7 +90,7 @@ public class PersonalUI extends JFrame{
 	public static String[] hourCb = {"09", "10", "11", "12", "13", "14", "15", "16", "17",
 			"18", "19", "20", "21", "22"
 	};
-	protected static String selected;
+	protected static String selected = null;
 	private JLabel yoilLabel;
 	private JTextField yoilField;
 	
@@ -170,7 +170,7 @@ public class PersonalUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String SC_NAME = titleField.getText();
 				
-				ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+SC_NAME+"'");
+				ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+SC_NAME+"'"+" AND 유저_아이디 = "+id);
 				int SC_NUM=0;
 				try {
 					while(rs.next()) {
@@ -181,45 +181,47 @@ public class PersonalUI extends JFrame{
 					e1.printStackTrace();
 				}
 				
-				// 예외 처리 1) titleField가 비어있을 시
-				if (titleField.getText()=="")
-				{
-					JOptionPane.showMessageDialog(null,"삭제할 스케줄명이 없습니다.");
+				
+				if(selected == null) {	//예외 처리 1) 리스트가 선택되지 않았을 때
+					JOptionPane.showMessageDialog(null,"삭제할 일정을 선택하세요.");
+				}
+				else if(SC_NUM<=0) {
+					JOptionPane.showMessageDialog(null,"삭제 오류!");
 				}
 				else {
-					String query = "DELETE FROM 스케줄 where 스케줄_번호= "+SC_NUM;
+					String query = "DELETE FROM 스케줄 where 스케줄_번호= "+SC_NUM+" AND 유저_아이디 = "+id;
 					
 					System.out.print(query);
-					db.executeUpdate(query);
-					
-					// ------------- 등록 성공 후 스케줄 인덱스 재조정---------------
-				
-					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
-					// 실제 존재하고 있는 스케줄 갯수
-					int actual_scCount = 0;
-					try {
-						while(rs2.next()) {
-							actual_scCount = rs2.getInt(1);
+					int n = db.executeUpdate(query);
+					if(n<0) 
+						JOptionPane.showMessageDialog(null,"삭제 오류!");
+					else {
+						// ------------- 삭제 성공 후 스케줄 인덱스 재조정---------------
+						ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
+						// 실제 존재하고 있는 스케줄 갯수
+						int actual_scCount = 0;
+						try {
+							while(rs2.next()) {
+								actual_scCount = rs2.getInt(1);
+							}
+						} catch (SQLException e2) {
+							e2.printStackTrace();
 						}
-					} catch (SQLException e2) {
-						e2.printStackTrace();
+						// 삭제된 인덱스 ~ 끝 스케줄_번호 1씩 당기기
+						for (int i=SC_NUM; i<=actual_scCount; i++) {
+							String query2 = "UPDATE 스케줄 SET 스케줄_번호="+i+" WHERE 스케줄_번호= "+(i+1)+"";
+							db.executeUpdate(query2);
+						}
+						JOptionPane.showMessageDialog(null,"스케줄이 삭제되었습니다.");
+						// 삭제 성공 : 새로고침
+						refresh();
 					}
-					// 1 2 3 4 5 (2) 1 / 3 4 5
-					for (int i=SC_NUM; i<=actual_scCount; i++) {
-						String query2 = "UPDATE 스케줄 SET 스케줄_번호="+i+" WHERE 스케줄_번호= "+(i+1)+"";
-						db.executeUpdate(query2);
-						}
-					JOptionPane.showMessageDialog(null,"스케줄이 삭제되었습니다.");
 				}
-					// 등록 성공 : 새로고침
-				refresh();
+				
 			}
 		});
 		
 		subFrame.getContentPane().setLayout(null);
-		
-		int x = 30;
-		int y = 20;
 		
 		titleLabel.setBounds(342,66, 60, 25);
 		dateLabel.setBounds(342,106,60,25);
@@ -341,45 +343,39 @@ public class PersonalUI extends JFrame{
 					FIX = "0";
 				}
 				//-------------------------------------------예외 조건--------------------------------------------
-				Boolean success=true;
-				
-				//예외 1 : 일정이 중복될 경우
-				//고정 : 시간 중복 check
-				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
-				//(통합스케줄도 비교해야됨)
-				
 				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
 				dc.getData(id, d, WEEK, FIX, START, END);
-				//duplicatedCheck에서 예외처리
-				success = dc.PersonalDC();
 				
-				//예외 2 : 일정 제목과 날짜를 입력하지 않았을 때
+				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
 				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
-					success=false;
+					JOptionPane.showMessageDialog(null,"일정 정보를 모두 입력하세요.");
 				}
-				//예외 3 : 시작시간이 종료시간보다 늦을 경우
-				if(START>=END) { 
-					success=false;
+				//예외 2 : 시작시간이 종료시간보다 늦을 경우
+				else if(START>=END) { 
+					JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
+				}
+				//예외 3 : 일정이 중복될 경우
+				else if(!dc.PersonalDC()) {	//duplicatedCheck에서 예외처리
+					JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 				}
 				//-------------------------------------------예외 조건 end-----------------------------------------
 				//등록
-				int n=-1;
-				if(success){
+				else{
 					SCNUM+=1;
 					DB_Conn_Query db = new DB_Conn_Query();
 					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
 					System.out.print(query);
-					n = db.executeUpdate(query);
+					int n = db.executeUpdate(query);
+					
+					if(n<0){
+						JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
+						//등록 성공 : 새로고침
+						refresh();
+					}
 				}
-				if(n<0){
-					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
-				}
-				else {
-					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
-					//등록 성공 : 새로고침
-					refresh();
-				}
-				
 			}	
 		});
 		
@@ -484,7 +480,7 @@ public class PersonalUI extends JFrame{
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
 		subFrame.getContentPane().add(refreshBtn);
-		
+		subFrame.setLocationRelativeTo(null);	//화면 중앙 배치
 		
 	}
 	public void enabled(String b) {	//고정여부에 따라 컴포넌트 enable 설정하는 함수
