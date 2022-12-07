@@ -367,6 +367,7 @@ public class PersonalUI extends JFrame{
 				
 				int dow = totalDays%7;
 				
+				System.out.println("총일 출력 DOW : " + dow);
 				if(dow==0) {
 					WEEK = "일";
 				}
@@ -388,6 +389,8 @@ public class PersonalUI extends JFrame{
 				if(dow==6) {
 					WEEK = "토";
 				}
+				
+				System.out.println("요일 출력 WEEK : " + dow);
 				ZoneId defaultZoneId = ZoneId.systemDefault();
 				Date date = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
 				if(fixBox.isSelected()) {	//고정
