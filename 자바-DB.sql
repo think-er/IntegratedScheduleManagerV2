@@ -43,7 +43,7 @@ CREATE TABLE 소속(
 CREATE TABLE 스케줄(
     스케줄_번호 NUMBER(5) PRIMARY KEY,
     유저_아이디 NUMBER(10) NOT NULL,
-    스케줄_이름 VARCHAR(20) NOT NULL,
+    스케줄_이름 VARCHAR(30) NOT NULL,
     요일 VARCHAR(5),
     시작시간 NUMBER(3) NOT NULL,
     종료시간 NUMBER(3) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE 스케줄(
 CREATE TABLE 통합스케줄(
     통합_번호 NUMBER(5) PRIMARY KEY,
     팀_번호 NUMBER(5) NOT NULL,
-    통합스케줄_이름 VARCHAR(20) NOT NULL,
+    통합스케줄_이름 VARCHAR(30) NOT NULL,
     요일 VARCHAR(5),
     시작시간 NUMBER(3) NOT NULL,
     종료시간 NUMBER(3) NOT NULL,
