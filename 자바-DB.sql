@@ -18,8 +18,8 @@ GRANT connect, resource, dba TO suser; -- 권한 부여
 
 CREATE TABLE 유저 (
     유저_아이디 NUMBER(10) PRIMARY KEY,  --학번
-    유저_비밀번호 VARCHAR(20),
-    관리자_여부 CHAR(1) CHECK(관리자_여부 IN ('0','1')),  --오라클에선 BOOLEAN이 없어 0과 1로 표현
+    유저_비밀번호 VARCHAR(20) NOT NULL,
+    관리자_여부 CHAR(1) CHECK(관리자_여부 IN ('0','1')) NOT NULL,  --오라클에선 BOOLEAN이 없어 0과 1로 표현
 	이름	NCHAR(5) NOT NULL,
 	전화번호	CHAR(20),
 	학년	NUMBER(1)
@@ -42,12 +42,12 @@ CREATE TABLE 소속(
 
 CREATE TABLE 스케줄(
     스케줄_번호 NUMBER(5) PRIMARY KEY,
-    유저_아이디 NUMBER(10),
-    스케줄_이름 VARCHAR(20),
+    유저_아이디 NUMBER(10) NOT NULL,
+    스케줄_이름 VARCHAR(30) NOT NULL,
     요일 VARCHAR(5),
-    시작시간 NUMBER(3),
-    종료시간 NUMBER(3),
-    고정여부 CHAR(1) CHECK(고정여부 IN ('0','1')),
+    시작시간 NUMBER(3) NOT NULL,
+    종료시간 NUMBER(3) NOT NULL,
+    고정여부 CHAR(1) CHECK(고정여부 IN ('0','1')) NOT NULL,
     날짜 DATE,
     메모 VARCHAR(50),
     FOREIGN KEY (유저_아이디) REFERENCES 유저(유저_아이디)
@@ -55,12 +55,12 @@ CREATE TABLE 스케줄(
 
 CREATE TABLE 통합스케줄(
     통합_번호 NUMBER(5) PRIMARY KEY,
-    팀_번호 NUMBER(5),
-    통합스케줄_이름 VARCHAR(20),
+    팀_번호 NUMBER(5) NOT NULL,
+    통합스케줄_이름 VARCHAR(30) NOT NULL,
     요일 VARCHAR(5),
-    시작시간 NUMBER(3),
-    종료시간 NUMBER(3),
-    고정여부 CHAR(1) CHECK(고정여부 IN ('0','1')),
+    시작시간 NUMBER(3) NOT NULL,
+    종료시간 NUMBER(3) NOT NULL,
+    고정여부 CHAR(1) CHECK(고정여부 IN ('0','1')) NOT NULL,
     날짜 DATE,
     메모 VARCHAR(50),
     FOREIGN KEY (팀_번호) REFERENCES 팀(팀_번호)
@@ -90,13 +90,13 @@ INSERT INTO 팀 VALUES(2,'디비모임',20196042);
 -- 소속(팀_번호, 유저_아이디)
 INSERT INTO 소속 VALUES(1, 20203089);
 INSERT INTO 소속 VALUES(1, 20173070);
-
 INSERT INTO 소속 VALUES(1, 20143698);
 INSERT INTO 소속 VALUES(1, 20195150);
 INSERT INTO 소속 VALUES(2, 20129921);
 INSERT INTO 소속 VALUES(2, 20205609);
 INSERT INTO 소속 VALUES(2, 20226289);
 INSERT INTO 소속 VALUES(2, 20210804);
+
 -- 스케줄(스케줄_번호, 유저_아이디, 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모)
 INSERT INTO 스케줄 VALUES(1, 20203089, 'DB', '화', 9, 11, 1, NULL, '정보 816');
 
@@ -118,10 +118,4 @@ INSERT INTO 스케줄 VALUES(14, 20195150, '블록체인', '화', 13,15,1,NULL, 
 INSERT INTO 통합스케줄 VALUES(1, 1,'회의','금' , 17, 18,'0','2022/11/15', '첫번째 회의');
 
 COMMIT; --커밋 해줘야 됨
-
-
-
-
-
-
 
