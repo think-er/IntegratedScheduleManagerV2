@@ -41,7 +41,9 @@ public class EventUI extends JPanel {
 	
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
-		this.eventNameLabel.setText(this.eventName);
+		String htmlText = "<HTML><body><center>"+ this.eventName + "</center></body></HTML>";
+		System.out.println(htmlText);
+		this.eventNameLabel.setText(htmlText);
 	}
 	
 	public void setEventMode(int Mode) {
@@ -102,7 +104,7 @@ public class EventUI extends JPanel {
 		eventAddBtn.setBounds(0, 0, 90, 80);
 		
 		// 이벤트 보기
-		eventNameLabel = new JLabel();
+		eventNameLabel = new JLabel("", JLabel.CENTER);
 		eventNameLabel.setFont(new Font("나눔고딕", Font.BOLD, 10));
 		eventNameLabel.setBounds(0, 0, 90, 80);
 		
