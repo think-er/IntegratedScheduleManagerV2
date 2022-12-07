@@ -355,6 +355,98 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(lblNewLabel);
 		
 		JButton modifyBtn = new JButton("수정");
+		modifyBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selected == null) 
+					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
+				else {
+					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) from 통합스케줄");
+					int SCNUM=0;
+					try {
+						while(rs2.next()) {
+							SCNUM = rs2.getInt(1);
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					String SCNAME = titleField.getText(); // 통합스케줄 이름
+					int year = Integer.parseInt(yearField.getText()); 
+					int month = Integer.parseInt(monthBox.getSelectedItem().toString());
+					int day = Integer.parseInt(dayBox.getSelectedItem().toString());
+					START = Integer.parseInt(stHourBox.getSelectedItem().toString());
+					END = Integer.parseInt(edHourBox.getSelectedItem().toString());
+					String MEMO = memoArea.getText();
+//					System.out.println(year+"-"+String.format("%02d", month)+"-"+String.format("%02d", day));
+					LocalDate date = LocalDate.of(year, month,day);
+					String date2 = "'"+date+"'";
+					System.out.println(date);
+					DayOfWeek dayOfWeek = date.getDayOfWeek();
+					System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
+					String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+					WEEK = yoil;
+					String month2 = monthBox.getSelectedItem().toString();
+					String day2 = (dayBox.getSelectedItem().toString());
+							
+					// 날짜 Date로 변환
+					String Days = year+"-"+month2+"-"+day2;
+					DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+					LocalDate DATE = LocalDate.parse(Days, sdf);
+					ZoneId defaultZoneId = ZoneId.systemDefault();
+					Date d = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
+					
+					if(fixBox.isSelected()) {	//고정
+						FIX = "1";
+						date2 = null;
+						WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+					}
+					else {	//비고정
+						FIX = "0";
+					}
+					
+					//-------------------------------------------예외 조건--------------------------------------------
+					dc.getData(id, d, WEEK, FIX, START, END);
+					
+					if(START>=END) {  //예외 1 : 시작시간이 종료시간보다 늦을 경우
+						JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
+					}
+					//예외 2 : 일정이 중복될 경우
+					else if(!dc.PersonalDC()) {	//duplicatedCheck에서 예외처리
+						JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
+					}
+					else {
+						int TEAM_NUM2=0;
+						ResultSet rs3 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
+						try {
+							while(rs3.next()) {
+								TEAM_NUM2 = rs3.getInt(1);
+							}
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						
+						DB_Conn_Query db = new DB_Conn_Query();
+						String query3 = "UPDATE 통합스케줄 SET 통합스케줄_이름 = '"+SCNAME+"', 요일 = '"+WEEK+"', 시작시간 = "+START+", 종료시간 = "+END+","
+								+ "고정여부 = '"+FIX+"', 날짜 = "+date2+", 메모 = '"+MEMO+"'"
+								+ "WHERE 통합_번호 = "+SCNUM+" AND 팀_번호 = "+TEAM_NUM2+"";
+						db.executeUpdate(query3);
+						System.out.print(query3);
+						int n = db.executeUpdate(query3);
+						if(n<0){
+							JOptionPane.showMessageDialog(null,"수정을 실패했습니다.");
+							}
+						else {
+							JOptionPane.showMessageDialog(null,"수정을 성공했습니다.");
+							//수정 성공 : 새로고침
+							refresh();
+						}
+					}
+				}
+			}
+		});
+		
 		modifyBtn.setBounds(532, 366, 60, 25);
 		Integration.getContentPane().add(modifyBtn);
 		
