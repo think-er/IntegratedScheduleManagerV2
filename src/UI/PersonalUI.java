@@ -342,17 +342,8 @@ public class PersonalUI extends JFrame{
 				}
 				//-------------------------------------------예외 조건--------------------------------------------
 				Boolean success=true;
-				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
-				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
-					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
-					success=false;
-				}
-				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
-				else if(START>=END) { 
-					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
-					success=false;
-				}
-				//예외 3 : 일정이 중복될 경우
+				
+				//예외 1 : 일정이 중복될 경우
 				//고정 : 시간 중복 check
 				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
 				//(통합스케줄도 비교해야됨)
@@ -362,21 +353,33 @@ public class PersonalUI extends JFrame{
 				//duplicatedCheck에서 예외처리
 				success = dc.PersonalDC();
 				
+				//예외 2 : 일정 제목과 날짜를 입력하지 않았을 때
+				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
+					success=false;
+				}
+				//예외 3 : 시작시간이 종료시간보다 늦을 경우
+				if(START>=END) { 
+					success=false;
+				}
 				//-------------------------------------------예외 조건 end-----------------------------------------
 				//등록
+				int n=-1;
 				if(success){
 					SCNUM+=1;
 					DB_Conn_Query db = new DB_Conn_Query();
 					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
 					System.out.print(query);
-					db.executeUpdate(query);
+					n = db.executeUpdate(query);
+				}
+				if(n<0){
+					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+				}
+				else {
 					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
 					//등록 성공 : 새로고침
 					refresh();
 				}
-				else {
-					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
-				}
+				
 			}	
 		});
 		
