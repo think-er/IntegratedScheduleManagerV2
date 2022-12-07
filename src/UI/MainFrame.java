@@ -9,8 +9,9 @@ public class MainFrame extends JFrame{
 	
 	private void init() {
 		frame = new JFrame();
-		frame.setLocationRelativeTo(null);	//화면 중앙 배치
+		
 		new LoginUI();
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);	//화면 중앙 배치
 	}
 }

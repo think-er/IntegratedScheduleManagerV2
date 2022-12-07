@@ -107,8 +107,6 @@ public class PersonalUI extends JFrame{
 	
 	
 	private void init(String id) {
-		setLocationRelativeTo(null);	//화면 중앙 배치
-		setResizable(false);			// 화면 사이즈 고정
 //		String[] minuteCb = {"00", "30"};
 		
 		subFrame = new JFrame();
@@ -539,8 +537,8 @@ public class PersonalUI extends JFrame{
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
 		subFrame.getContentPane().add(refreshBtn);
-		
-		
+		subFrame.setLocationRelativeTo(null);	//화면 중앙 배치
+		subFrame.setResizable(false);			// 화면 사이즈 고정
 	}
 	public void enabled(String b) {	//고정여부에 따라 컴포넌트 enable 설정하는 함수
 		Boolean tf=true;

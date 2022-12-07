@@ -157,9 +157,6 @@ public class HomeUI extends JFrame{
 	}
 
 	public HomeUI(String id, String level) {
-		setLocationRelativeTo(null);	//화면 중앙 배치
-		setResizable(false);			// 화면 사이즈 고정
-		
 		viewUser = id;
 		ID=id;
 		LEVEL=level;
@@ -174,6 +171,7 @@ public class HomeUI extends JFrame{
 				1000, 580);
 		homePanel.setLayout(null);
 		MainFrame.frame.getContentPane().add(homePanel);
+		
 		
 		// 홈 패널: 학번
 		homeUserLabel = new JLabel("학번: ");
@@ -218,7 +216,7 @@ public class HomeUI extends JFrame{
 		MainFrame.frame.setSize(HOME_FRAME_WIDTH, HOME_FRAME_HEIGHT);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
-	
+		MainFrame.frame.setLocationRelativeTo(null);	//화면 중앙 배치
 		
 		
 		// -----------------------------------------------------------------
@@ -612,7 +610,6 @@ public class HomeUI extends JFrame{
 		
 		teamListScrollPane.setViewportView(teamList);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
-		
 		
 	}
 	

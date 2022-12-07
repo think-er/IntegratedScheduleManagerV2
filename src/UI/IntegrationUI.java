@@ -100,8 +100,6 @@ public class IntegrationUI extends JFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(String id) {
-		setLocationRelativeTo(null);	//화면 중앙 배치
-		setResizable(false);			// 화면 사이즈 고정
 		Integration = new JFrame();
 		Integration.setBounds(100, 100, 700, 440);
 		Integration.getContentPane().setLayout(null);
@@ -497,6 +495,7 @@ public class IntegrationUI extends JFrame {
 		Integration.getContentPane().add(dayBox);
 		
 		Integration.setResizable(false);
+		Integration.setLocationRelativeTo(null);	//화면 중앙 배치
 		Integration.setTitle("통합 일정 관리");
 	}
 	public void enabled(String b) {
