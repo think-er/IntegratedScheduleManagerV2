@@ -366,7 +366,17 @@ public class IntegrationUI extends JFrame {
 				if(selected == null) 
 					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
 				else {
-					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) from 통합스케줄");
+					int TEAM_NUM2=0;
+					ResultSet rs3 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
+					try {
+						while(rs3.next()) {
+							TEAM_NUM2 = rs3.getInt(1);
+						}
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					ResultSet rs2 = db.executeQuery("SELECT 통합_번호 from 통합스케줄 where 통합스케줄_이름 = '"+selected+"' AND 팀_번호="+TEAM_NUM2+"");
 					int SCNUM=0;
 					try {
 						while(rs2.next()) {
@@ -418,6 +428,32 @@ public class IntegrationUI extends JFrame {
 						FIX = "0";
 					}
 					
+					//통합스케줄 삭제
+					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+SCNUM;
+					
+					System.out.print(query);
+					int n = db.executeUpdate(query);
+					int actual_scCount = 0;
+					if(n<0) 
+						JOptionPane.showMessageDialog(null,"삭제 오류!");
+					else {
+						// ------------- 삭제 성공 후 통합스케줄 인덱스 재조정---------------
+						ResultSet rs4 = db.executeQuery("SELECT COUNT(*) FROM 통합스케줄");
+						// 실제 존재하고 있는 스케줄 갯수
+						try {
+							while(rs4.next()) {
+								actual_scCount = rs4.getInt(1);
+							}
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+						}
+						// 삭제된 인덱스 ~ 끝 스케줄_번호 1씩 당기기
+						for (int i=SCNUM; i<=actual_scCount; i++) {
+							String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
+							db.executeUpdate(query2);
+							}
+					}
+					
 					//-------------------------------------------예외 조건--------------------------------------------
 					dc.getData(id, d, WEEK, FIX, START, END);
 					
@@ -437,26 +473,14 @@ public class IntegrationUI extends JFrame {
 					else if(!dc.PersonalDC()) {	//duplicatedCheck에서 예외처리
 						JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 					}
-					else {
-						int TEAM_NUM2=0;
-						ResultSet rs3 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
-						try {
-							while(rs3.next()) {
-								TEAM_NUM2 = rs3.getInt(1);
-							}
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-						
+					else {				
 						DB_Conn_Query db = new DB_Conn_Query();
-						String query3 = "UPDATE 통합스케줄 SET 통합스케줄_이름 = '"+SCNAME+"', 요일 = '"+WEEK+"', 시작시간 = "+START+", 종료시간 = "+END+","
-								+ "고정여부 = '"+FIX+"', 날짜 = "+date2+", 메모 = '"+MEMO+"'"
-								+ "WHERE 통합_번호 = "+SCNUM+" AND 팀_번호 = "+TEAM_NUM2+"";
+						String query3 = "INSERT INTO 통합스케줄 VALUES("+(actual_scCount+1)+","+TEAM_NUM2+",'"+SCNAME+"','"
+								+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
 						db.executeUpdate(query3);
 						System.out.print(query3);
-						int n = db.executeUpdate(query3);
-						if(n<0){
+						int n2 = db.executeUpdate(query3);
+						if(n2<0){
 							JOptionPane.showMessageDialog(null,"수정을 실패했습니다.");
 							}
 						else {
