@@ -16,14 +16,16 @@ import javax.swing.SwingConstants;
 public class EventUI extends JPanel {
 	private int x;
 	private int y;
-	public boolean eventMode = false;
-	// false == eventAddBtn / true == eventNameLabel
-	public boolean eventCompViewMode = false;
-	// false == 기본 모드 / true == eventComp 모드
-	public boolean eventCompMode = false;
+	
+	public int eventMode = 0;
+	
+	// 0 = 추가 전
+	// 1 = 개인
+	// 2 = 통합
+	
+	public boolean eventCompView = false;
 	
 	private String eventName;
-	private String eventMemo;
 	private JButton eventAddBtn;
 	private JLabel eventNameLabel;
 	
@@ -37,52 +39,53 @@ public class EventUI extends JPanel {
 		this.y = y;
 	}
 	
-	public void setEventMemo(String eventMemo) {
-		this.eventMemo = eventMemo;
-	}
-	
-	public void setEventName(String eventName, EventUI event) {
+	public void setEventName(String eventName) {
 		this.eventName = eventName;
-		event.eventNameLabel.setText(this.eventName);
+		this.eventNameLabel.setText(this.eventName);
 	}
 	
-	public void setEventMode(Boolean Mode) {
+	public void setEventMode(int Mode) {
 		this.eventMode = Mode;
 	}
 	
-	// 공통 시간을 보여주는 모드
-	public void setEventCompViewMode(Boolean CompViewMode) {
-		this.eventCompViewMode = CompViewMode;
+	public void setEventCompViewMode(boolean Mode) {
+		this.eventCompView = Mode;
 	}
 	
-	public void setEventCompMode(Boolean CompMode) {
-		this.eventCompMode = CompMode;
-	}
 	
 	public void viewEventMode() {
-		if(!this.eventMode) {
+		if(this.eventMode == 0) {
 			eventAddBtn.setVisible(true);
+			// 이벤트 추가 버튼을 킨다. 
 			eventNameLabel.setVisible(false);
-		}
-		else {
-			eventAddBtn.setVisible(false);
-			eventNameLabel.setVisible(true);
+			// 이벤트 이름을 끈다.
 		}
 		
-		if(!this.eventCompMode) {
-			eventAddBtn.setVisible(true);
-			eventNameLabel.setVisible(false);
-		}
-		else {
+		// 그것이 아니라면
+		else if(this.eventMode == 1) {
 			eventAddBtn.setVisible(false);
+			// 이벤트 추가 버튼을 끈다.
 			eventNameLabel.setVisible(true);
+			setBackground(Color.CYAN);
+			// 이벤트 이름을 킨다.
+		}
+		
+		else if(this.eventMode == 2) {
+			eventAddBtn.setVisible(false);
+			// 이벤트 추가 버튼을 끈다.
+			eventNameLabel.setVisible(true);
+			// 이벤트 이름을 킨다.
+			setBackground(Color.BLUE);
 		}
 	}
 	
 	public void viewEventCompMode() {
-		if(!this.eventCompViewMode) {
+		// 이벤트 공통 보기를 끄고 키는 경우
+		if(eventCompView == false) {
 			eventCompBtn.setVisible(false);
+			// 이벤트 공통 보기를 끈다.
 			viewEventMode();
+			// 이벤트 모드를 보여준다.
 		}
 		else {
 			eventAddBtn.setVisible(false);
