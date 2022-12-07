@@ -354,7 +354,7 @@ public class IntegrationUI extends JFrame {
 			}
 		});
 		
-		//////////////////////////////
+		////////////////////////////// 통합스케줄 수정
 		JLabel lblNewLabel = new JLabel("통합 일정 관리");
 		lblNewLabel.setFont(new Font("나눔고딕", Font.BOLD, 20));
 		lblNewLabel.setBounds(12, 26, 181, 30);
@@ -378,7 +378,14 @@ public class IntegrationUI extends JFrame {
 					}
 					
 					String SCNAME = titleField.getText(); // 통합스케줄 이름
-					int year = Integer.parseInt(yearField.getText()); 
+					String yearCheck="";
+					if (yearField.getText().length()==0) {
+						yearCheck="2022";
+					}
+					else {
+						yearCheck=yearField.getText();
+					}
+					int year = Integer.parseInt(yearCheck);
 					int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 					int day = Integer.parseInt(dayBox.getSelectedItem().toString());
 					START = Integer.parseInt(stHourBox.getSelectedItem().toString());
@@ -414,10 +421,19 @@ public class IntegrationUI extends JFrame {
 					//-------------------------------------------예외 조건--------------------------------------------
 					dc.getData(id, d, WEEK, FIX, START, END);
 					
-					if(START>=END) {  //예외 1 : 시작시간이 종료시간보다 늦을 경우
+					//예외 1 : titleField가 비었을 시
+					if(titleField.getText().length()==0) {
 						JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
 					}
-					//예외 2 : 일정이 중복될 경우
+					//예외 2 : yearField가 비었을 시
+					else if (yearField.getText().length()==0) {
+						JOptionPane.showMessageDialog(null,"년도값이 올바르지 않습니다.");
+					}
+					//예외 3 : 시작시간이 종료시간보다 늦을 경우
+					else if(START>=END) {
+						JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
+					}
+					//예외 4 : 일정이 중복될 경우
 					else if(!dc.PersonalDC()) {	//duplicatedCheck에서 예외처리
 						JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 					}
@@ -477,7 +493,14 @@ public class IntegrationUI extends JFrame {
 				}
 				
 				String SCNAME = titleField.getText(); // 통합스케줄 이름
-				int year = Integer.parseInt(yearField.getText()); 
+				String yearCheck="";
+				if (yearField.getText().length()==0) {
+					yearCheck="2022";
+				}
+				else {
+					yearCheck=yearField.getText();
+				}
+				int year = Integer.parseInt(yearCheck); 
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
 				START = Integer.parseInt(stHourBox.getSelectedItem().toString());
@@ -516,15 +539,19 @@ public class IntegrationUI extends JFrame {
 				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
 				dc.getData(id, d, WEEK, FIX, START, END);
 				
-				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
-				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
-					JOptionPane.showMessageDialog(null,"일정 정보를 모두 입력하세요.");
+				//예외 1 : 일정 제목을 입력하지 않았을 때
+				if(titleField.getText().length()==0) {	
+					JOptionPane.showMessageDialog(null,"일정 제목을 입력하지 않았습니다.");
 				}
-				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
+				//예외 2 : yearField가 비었을 시
+				else if (yearField.getText().length()==0) {
+					JOptionPane.showMessageDialog(null,"년도를 입력하지 않았습니다.");
+				}
+				//예외 3 : 시작시간이 종료시간보다 늦을 경우 경고창
 				else if(START>=END) { 
 					JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
 				}
-				//예외 3 : 일정이 중복될 경우
+				//예외 4 : 일정이 중복될 경우
 				else if(!dc.IntegrationDC()) {//duplicatedCheck에서 예외처리
 					JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 				}
