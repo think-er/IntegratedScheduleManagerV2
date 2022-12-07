@@ -52,7 +52,7 @@ public class CreateTeam extends JFrame {
 					}catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-					String query = "INSERT INTO 팀 VALUES("+(count+1)+",'"+name+"',null)";
+					String query = "INSERT INTO 팀 VALUES("+(count+1)+",'"+name+"')";
 					
 					int n = db.executeUpdate(query);
 					if(n<0) {
