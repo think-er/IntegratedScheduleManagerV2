@@ -376,7 +376,7 @@ public class IntegrationUI extends JFrame {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();
 					}
-					ResultSet rs2 = db.executeQuery("SELECT 통합_번호 from 통합스케줄 where 통합스케줄_이름 = '"+selected+"' AND 팀_번호="+TEAM_NUM2+"");
+					ResultSet rs2 = db.executeQuery("SELECT 통합_번호 from 통합스케줄 where 통합스케줄_이름 = '"+selected+"' AND 팀_번호="+TEAM_NUM2);
 					int SCNUM=0;
 					try {
 						while(rs2.next()) {
@@ -429,9 +429,9 @@ public class IntegrationUI extends JFrame {
 					}
 					
 					//통합스케줄 삭제
-					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+SCNUM;
+					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+SCNUM+" AND 팀_번호="+TEAM_NUM2;
 					
-					System.out.print(query);
+					System.out.println(query);
 					int n = db.executeUpdate(query);
 					int actual_scCount = 0;
 					if(n<0) 
@@ -451,7 +451,7 @@ public class IntegrationUI extends JFrame {
 						for (int i=SCNUM; i<=actual_scCount; i++) {
 							String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
 							db.executeUpdate(query2);
-							}
+						}
 					}
 					
 					//-------------------------------------------예외 조건--------------------------------------------
@@ -477,8 +477,7 @@ public class IntegrationUI extends JFrame {
 						DB_Conn_Query db = new DB_Conn_Query();
 						String query3 = "INSERT INTO 통합스케줄 VALUES("+(actual_scCount+1)+","+TEAM_NUM2+",'"+SCNAME+"','"
 								+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
-						db.executeUpdate(query3);
-						System.out.print(query3);
+						System.out.println(query3);
 						int n2 = db.executeUpdate(query3);
 						if(n2<0){
 							JOptionPane.showMessageDialog(null,"수정을 실패했습니다.");
