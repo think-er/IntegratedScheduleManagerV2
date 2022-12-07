@@ -7,11 +7,20 @@ import java.awt.Font;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import Control.ViewCompSchedule;
+
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import UI.PersonalUI;
 
 public class EventUI extends JPanel {
 	private int x;
@@ -42,7 +51,6 @@ public class EventUI extends JPanel {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 		String htmlText = "<HTML><body><center>"+ this.eventName + "</center></body></HTML>";
-		System.out.println(htmlText);
 		this.eventNameLabel.setText(htmlText);
 	}
 	
@@ -102,6 +110,23 @@ public class EventUI extends JPanel {
 		eventAddBtn = new JButton("+");
 		eventAddBtn.setFont(new Font("나눔고딕", Font.BOLD, 15));
 		eventAddBtn.setBounds(0, 0, 90, 80);
+		
+		eventAddBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PersonalUI viewUI = new PersonalUI(HomeUI.ID);
+				// 0 1 2 3 4 5 6
+				// ... 13 index
+				LocalDate calDate = HomeUI.startOfCurrentWeek;
+				calDate = calDate.plusDays(y);
+				viewUI.yearField.setText(Integer.toString(calDate.getYear()));
+				viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
+				viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
+				viewUI.stHourBox.setSelectedIndex(x);
+				viewUI.edHourBox.setSelectedIndex(x+1);
+				
+			}
+		});
+		
 		
 		// 이벤트 보기
 		eventNameLabel = new JLabel("", JLabel.CENTER);
