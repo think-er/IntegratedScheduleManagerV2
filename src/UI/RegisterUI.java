@@ -150,6 +150,7 @@ public class RegisterUI {
 					}
 					else	//관리자 여부 체크 x : 일반 회원가입
 						TF = "0";
+						SF=true;
 				}
 				if(SF) {
 					String Steam;
