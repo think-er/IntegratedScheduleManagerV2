@@ -169,13 +169,24 @@ public class RegisterUI {
 					DB_Conn_Query db = new DB_Conn_Query();
 					String query = "insert into 유저 values("+ID+",'"+PW+"','"+TF+"','"+NAME+"','"+TELL+"',"+GRADE+")";
 					String query2 = "insert into 소속 values("+TNUM+","+ID+")";
-					db.executeUpdate(query);
-					db.executeUpdate(query2);
+					int n = db.executeUpdate(query);
+					if(n<0) {
+						JOptionPane.showMessageDialog(null,"회원가입 실패");
+					}
+					else{
+						int m = db.executeUpdate(query2);
+						if(m<0) {
+							JOptionPane.showMessageDialog(null,"회원가입 실패");
+						}
+						else {
+							JOptionPane.showMessageDialog(null,"회원가입 성공");
+							registerPanel.setVisible(false);
+							LoginUI loginPanel = new LoginUI();
+							loginPanel.loginPanel.setVisible(true);
+						}
+					}
 					
-					JOptionPane.showMessageDialog(null,"회원가입 성공");
-					registerPanel.setVisible(false);
-					LoginUI loginPanel = new LoginUI();
-					loginPanel.loginPanel.setVisible(true);
+					
 				}
 				
 			}
