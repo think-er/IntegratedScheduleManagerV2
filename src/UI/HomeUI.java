@@ -627,17 +627,14 @@ public class HomeUI extends JFrame{
 		
 		try {
 			// 유저_아이디 들고오는 sql 구문
-			String sql = "SELECT 유저_아이디 "
-					+ "FROM 소속 "
-					+ "WHERE 팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
-			
-//			String sql = "SELECT 유저_아이디"
-//					+ "FROM 소속"
-//					+ "WHERE 팀_번호= "+"1";
+			String sql = "SELECT 유저.유저_아이디, 유저.이름 "
+					+ "FROM 소속, 유저 "
+					+ "WHERE 소속.유저_아이디 = 유저.유저_아이디 AND "
+					+ "팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = " + id + ")";
 			
 			ResultSet src = db.executeQuery(sql);
 			while(src.next()) {
-				listModel.addElement(src.getString(1));
+				listModel.addElement(src.getInt(1)+" "+src.getString(2));
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
