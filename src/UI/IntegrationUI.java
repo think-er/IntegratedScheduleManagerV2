@@ -63,7 +63,7 @@ public class IntegrationUI extends JFrame {
 	private int START;
 	private int END;
 	
-	protected static String selected;
+	protected static String selected = null;
 	JFrame Integration;
 	private JTextField titleField;
 	private JTextField yearField;
@@ -216,51 +216,65 @@ public class IntegrationUI extends JFrame {
 		delBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String SC_NAME = titleField.getText();
-				
-				ResultSet rs = db.executeQuery("select 통합_번호 FROM 통합스케줄 where 통합스케줄_이름 = '"+SC_NAME+"'");
-				int TEAM_NUM=0;
+				int TEAM_NUM = 0;
+				ResultSet rs3 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+id);
+				System.out.println("SELECT 팀_번호 FROM 소속 WHRER 유저_아이디 = "+id);
 				try {
-					while(rs.next()) {
-						TEAM_NUM = rs.getInt(1);
+					while(rs3.next()) {
+						TEAM_NUM = rs3.getInt(1);
 					}
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
-				// 예외 처리 1) titleField가 비어있을 시
-				if (titleField.getText()=="")
-				{
-					JOptionPane.showMessageDialog(null,"삭제할 스케줄명이 없습니다.");
+				ResultSet rs = db.executeQuery("select 통합_번호 FROM 통합스케줄 "
+											 + "where 통합스케줄_이름 = '"+SC_NAME+"'"+" AND 팀_번호 = "+TEAM_NUM);
+				int SC_NUM = 0;
+				try {
+					while(rs.next()) {
+						SC_NUM = rs.getInt(1);
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
+				if(selected == null) {	//예외 처리 1) 리스트가 선택되지 않았을 때
+					JOptionPane.showMessageDialog(null,"삭제할 일정을 선택하세요.");
+				}
+				else if(SC_NUM<=0) {
+					JOptionPane.showMessageDialog(null,"삭제 오류!");
 				}
 				else {
-					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+TEAM_NUM;
+					String query = "DELETE FROM 통합스케줄 where 통합_번호= "+SC_NUM;
 					
 					System.out.print(query);
-					db.executeUpdate(query);
-					
-					// ------------- 등록 성공 후 통합스케줄 인덱스 재조정---------------
-				
-					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 통합스케줄");
-					// 실제 존재하고 있는 스케줄 갯수
-					int actual_scCount = 0;
-					try {
-						while(rs2.next()) {
-							actual_scCount = rs2.getInt(1);
+					int n = db.executeUpdate(query);
+					if(n<0) 
+						JOptionPane.showMessageDialog(null,"삭제 오류!");
+					else {
+						// ------------- 삭제 성공 후 통합스케줄 인덱스 재조정---------------
+						ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 통합스케줄");
+						// 실제 존재하고 있는 스케줄 갯수
+						int actual_scCount = 0;
+						try {
+							while(rs2.next()) {
+								actual_scCount = rs2.getInt(1);
+							}
+						} catch (SQLException e2) {
+							e2.printStackTrace();
 						}
-					} catch (SQLException e2) {
-						e2.printStackTrace();
+						// 삭제된 인덱스 ~ 끝 스케줄_번호 1씩 당기기
+						for (int i=SC_NUM; i<=actual_scCount; i++) {
+							String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
+							db.executeUpdate(query2);
+							}
+						JOptionPane.showMessageDialog(null,"통합 스케줄을 삭제하였습니다.");
+						// 삭제 성공 : 새로고침
+						refresh();
 					}
-					// 1 2 3 4 5 (2) 1 / 3 4 5
-					for (int i=TEAM_NUM; i<=actual_scCount; i++) {
-						String query2 = "UPDATE 통합스케줄 SET 통합_번호="+i+" WHERE 통합_번호= "+(i+1)+"";
-						db.executeUpdate(query2);
-						}
-					JOptionPane.showMessageDialog(null,"통합 스케줄을 삭제하였습니다.");
 				}
 				
-				// 등록 성공 : 새로고침
-				refresh();
+				
 			}
 		});
 		delBtn.setBounds(602, 366, 60, 25);
@@ -388,7 +402,7 @@ public class IntegrationUI extends JFrame {
 				
 				if(fixBox.isSelected()) {	//고정
 					FIX = "1";
-					date = null;
+					date2 = null;
 					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 				}
 				else {	//비고정
@@ -397,35 +411,25 @@ public class IntegrationUI extends JFrame {
 				
 				//-------------------------------------------예외 조건--------------------------------------------
 				// 예외처리 - 통합스케줄 등록
-				Boolean success=true;
-				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
-				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
-					JOptionPane.showMessageDialog(null,"일정 제목과 년도 항목을 확인하세요.");
-					success=false;
-				}
-				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
-				else if(START>=END) { 
-					JOptionPane.showMessageDialog(null,"시작시간을 잘못 입력했습니다.");
-					success=false;
-				}
-				//예외 3 : 일정이 중복될 경우
-				//고정 : 시간 중복 check
-				//같은 요일 데이터를 가져와서 시작시간~종료시간이 겹치면 false
-				//(통합스케줄도 비교해야됨)
 				
 				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
 				dc.getData(id, d, WEEK, FIX, START, END);
-				//duplicatedCheck에서 예외처리
-				success = dc.IntegrationDC();
 				
-				if (yearField.getText().isEmpty()) {
-					// 년도 입력 안했을 시
-					JOptionPane.showMessageDialog(null,"년도를 입력해주세요.");
+				//예외 1 : 일정 제목과 날짜를 입력하지 않았을 때
+				if(SCNAME.length()==0||yearField.getText().isEmpty()) {	
+					JOptionPane.showMessageDialog(null,"일정 정보를 모두 입력하세요.");
+				}
+				//예외 2 : 시작시간이 종료시간보다 늦을 경우 경고창
+				else if(START>=END) { 
+					JOptionPane.showMessageDialog(null,"잘못된 시작시간 입니다.");
+				}
+				//예외 3 : 일정이 중복될 경우
+				else if(!dc.IntegrationDC()) {//duplicatedCheck에서 예외처리
+					JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 				}
 				//-------------------------------------------예외 조건 end-----------------------------------------
-				
 				//등록
-				if(success){
+				else{
 					// 충족 조건 달성 시
 					int TEAM_NUM2=0;
 					ResultSet rs2 = db.executeQuery("SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID);
@@ -440,18 +444,18 @@ public class IntegrationUI extends JFrame {
 					
 					SCNUM+=1;
 					String query = "INSERT INTO 통합스케줄 VALUES("+SCNUM+","+TEAM_NUM2+",'"+SCNAME+"','"
-							+yoil+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
-					
-					// INSERT INTO 통합스케줄 VALUES(1, 1,'회의','금' , 17, 18,'0','2022/11/15', '첫번째 회의');
-					
+							+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
+										
 					System.out.print(query);
-					db.executeUpdate(query);
-					// 등록 성공 : 새로고침
-					JOptionPane.showMessageDialog(null,"통합 스케줄을 추가하였습니다.");
-					refresh();
-				}
-				else {
-					JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+					int n = db.executeUpdate(query);
+					if(n<0){
+						JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
+						//등록 성공 : 새로고침
+						refresh();
+					}
 				}
 			}
 		});
@@ -475,7 +479,6 @@ public class IntegrationUI extends JFrame {
 				refresh();
 			}
 		});
-		
 		
 		//------------------------------새로고침 버튼 이벤트 end----------------------------
 		refreshBtn.setBounds(565, 26, 97, 23);
