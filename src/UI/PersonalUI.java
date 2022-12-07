@@ -39,6 +39,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import Control.UpdateSchedule;
+import Control.ViewCompSchedule;
+
 public class PersonalUI extends JFrame{
 	
 	// 스케줄표 아이디를 불러오기 위한 변수
@@ -215,6 +218,9 @@ public class PersonalUI extends JFrame{
 						JOptionPane.showMessageDialog(null,"스케줄이 삭제되었습니다.");
 						// 삭제 성공 : 새로고침
 						refresh();
+						
+						new UpdateSchedule();
+						new ViewCompSchedule();
 					}
 				}
 				
@@ -374,6 +380,9 @@ public class PersonalUI extends JFrame{
 						JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
 						//등록 성공 : 새로고침
 						refresh();
+						
+						new UpdateSchedule();
+						new ViewCompSchedule();
 					}
 				}
 			}	
@@ -523,6 +532,8 @@ public class PersonalUI extends JFrame{
 							JOptionPane.showMessageDialog(null,"수정을 성공했습니다.");
 							//수정 성공 : 새로고침
 							refresh();
+							new UpdateSchedule();
+							new ViewCompSchedule();
 						}
 					}
 				}
