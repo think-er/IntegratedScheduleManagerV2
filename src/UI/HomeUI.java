@@ -138,7 +138,6 @@ public class HomeUI extends JFrame{
 	public static EventUI[][] event;
 	
 	private JButton viewCompEventBtn;
-	private Boolean viewCompEventBoolean;
 	
 	public static int Y;
 	public static int M;
@@ -146,7 +145,9 @@ public class HomeUI extends JFrame{
 	public static String StartOfWeekFormat;
 	public static String EndOfWeekFormat;
 	
-	public String viewUser;
+	public static String viewUser;
+	// 프로그램이 돌아가는 와중 켜져있는지 확인한다.
+	private static Boolean viewCompEventMode = false;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
 	
@@ -224,26 +225,26 @@ public class HomeUI extends JFrame{
 		// 날짜 변경 패널
 		homeScheduleColumnPanel = new JPanel();
 		homeScheduleColumnPanel.setBounds(212, 86, 730, 50);
-		homeScheduleColumnPanel.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumnPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 
 		homeScheduleColumnPanel.setLayout(new GridLayout(1, 8, 0, 0));
 		
 		JPanel homeScheduleColumn_0 = new JPanel();
-		homeScheduleColumn_0.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_0.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_1 = new JPanel();
-		homeScheduleColumn_1.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_2 = new JPanel();
-		homeScheduleColumn_2.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_3 = new JPanel();
-		homeScheduleColumn_3.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_3.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_4 = new JPanel();
-		homeScheduleColumn_4.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_4.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_5 = new JPanel();
-		homeScheduleColumn_5.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_6 = new JPanel();
-		homeScheduleColumn_6.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_6.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_7 = new JPanel();
-		homeScheduleColumn_7.setBorder(new LineBorder(new Color(255, 0, 0)));
+		homeScheduleColumn_7.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		homeScheduleColumnPanel.add(homeScheduleColumn_0);
 		homeScheduleColumnPanel.add(homeScheduleColumn_1);
@@ -418,7 +419,7 @@ public class HomeUI extends JFrame{
 			}
 		}
 		
-		update_Schedule(viewUser);
+		update_Schedule();
 		
 		homeCalendar.addPropertyChangeListener(new PropertyChangeListener()
 		{
@@ -464,7 +465,8 @@ public class HomeUI extends JFrame{
 				
 				EndOfWeekFormat = printDate.plusDays(1).format(formatter);
 				
-				update_Schedule(viewUser);
+				update_Schedule();
+				view_CompSchedule();
 				
 			}
 		});
@@ -481,21 +483,21 @@ public class HomeUI extends JFrame{
 		viewCompEventBtn = new JButton("공통 시간 켜기");
 		viewCompEventBtn.setBounds(700, 30, 130, 30);
 		homePanel.add(viewCompEventBtn);
-		viewCompEventBoolean = false;
+		viewCompEventMode = false;
 		viewCompEventBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// 공통 시간 켜기
-				if (viewCompEventBoolean == false) {
-					viewCompEventBtn.setText("공통 시간 끄기");
-					viewCompEventBoolean = true;
-					view_CompSchedule(viewCompEventBoolean, viewUser);
+				if (viewCompEventMode == false) {
+					viewCompEventBtn.setText("공통 시간 끄기");	
+					viewCompEventMode = true;
+					view_CompSchedule();
 				}
 				
 				// 공통 시간 끄기
 				else {
 					viewCompEventBtn.setText("공통 시간 켜기");
-					viewCompEventBoolean = false;
-					view_CompSchedule(viewCompEventBoolean, viewUser);
+					viewCompEventMode = false;
+					view_CompSchedule();
 				}
 			}
 		});
@@ -573,15 +575,20 @@ public class HomeUI extends JFrame{
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
 		try {
-			String sql = "SELECT 이름 "
-					+ "FROM 유저,소속 "
-					+ "WHERE 유저.유저_아이디=소속.유저_아이디 "
-					+ "AND 소속.팀_번호 in (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
+			
+			
+			// 유저_아이디 들고오는 sql 구문
+			String sql = "SELECT 유저_아이디 "
+					+ "FROM 소속 "
+					+ "WHERE 팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+ID+")";
+			
+//			String sql = "SELECT 유저_아이디"
+//					+ "FROM 소속"
+//					+ "WHERE 팀_번호= "+"1";
 			
 			ResultSet src = db.executeQuery(sql);
-			System.out.println(ID);
 			while(src.next()) {
-				listModel.addElement(src.getString("이름"));
+				listModel.addElement(src.getString(1));
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -591,7 +598,11 @@ public class HomeUI extends JFrame{
 		teamList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				if(!e.getValueIsAdjusting()) {	//이거 없으면 mouse 눌릴때, 뗄때 각각 한번씩 호출되서 총 두번 호출
-					System.out.println("selected :"+teamList.getSelectedValue());
+					
+					viewUser = teamList.getSelectedValue();
+					update_Schedule();
+					// 만약 viewCompEventMode가 켜져있을 경우
+					view_CompSchedule();
 				}
 			}
 		});
@@ -603,9 +614,19 @@ public class HomeUI extends JFrame{
 		
 	}
 	
-	public void view_CompSchedule(boolean mode, String id) {
+	public void view_CompSchedule() {
+		
+		// 새로 초기화
+		for(int i=0; i<14; i++) {
+			for(int j=0; j<7; j++) {
+				event[i][j].setEventCompViewMode(false);
+				event[i][j].viewEventCompMode();
+			}
+		}
+		
+		
 		try {
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
+			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+viewUser;
 			ResultSet rs = db.executeQuery(sql);
 			
 			String _teamNum = "";
@@ -626,20 +647,16 @@ public class HomeUI extends JFrame{
 				sql = "SELECT 요일, 시작시간, 종료시간 FROM 스케줄 WHERE 유저_아이디="+_teamUser.get(k) +
 						"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
 						"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')" +
-						"OR (유저_아이디="+id +
+						"OR (유저_아이디="+_teamUser.get(k) +
 						"AND 고정여부='1')";
-				System.out.println("팀원 = " + _teamUser.get(k));
+				
 				rs = db.executeQuery(sql);
 				while(rs.next()) {
 					String days = rs.getString(1);
 					int startTime = rs.getInt(2);
 					int endTime = rs.getInt(3);
 					
-					System.out.println(_teamUser.get(k) + " : " + startTime + " : " + endTime);
-					
-					// 요일 문자가 아닌 숫자로 받기
 					int days2 = 0;
-					
 					if (days.equals("일"))
 						days2 = 0;
 					else if (days.equals("월"))
@@ -655,9 +672,11 @@ public class HomeUI extends JFrame{
 					else if (days.equals("토"))
 						days2 = 6;
 					
-					
-					for(int i=startTime - 9; i <= endTime - 9; i++) {
-						event[i][days2].setEventCompViewMode(mode);
+//					System.out.println("횟수: " + k + " 팀원: " + _teamUser.get(0));
+//					System.out.println(days + " : " + startTime + " : " + endTime);
+//					
+					for(int i=startTime - 9; i < endTime - 9; i++) {
+						event[i][days2].setEventCompViewMode(viewCompEventMode);
 						event[i][days2].viewEventCompMode();
 					}
 				}
@@ -667,20 +686,25 @@ public class HomeUI extends JFrame{
 		}
 	}
 	
-	public void update_Schedule(String id) {
+	public void update_Schedule() {
+		
 		
 		for(int i=0; i<14; i++) {
 			for(int j=0; j<7; j++) {
-				event[i][j].setEventMode(false);
+				event[i][j].setEventMode(0);
+				// 이전에 출력했던 이벤트들을 전부 끈다.
 				event[i][j].viewEventMode();
+				// 새로운 모드로 이벤트들을 조회한다.
+			
 			}
 		}
-		// 데이터베이스에서 로그인한 개인 시간표 가져오기
+		
+		// 데이터베이스에서 개인 시간표 가져오기
 		try {
-			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE (유저_아이디="+id +
+			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE (유저_아이디="+viewUser +
 					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
 					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
-					"OR (유저_아이디="+id +
+					"OR (유저_아이디="+viewUser +
 					"AND 고정여부='1')";
 
 			ResultSet rs = db.executeQuery(sql);
@@ -707,11 +731,10 @@ public class HomeUI extends JFrame{
 					days2 = 6;
 				int startTime = rs.getInt(3);
 				int endTime = rs.getInt(4);
-				String memo = rs.getString(6);
 				
-				for(int i=startTime - 9; i <= endTime - 9; i++) {
-					event[i][days2].setEventName(name, event[i][days2]);
-					event[i][days2].setEventMode(true);
+				for(int i=startTime - 9; i < endTime - 9; i++) {
+					event[i][days2].setEventName(name);
+					event[i][days2].setEventMode(1);
 					event[i][days2].viewEventMode();
 				}
 			}
@@ -719,19 +742,15 @@ public class HomeUI extends JFrame{
 			e.printStackTrace();
 		};
 		
-		
-		
-		// 통합 스케줄 보이기------------------------------------------------------------------------
 		try {
 			
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+id;
+			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+viewUser;
 			ResultSet rs = db.executeQuery(sql);
 			String _teamNum = "";
 			while(rs.next()) {
 				_teamNum = rs.getString(1);
 			}
 			
-			// 팀 가져와야한다. 
 			sql = "SELECT 통합스케줄_이름, 요일, 시작시간, 종료시간 FROM 통합스케줄 WHERE (팀_번호="+_teamNum +
 					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
 					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
@@ -776,9 +795,9 @@ public class HomeUI extends JFrame{
 				int endTime = rs.getInt(4);
 //				String memo = rs.getString(6);
 				
-				for(int i=startTime - 9; i <= endTime - 9; i++) {
-					event[i][days2].setEventName(_teamName, event[i][days2]);
-					event[i][days2].setEventCompMode(true);
+				for(int i=startTime - 9; i < endTime - 9; i++) {
+					event[i][days2].setEventName(_teamName);
+					event[i][days2].setEventMode(2);
 					event[i][days2].viewEventMode();
 				}
 			}
