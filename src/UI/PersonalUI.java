@@ -74,11 +74,10 @@ public class PersonalUI extends JFrame{
 	public JTextField yearField;
 	public JComboBox monthBox;
 	public JComboBox dayBox;
+	public JComboBox weekBox;
 	private JCheckBox fixBox;
 	public JComboBox stHourBox;
-//	private JComboBox stMinuteBox;
 	public JComboBox edHourBox;
-//	private JComboBox edMinuteBox;
 	private JTextArea memoArea;
 	private JScrollPane memoScrollPane;
 	private JButton delBtn;
@@ -91,8 +90,7 @@ public class PersonalUI extends JFrame{
 			"18", "19", "20", "21", "22"
 	};
 	protected static String selected = null;
-	private JLabel yoilLabel;
-	private JTextField yoilField;
+	private JLabel weekLabel;
 	
 	private int START;
 	private int END;
@@ -104,14 +102,12 @@ public class PersonalUI extends JFrame{
 	public PersonalUI(String id) {
 		init(id);
 		ID=id;
-		
 	}
 	
 	
 	private void init(String id) {
 		setLocationRelativeTo(null);	//화면 중앙 배치
 		setResizable(false);			// 화면 사이즈 고정
-//		String[] minuteCb = {"00", "30"};
 		
 		subFrame = new JFrame();
 		
@@ -322,8 +318,8 @@ public class PersonalUI extends JFrame{
 				System.out.println(date);
 				DayOfWeek dayOfWeek = date.getDayOfWeek();
 				System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
-				String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-				WEEK = yoil;
+				String week = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+				WEEK = week;
 				String month2 = monthBox.getSelectedItem().toString();
 				String day2 = (dayBox.getSelectedItem().toString());
 						
@@ -337,7 +333,7 @@ public class PersonalUI extends JFrame{
 				if(fixBox.isSelected()) {	//고정
 					FIX = "1";
 					date = null;
-					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+					WEEK = weekBox.getSelectedItem().toString();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 				}
 				else {	//비고정
 					FIX = "0";
@@ -423,7 +419,7 @@ public class PersonalUI extends JFrame{
 							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
 								//yearField.setText((d.getYear()).toString());
 								enabled("1");
-								yoilField.setText(rs.getString("요일"));
+								weekBox.setSelectedIndex(getWeek(rs.getString("요일")));
 							}
 							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
 								Date date = rs.getDate("날짜");
@@ -453,17 +449,18 @@ public class PersonalUI extends JFrame{
 				if(selected == null) 
 					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
 				else {
-					ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
+					String SCNAME = titleField.getText();
+					ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+SCNAME+"'"+" AND 유저_아이디 = "+id);
 					int SCNUM=0;
 					try {
-						while(rs2.next()) {
-							SCNUM = rs2.getInt(1);
+						while(rs.next()) {
+							SCNUM = rs.getInt(1);
 						}
-					} catch (SQLException e1) {			
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 	
-					String SCNAME = titleField.getText();
 					int year = Integer.parseInt(yearField.getText());
 					int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 					int day = Integer.parseInt(dayBox.getSelectedItem().toString());
@@ -477,8 +474,8 @@ public class PersonalUI extends JFrame{
 					System.out.println(date);
 					DayOfWeek dayOfWeek = date.getDayOfWeek();
 					System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
-					String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-					WEEK = yoil;
+					String week = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+					WEEK = week;
 					String month2 = monthBox.getSelectedItem().toString();
 					String day2 = (dayBox.getSelectedItem().toString());
 							
@@ -493,7 +490,7 @@ public class PersonalUI extends JFrame{
 					if(fixBox.isSelected()) {	//고정
 						FIX = "1";
 						date2 = null;
-						WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+						WEEK = weekBox.getSelectedItem().toString();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 					}
 					else {	//비고정
 						FIX = "0";
@@ -534,14 +531,9 @@ public class PersonalUI extends JFrame{
 		
 		personalScrollPane.setViewportView(personalList);
 		
-		yoilLabel = new JLabel("요일");
-		yoilLabel.setBounds(342, 146, 60, 25);
-		subFrame.getContentPane().add(yoilLabel);
-		
-		yoilField = new JTextField();
-		yoilField.setEnabled(false);
-		yoilField.setBounds(412, 146, 50, 25);
-		subFrame.getContentPane().add(yoilField);
+		weekLabel = new JLabel("요일");
+		weekLabel.setBounds(342, 146, 60, 25);
+		subFrame.getContentPane().add(weekLabel);
 		
 		JButton refreshBtn = new JButton("새로고침");
 		refreshBtn.addActionListener(new ActionListener() {
@@ -551,6 +543,12 @@ public class PersonalUI extends JFrame{
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
 		subFrame.getContentPane().add(refreshBtn);
+		
+		weekBox = new JComboBox();
+		weekBox.setEnabled(false);
+		weekBox.setModel(new DefaultComboBoxModel(new String[] {"일", "월", "화", "수", "목", "금", "토"}));
+		weekBox.setBounds(412, 148, 50, 23);
+		subFrame.getContentPane().add(weekBox);
 		subFrame.setLocationRelativeTo(null);	//화면 중앙 배치
 		
 	}
@@ -559,7 +557,7 @@ public class PersonalUI extends JFrame{
 		if(b.equals("0"))tf=false;
 		
 		fixBox.setSelected(tf);
-		yoilField.setEnabled(tf);
+		weekBox.setEnabled(tf);
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
 		dayBox.setEnabled(!tf);
@@ -583,7 +581,7 @@ public class PersonalUI extends JFrame{
 		personalList.setModel(listModel);
 		
 		titleField.setText("");
-		yoilField.setText("");
+		weekBox.setSelectedIndex(0);
 		yearField.setText("2022");
 		monthBox.setSelectedIndex(0);
 		dayBox.setSelectedIndex(0);
@@ -592,5 +590,27 @@ public class PersonalUI extends JFrame{
 		memoArea.setText("");
 		fixBox.setSelected(false);
 		enabled("0");
+	}
+	public int getWeek(String week) {
+		int w;
+		switch(week) {
+		case "일":
+			w=0;	break;
+		case "월":
+			w=1;	break;
+		case "화":
+			w=2;	break;
+		case "수":
+			w=3;	break;
+		case "목":
+			w=4;	break;
+		case "금":
+			w=5;	break;
+		case "토":
+			w=6;	break;
+		default:
+			return -1;
+		}
+		return w;
 	}
 }
