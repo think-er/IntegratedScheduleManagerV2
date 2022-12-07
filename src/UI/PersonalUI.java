@@ -22,9 +22,11 @@ import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -107,6 +109,8 @@ public class PersonalUI extends JFrame{
 	
 	
 	private void init(String id) {
+		setLocationRelativeTo(null);	//화면 중앙 배치
+		setResizable(false);			// 화면 사이즈 고정
 //		String[] minuteCb = {"00", "30"};
 		
 		subFrame = new JFrame();
@@ -306,94 +310,31 @@ public class PersonalUI extends JFrame{
 				int year = Integer.parseInt(yearField.getText());
 				int month = Integer.parseInt(monthBox.getSelectedItem().toString());
 				int day = Integer.parseInt(dayBox.getSelectedItem().toString());
-				String month2 = monthBox.getSelectedItem().toString();
-				String day2 = (dayBox.getSelectedItem().toString());
-						
-				// 날짜 Date로 변환
-				String Days = year+"-"+month2+"-"+day2;
-				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
-				LocalDate DATE = LocalDate.parse(Days, sdf);
-				String DATE2 = "'"+DATE.toString()+"'";
-				System.out.println(DATE);
-				 
+						 
 				START = Integer.parseInt(stHourBox.getSelectedItem().toString());
 				END = Integer.parseInt(edHourBox.getSelectedItem().toString());
 				String MEMO = memoArea.getText();
 				
-				// 요일 구하는 식
-				int totalDays = 0;
-				totalDays = totalDays + (year)/4;
-				if((year-1900)%4==0 && month <3) {
-					totalDays = totalDays -1;
-				}
-				if(month==1) {
-						totalDays = totalDays +day;
-				}
-				if(month==2) {
-					totalDays = totalDays +day+31;
-				}
-				if(month==3) {
-					totalDays = totalDays +day+31+28;
-				}
-				if(month==4) {
-					totalDays = totalDays +day+31+28+31;
-				}
-				if(month==5) {
-					totalDays = totalDays +day+31+28+31+30;
-				}
-				if(month==6) {
-					totalDays = totalDays +day+31+28+31+30+31;
-				}
-				if(month==7) {
-					totalDays = totalDays +day+31+28+31+30+31+30;
-				}
-				if(month==8) {
-					totalDays = totalDays +day+31+28+31+30+31+30+31;
-				}
-				if(month==9) {
-					totalDays = totalDays +day+31+28+31+30+31+30+31+31;
-				}
-				if(month==10) {
-					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30;
-				}
-				if(month==11) {
-					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30+31;
-				}
-				if(month==12) {
-					totalDays = totalDays +day+31+28+31+30+31+30+31+31+30+31+30;
-				}
+				LocalDate date = LocalDate.of(year, month, day);
+				String date2 = "'"+date+"'";
+				System.out.println(date);
+				DayOfWeek dayOfWeek = date.getDayOfWeek();
+				System.out.println(dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN));
+				String yoil = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+				WEEK = yoil;
+				String month2 = monthBox.getSelectedItem().toString();
+				String day2 = (dayBox.getSelectedItem().toString());
+						
+				// 날짜 Date로 변환
+				String Days1 = year+"-"+month2+"-"+day2;
+				DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.US);
+				LocalDate DATE = LocalDate.parse(Days1, sdf);
 				
-				int dow = totalDays%7;
-				
-				System.out.println("총일 출력 DOW : " + dow);
-				if(dow==0) {
-					WEEK = "일";
-				}
-				if(dow==1) {
-					WEEK = "월";
-				}
-				if(dow==2) {
-					WEEK = "화";
-				}
-				if(dow==3) {
-					WEEK = "수";
-				}
-				if(dow==4) {
-					WEEK = "목";
-				}
-				if(dow==5) {
-					WEEK = "금";
-				}
-				if(dow==6) {
-					WEEK = "토";
-				}
-				
-				System.out.println("요일 출력 WEEK : " + dow);
 				ZoneId defaultZoneId = ZoneId.systemDefault();
-				Date date = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
+				Date d = Date.from(DATE.atStartOfDay(defaultZoneId).toInstant());
 				if(fixBox.isSelected()) {	//고정
 					FIX = "1";
-					DATE2 = null;
+					date = null;
 					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 				}
 				else {	//비고정
@@ -417,7 +358,7 @@ public class PersonalUI extends JFrame{
 				//(통합스케줄도 비교해야됨)
 				
 				//duplicatedCheck에 데이터 보내줌(이것들은 유저가 입력한 데이터)
-				dc.getData(id, date, WEEK, FIX, START, END);
+				dc.getData(id, d, WEEK, FIX, START, END);
 				//duplicatedCheck에서 예외처리
 				success = dc.PersonalDC();
 				
@@ -426,7 +367,7 @@ public class PersonalUI extends JFrame{
 				if(success){
 					SCNUM+=1;
 					DB_Conn_Query db = new DB_Conn_Query();
-					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+DATE2+",'"+MEMO+"')";
+					String query = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
 					System.out.print(query);
 					db.executeUpdate(query);
 					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
@@ -540,8 +481,8 @@ public class PersonalUI extends JFrame{
 		});
 		refreshBtn.setBounds(565, 26, 97, 23);
 		subFrame.getContentPane().add(refreshBtn);
-		subFrame.setLocationRelativeTo(null);	//화면 중앙 배치
-		subFrame.setResizable(false);			// 화면 사이즈 고정
+		
+		
 	}
 	public void enabled(String b) {	//고정여부에 따라 컴포넌트 enable 설정하는 함수
 		Boolean tf=true;
