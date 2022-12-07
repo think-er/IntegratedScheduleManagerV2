@@ -75,6 +75,10 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.SwingConstants;
 
+import Control.UpdateSchedule;
+import Control.ViewCompSchedule;
+import javax.swing.border.EmptyBorder;
+
 public class HomeUI extends JFrame{
 	
 	// homePanel
@@ -147,7 +151,7 @@ public class HomeUI extends JFrame{
 	
 	public static String viewUser;
 	// 프로그램이 돌아가는 와중 켜져있는지 확인한다.
-	private static Boolean viewCompEventMode = false;
+	public static Boolean viewCompEventMode = false;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
 	
@@ -171,6 +175,7 @@ public class HomeUI extends JFrame{
 				1000, 580);
 		homePanel.setLayout(null);
 		MainFrame.frame.getContentPane().add(homePanel);
+		homePanel.setBackground(Color.WHITE);
 		
 		
 		// 홈 패널: 학번
@@ -181,8 +186,25 @@ public class HomeUI extends JFrame{
 		
 		// 홈 패널: 달력
 		homeCalendar = new JCalendar();
+		homeCalendar.getDayChooser().getDayPanel().setBorder(null);
+		homeCalendar.getYearChooser().setBorder(null);
+		homeCalendar.getMonthChooser().setBorder(null);
+		homeCalendar.getMonthChooser().getComboBox().setBackground(new Color(255, 255, 255));
+		homeCalendar.getMonthChooser().getComboBox().setForeground(new Color(0, 0, 0));
+		homeCalendar.getDayChooser().getDayPanel().setBackground(new Color(255, 255, 255));
+		homeCalendar.getDayChooser().setDecorationBackgroundColor(new Color(255, 255, 255));
+		homeCalendar.getYearChooser().getSpinner().setBackground(new Color(255, 255, 255));
+		homeCalendar.getYearChooser().setBackground(new Color(255, 255, 255));
+		homeCalendar.getMonthChooser().getSpinner().setBackground(new Color(255, 255, 255));
+		homeCalendar.getMonthChooser().setBackground(new Color(255, 255, 255));
+		homeCalendar.getDayChooser().setBorder(null);
+		homeCalendar.getDayChooser().setDayBordersVisible(true);
+		homeCalendar.getDayChooser().setBackground(new Color(255, 255, 255));
+		homeCalendar.getDayChooser().setWeekOfYearVisible(false);
 		homeCalendar.setBounds(HOME_CALENDAR_X, HOME_CALENDAR_Y, 
 				HOME_CALENDAR_WIDTH, HOME_CALENDAR_HEIGHT);
+		homeCalendar.setDecorationBackgroundColor(new Color(255, 255, 255));
+		homeCalendar.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homePanel.add(homeCalendar);
 		
 		
@@ -228,20 +250,28 @@ public class HomeUI extends JFrame{
 		homeScheduleColumnPanel.setLayout(new GridLayout(1, 8, 0, 0));
 		
 		JPanel homeScheduleColumn_0 = new JPanel();
+		homeScheduleColumn_0.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_0.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_1 = new JPanel();
+		homeScheduleColumn_1.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_1.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_2 = new JPanel();
+		homeScheduleColumn_2.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_2.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_3 = new JPanel();
+		homeScheduleColumn_3.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_3.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_4 = new JPanel();
+		homeScheduleColumn_4.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_4.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_5 = new JPanel();
+		homeScheduleColumn_5.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_5.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_6 = new JPanel();
+		homeScheduleColumn_6.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_6.setBorder(new LineBorder(new Color(0, 0, 0)));
 		JPanel homeScheduleColumn_7 = new JPanel();
+		homeScheduleColumn_7.setBackground(new Color(255, 255, 255));
 		homeScheduleColumn_7.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		homeScheduleColumnPanel.add(homeScheduleColumn_0);
@@ -252,6 +282,7 @@ public class HomeUI extends JFrame{
 		SunLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		SunLabel.setBounds(8, 28, 75, 15);
 		SunLabel.setText("일");
+		SunLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		SunLabel.setForeground(Color.RED);
 		homeScheduleColumn_1.add(SunLabel);
 		
@@ -260,6 +291,7 @@ public class HomeUI extends JFrame{
 		JLabel Sun = new JLabel();
 		Sun.setHorizontalAlignment(SwingConstants.CENTER);
 		Sun.setBounds(8, 10, 75, 15);
+		Sun.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		Sun.setForeground(Color.RED);
 		homeScheduleColumn_1.add(Sun);
 		homeScheduleColumnPanel.add(homeScheduleColumn_2);
@@ -268,6 +300,7 @@ public class HomeUI extends JFrame{
 		JLabel Mon = new JLabel();
 		Mon.setHorizontalAlignment(SwingConstants.CENTER);
 		Mon.setBounds(8, 10, 75, 15);
+		Mon.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_2.add(Mon);
 		homeScheduleColumnPanel.add(homeScheduleColumn_3);
 		homeScheduleColumn_3.setLayout(null);
@@ -275,6 +308,7 @@ public class HomeUI extends JFrame{
 		JLabel Tue = new JLabel();
 		Tue.setHorizontalAlignment(SwingConstants.CENTER);
 		Tue.setBounds(8, 10, 75, 15);
+		Tue.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_3.add(Tue);
 		homeScheduleColumnPanel.add(homeScheduleColumn_4);
 		homeScheduleColumn_4.setLayout(null);
@@ -282,6 +316,7 @@ public class HomeUI extends JFrame{
 		JLabel Wed = new JLabel();
 		Wed.setHorizontalAlignment(SwingConstants.CENTER);
 		Wed.setBounds(8, 10, 75, 15);
+		Wed.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_4.add(Wed);
 		homeScheduleColumnPanel.add(homeScheduleColumn_5);
 		homeScheduleColumn_5.setLayout(null);
@@ -289,6 +324,7 @@ public class HomeUI extends JFrame{
 		JLabel Thu = new JLabel();
 		Thu.setHorizontalAlignment(SwingConstants.CENTER);
 		Thu.setBounds(8, 10, 75, 15);
+		Thu.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_5.add(Thu);
 		homeScheduleColumnPanel.add(homeScheduleColumn_6);
 		homeScheduleColumn_6.setLayout(null);
@@ -296,6 +332,7 @@ public class HomeUI extends JFrame{
 		JLabel Fri = new JLabel();
 		Fri.setHorizontalAlignment(SwingConstants.CENTER);
 		Fri.setBounds(8, 10, 75, 15);
+		Fri.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_6.add(Fri);
 		homeScheduleColumnPanel.add(homeScheduleColumn_7);
 		homeScheduleColumn_7.setLayout(null);
@@ -303,6 +340,7 @@ public class HomeUI extends JFrame{
 		JLabel Sat = new JLabel();
 		Sat.setHorizontalAlignment(SwingConstants.CENTER);
 		Sat.setBounds(8, 10, 75, 15);
+		Sat.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		Sat.setForeground(Color.BLUE);
 		homeScheduleColumn_7.add(Sat);
 		
@@ -340,6 +378,7 @@ public class HomeUI extends JFrame{
 		JLabel MonLabel = new JLabel();
 		MonLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		MonLabel.setText("월");
+		MonLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		MonLabel.setBounds(15, 28, 60, 15);
 		homeScheduleColumn_2.add(MonLabel);
 		printDate = printDate.plusDays(1);
@@ -349,6 +388,7 @@ public class HomeUI extends JFrame{
 		TueLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		TueLabel.setText("화");
 		TueLabel.setBounds(15, 28, 60, 15);
+		TueLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_3.add(TueLabel);
 		printDate = printDate.plusDays(1);
 		Wed.setText(printDate.format(formatter));
@@ -356,6 +396,7 @@ public class HomeUI extends JFrame{
 		JLabel WedLabel = new JLabel();
 		WedLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		WedLabel.setText("수");
+		WedLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		WedLabel.setBounds(15, 28, 60, 15);
 		homeScheduleColumn_4.add(WedLabel);
 		printDate = printDate.plusDays(1);
@@ -365,6 +406,7 @@ public class HomeUI extends JFrame{
 		ThuLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		ThuLabel.setBounds(15, 28, 60, 15);
 		ThuLabel.setText("목");
+		ThuLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeScheduleColumn_5.add(ThuLabel);
 		printDate = printDate.plusDays(1);
 		Fri.setText(printDate.format(formatter));
@@ -372,6 +414,7 @@ public class HomeUI extends JFrame{
 		JLabel Fri_1 = new JLabel();
 		Fri_1.setHorizontalAlignment(SwingConstants.CENTER);
 		Fri_1.setText("금");
+		Fri_1.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		Fri_1.setBounds(15, 28, 60, 15);
 		homeScheduleColumn_6.add(Fri_1);
 		printDate = printDate.plusDays(1);
@@ -380,6 +423,7 @@ public class HomeUI extends JFrame{
 		JLabel SatLabel = new JLabel();
 		SatLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		SatLabel.setText("토");
+		SatLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		SatLabel.setForeground(Color.BLUE);
 		SatLabel.setBounds(15, 28, 60, 15);
 		homeScheduleColumn_7.add(SatLabel);
@@ -392,6 +436,7 @@ public class HomeUI extends JFrame{
 		event = new EventUI[14][7];
 		
 		homeSchedulePanel = new JPanel();
+		homeSchedulePanel.setBackground(new Color(255, 255, 255));
 		homeSchedulePanel.setLayout(new GridLayout(14, 8));
 		
 		// 표 배치
@@ -400,6 +445,7 @@ public class HomeUI extends JFrame{
 			// 시간 행 패널
 			JPanel timeUI = new JPanel();
 			timeUI.setPreferredSize(new Dimension(90, 80));
+			timeUI.setBackground(Color.WHITE);
 			timeUI.setBorder(new LineBorder(new Color(0, 0, 0)));
 			homeSchedulePanel.add(timeUI);
 			
@@ -417,7 +463,7 @@ public class HomeUI extends JFrame{
 			}
 		}
 		
-		update_Schedule();
+		new UpdateSchedule();
 		
 		homeCalendar.addPropertyChangeListener(new PropertyChangeListener()
 		{
@@ -463,8 +509,8 @@ public class HomeUI extends JFrame{
 				
 				EndOfWeekFormat = printDate.plusDays(1).format(formatter);
 				
-				update_Schedule();
-				view_CompSchedule();
+				new UpdateSchedule();
+				new ViewCompSchedule();
 				
 			}
 		});
@@ -473,7 +519,7 @@ public class HomeUI extends JFrame{
 		homeScheduleScrollPane = new JScrollPane(homeSchedulePanel);
 		homeScheduleScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		homeScheduleScrollPane.setBounds(212, 136, 750, 407);
-		homeScheduleScrollPane.getVerticalScrollBar().setUnitIncrement(50);
+		homeScheduleScrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		
 		homePanel.add(homeScheduleScrollPane);	
 		// -----------------------------------------------------------------
@@ -490,14 +536,14 @@ public class HomeUI extends JFrame{
 				if (viewCompEventMode == false) {
 					viewCompEventBtn.setText("공통 시간 끄기");	
 					viewCompEventMode = true;
-					view_CompSchedule();
+					new ViewCompSchedule();
 				}
 				
 				// 공통 시간 끄기
 				else {
 					viewCompEventBtn.setText("공통 시간 켜기");
 					viewCompEventMode = false;
-					view_CompSchedule();
+					new ViewCompSchedule();
 				}
 			}
 		});
@@ -506,6 +552,7 @@ public class HomeUI extends JFrame{
 		// 홈 통합 일정 패널: 통합 일정 패널
 		homeIntegrationPanel = new JPanel();
 		homeIntegrationPanel.setBounds(0, 210, 200, 356);
+		homeIntegrationPanel.setBackground(Color.WHITE);
 		homePanel.add(homeIntegrationPanel);
 		
 		// 홈 통합 일정 패널: 학생 리스트 스크롤 패널
@@ -570,13 +617,11 @@ public class HomeUI extends JFrame{
 		
 		//-----------------------------팀원 이름 리스트 추가--------------------------
 		JList<String> teamList = new JList<String>();
-		
+		teamList.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		teamList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
 		try {
-			
-			
 			// 유저_아이디 들고오는 sql 구문
 			String sql = "SELECT 유저_아이디 "
 					+ "FROM 소속 "
@@ -600,9 +645,9 @@ public class HomeUI extends JFrame{
 				if(!e.getValueIsAdjusting()) {	//이거 없으면 mouse 눌릴때, 뗄때 각각 한번씩 호출되서 총 두번 호출
 					
 					viewUser = teamList.getSelectedValue();
-					update_Schedule();
+					new UpdateSchedule();
 					// 만약 viewCompEventMode가 켜져있을 경우
-					view_CompSchedule();
+					new ViewCompSchedule();
 				}
 			}
 		});
@@ -611,197 +656,5 @@ public class HomeUI extends JFrame{
 		teamListScrollPane.setViewportView(teamList);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
 		
-	}
-	
-	public void view_CompSchedule() {
-		
-		// 새로 초기화
-		for(int i=0; i<14; i++) {
-			for(int j=0; j<7; j++) {
-				event[i][j].setEventCompViewMode(false);
-				event[i][j].viewEventCompMode();
-			}
-		}
-		
-		
-		try {
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+viewUser;
-			ResultSet rs = db.executeQuery(sql);
-			
-			String _teamNum = "";
-			ArrayList<String> _teamUser = new ArrayList<String>();
-			
-			while(rs.next()) {
-				_teamNum = rs.getString(1);
-			}
-			
-			sql = "SELECT 유저_아이디 FROM 소속 WHERE 팀_번호 = "+_teamNum;
-			rs = db.executeQuery(sql);
-			
-			while(rs.next()) {
-				_teamUser.add(rs.getString(1));
-			}
-			
-			for(int k=0; k<_teamUser.size(); k++) {
-				sql = "SELECT 요일, 시작시간, 종료시간 FROM 스케줄 WHERE 유저_아이디="+_teamUser.get(k) +
-						"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
-						"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD')" +
-						"OR (유저_아이디="+_teamUser.get(k) +
-						"AND 고정여부='1')";
-				
-				rs = db.executeQuery(sql);
-				while(rs.next()) {
-					String days = rs.getString(1);
-					int startTime = rs.getInt(2);
-					int endTime = rs.getInt(3);
-					
-					int days2 = 0;
-					if (days.equals("일"))
-						days2 = 0;
-					else if (days.equals("월"))
-						days2 = 1;
-					else if (days.equals("화"))
-						days2 = 2;
-					else if (days.equals("수"))
-						days2 = 3;
-					else if (days.equals("목"))
-						days2 = 4;
-					else if (days.equals("금"))
-						days2 = 5;
-					else if (days.equals("토"))
-						days2 = 6;
-					
-//					System.out.println("횟수: " + k + " 팀원: " + _teamUser.get(0));
-//					System.out.println(days + " : " + startTime + " : " + endTime);
-//					
-					for(int i=startTime - 9; i < endTime - 9; i++) {
-						event[i][days2].setEventCompViewMode(viewCompEventMode);
-						event[i][days2].viewEventCompMode();
-					}
-				}
-			}
-		} catch(SQLException s) {
-			s.printStackTrace();
-		}
-	}
-	
-	public void update_Schedule() {
-		
-		
-		for(int i=0; i<14; i++) {
-			for(int j=0; j<7; j++) {
-				event[i][j].setEventMode(0);
-				// 이전에 출력했던 이벤트들을 전부 끈다.
-				event[i][j].viewEventMode();
-				// 새로운 모드로 이벤트들을 조회한다.
-			
-			}
-		}
-		
-		// 데이터베이스에서 개인 시간표 가져오기
-		try {
-			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE (유저_아이디="+viewUser +
-					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') " +
-					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
-					"OR (유저_아이디="+viewUser +
-					"AND 고정여부='1')";
-
-			ResultSet rs = db.executeQuery(sql);
-			while(rs.next()) {
-				String name = rs.getString(1);
-				// 요일 문자가 아닌 숫자로 받기
-				String days = rs.getString(2);	
-				
-				int days2 = 0;
-				
-				if (days.equals("일"))
-					days2 = 0;
-				else if (days.equals("월"))
-					days2 = 1;
-				else if (days.equals("화"))
-					days2 = 2;
-				else if (days.equals("수"))
-					days2 = 3;
-				else if (days.equals("목"))
-					days2 = 4;
-				else if (days.equals("금"))
-					days2 = 5;
-				else if (days.equals("토"))
-					days2 = 6;
-				int startTime = rs.getInt(3);
-				int endTime = rs.getInt(4);
-				
-				for(int i=startTime - 9; i < endTime - 9; i++) {
-					event[i][days2].setEventName(name);
-					event[i][days2].setEventMode(1);
-					event[i][days2].viewEventMode();
-				}
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		};
-		
-		try {
-			
-			String sql = "SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 ="+viewUser;
-			ResultSet rs = db.executeQuery(sql);
-			String _teamNum = "";
-			while(rs.next()) {
-				_teamNum = rs.getString(1);
-			}
-			
-			sql = "SELECT 통합스케줄_이름, 요일, 시작시간, 종료시간 FROM 통합스케줄 WHERE (팀_번호="+_teamNum +
-					"AND 날짜 BETWEEN TO_DATE('" + StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
-					"AND TO_DATE('" + EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
-					"OR (팀_번호=" + _teamNum +
-					"AND 고정여부='1')";
-
-			rs = db.executeQuery(sql);
-			while(rs.next()) {
-				String _teamName = rs.getString(1);
-				// 요일 문자가 아닌 숫자로 받기
-//				String _date = rs.getString(2);
-//				String _dateFormat[] = _date.split("-");		
-				// 날짜를 읽어서 변환하는 것을 만들었지만 요일을 읽으면 되므로 필요없음.
-//				int year = Integer.parseInt(_dateFormat[0]);
-//				int month = Integer.parseInt(_dateFormat[1]);
-//				int day = Integer.parseInt(_dateFormat[2].substring(0, 2));
-//				
-//				LocalDate date = LocalDate.of(year, month, day);
-//				DayOfWeek dayOfWeek = date.getDayOfWeek();
-//				
-//				int yoil = dayOfWeek.getValue();
-//				
-				String days = rs.getString(2);	
-				
-				int days2 = 0;
-				
-				if (days.equals("일"))
-					days2 = 0;
-				else if (days.equals("월"))
-					days2 = 1;
-				else if (days.equals("화"))
-					days2 = 2;
-				else if (days.equals("수"))
-					days2 = 3;
-				else if (days.equals("목"))
-					days2 = 4;
-				else if (days.equals("금"))
-					days2 = 5;
-				else if (days.equals("토"))
-					days2 = 6;
-				int startTime = rs.getInt(3);
-				int endTime = rs.getInt(4);
-//				String memo = rs.getString(6);
-				
-				for(int i=startTime - 9; i < endTime - 9; i++) {
-					event[i][days2].setEventName(_teamName);
-					event[i][days2].setEventMode(2);
-					event[i][days2].viewEventMode();
-				}
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		};
 	}
 }

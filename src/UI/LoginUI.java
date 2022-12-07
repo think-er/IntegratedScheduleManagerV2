@@ -12,7 +12,10 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import DB.DB_Conn_Query;
+
+import java.awt.Color;
 import java.awt.Font;
+import javax.swing.DropMode;
 public class LoginUI extends JFrame {
 	
 	public JPanel loginPanel;
@@ -66,21 +69,27 @@ public class LoginUI extends JFrame {
 				LOGIN_FRAME_WIDTH, LOGIN_FRAME_HEIGHT);
 		loginPanel.setLayout(null);
 		
+		loginPanel.setBackground(Color.WHITE);
+		
 //		loginTitleLabel = new JLabel("통합 일정 관리");
 //		loginTitleLabel.setBounds(150, 10, 100, 30);
 //		loginPanel.add(loginTitleLabel);
 		
 		loginIdLabel = new JLabel("학번");
+		loginIdLabel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 		loginIdLabel.setBounds(26, 186,
 				LOGIN_LABEL_WIDTH, LOGIN_LABEL_HEIGHT);
 		loginPanel.add(loginIdLabel);
 		
+		
 		loginIdField = new JTextField();
+		loginIdField.setForeground(new Color(0, 0, 0));
 		loginIdField.setBounds(92, 186, 
 				234, 30);
 		loginPanel.add(loginIdField);
 		
 		loginPwLabel = new JLabel("비밀번호");
+		loginPwLabel.setFont(new Font("나눔고딕", Font.PLAIN, 15));
 		loginPwLabel.setBounds(26, 226, 
 				LOGIN_LABEL_WIDTH, LOGIN_LABEL_HEIGHT);
 		loginPanel.add(loginPwLabel);
@@ -91,6 +100,8 @@ public class LoginUI extends JFrame {
 		loginPanel.add(loginPwField);
 				
 		loginBtn = new JButton("로그인");
+		loginBtn.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		
 		loginBtn.addActionListener(new ActionListener() {
 			
 		//----------------------로그인 기능 추가------------------------------
@@ -118,6 +129,8 @@ public class LoginUI extends JFrame {
 		loginPanel.add(loginBtn);
 		
 		toRegisterBtn = new JButton("회원가입");
+		toRegisterBtn.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		
 		toRegisterBtn.setBounds(92, 276, 
 				111, 30);
 		toRegisterBtn.addActionListener(new ActionListener() {
@@ -132,7 +145,7 @@ public class LoginUI extends JFrame {
 		MainFrame.frame.getContentPane().add(loginPanel);
 		
 		titleLabel = new JLabel("<html><body><center>통합 일정 관리<br>프로그램</center></body></html>");
-		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 33));
+		titleLabel.setFont(new Font("나눔고딕", Font.PLAIN, 20));
 		titleLabel.setBounds(92, 35, 234, 123);
 		loginPanel.add(titleLabel);
 		
