@@ -49,6 +49,7 @@ public class PersonalUI extends JFrame{
 	// 등록에 쓰일 변수
 	public static String WEEK = "";
 	public static String FIX;
+	public static String SCNAME;
 	DB_Conn_Query db = new DB_Conn_Query();
 	duplicatedCheck dc = new duplicatedCheck();
 	//----------------------------
@@ -471,10 +472,10 @@ public class PersonalUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(selected == null) 
 					JOptionPane.showMessageDialog(null,"수정할 일정을 선택해주세요");
-				else {
-					String SCNAME = titleField.getText();
-					ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+SCNAME+"'"+" AND 유저_아이디 = "+id);
+				else {			
+					ResultSet rs = db.executeQuery("select 스케줄_번호 FROM 스케줄 where 스케줄_이름 = '"+selected+"'"+" AND 유저_아이디 = "+id);
 					int SCNUM=0;
+					System.out.println(selected);
 					try {
 						while(rs.next()) {
 							SCNUM = rs.getInt(1);
@@ -525,6 +526,31 @@ public class PersonalUI extends JFrame{
 					else {	//비고정
 						FIX = "0";
 					}
+						
+					DB_Conn_Query db = new DB_Conn_Query();					
+					String query3 = "DELETE FROM 스케줄 where 스케줄_번호= "+SCNUM+" AND 유저_아이디 = "+id;
+					System.out.println(query3);
+					int n = db.executeUpdate(query3);
+					if(n<0) 
+						JOptionPane.showMessageDialog(null,"삭제 오류!");
+					else {
+						// ------------- 삭제 성공 후 스케줄 인덱스 재조정---------------
+						ResultSet rs2 = db.executeQuery("SELECT COUNT(*) FROM 스케줄");
+						// 실제 존재하고 있는 스케줄 갯수
+						int actual_scCount = 0;
+						try {
+							while(rs2.next()) {
+								actual_scCount = rs2.getInt(1);
+							}
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+						}
+						// 삭제된 인덱스 ~ 끝 스케줄_번호 1씩 당기기
+						for (int i=SCNUM; i<=actual_scCount; i++) {
+							String query2 = "UPDATE 스케줄 SET 스케줄_번호="+i+" WHERE 스케줄_번호= "+(i+1)+"";
+							db.executeUpdate(query2);
+						}						
+					}
 					
 					dc.getData(id, d, WEEK, FIX, START, END);
 					
@@ -545,15 +571,14 @@ public class PersonalUI extends JFrame{
 						JOptionPane.showMessageDialog(null,"중복된 일정입니다.");
 					}
 					
-					else {
-						DB_Conn_Query db = new DB_Conn_Query();
-						String query3 = "UPDATE 스케줄 SET 스케줄_이름 = '"+SCNAME+"', 요일 = '"+WEEK+"', 시작시간 = "+START+", 종료시간 = "+END+","
-								+ "고정여부 = '"+FIX+"', 날짜 = "+date2+", 메모 = '"+MEMO+"'"
-								+ "WHERE 스케줄_번호 = "+SCNUM+" AND 유저_아이디 = "+ID+"";
-						db.executeUpdate(query3);
-						System.out.print(query3);
-						int n = db.executeUpdate(query3);
-						if(n<0){
+					else {						
+						// 스케줄 다시 추가
+						String SCNAME2=titleField.getText();
+						String query4 = "insert into 스케줄 values("+SCNUM+","+ID+",'"+SCNAME2+"','"+WEEK+"',"+START+","+END+",'"+FIX+"',"+date2+",'"+MEMO+"')";
+						System.out.print(query4);
+					
+						int n2 = db.executeUpdate(query4);
+						if(n2<0){
 							JOptionPane.showMessageDialog(null,"수정을 실패했습니다.");
 							}
 						else {
