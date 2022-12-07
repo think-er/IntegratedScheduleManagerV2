@@ -148,6 +148,11 @@ public class duplicatedCheck {
 						s=false;
 					System.out.println(s);
 				}
+				//날짜가 다를 시 고정 스케줄과 시간 비교
+				else {
+					if(!timeCheck(id, "1")) 
+						s=false;
+				}
 			}
 			
 		} catch (SQLException e1) {
