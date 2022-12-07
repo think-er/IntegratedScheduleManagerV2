@@ -73,11 +73,11 @@ public class IntegrationUI extends JFrame {
 	private JTextField yearField;
 	private JComboBox monthBox;
 	private JComboBox dayBox;
+	private JComboBox weekBox;
 	private JCheckBox fixBox;
 	private JComboBox stHourBox;
 	private JComboBox edHourBox;
 	private JTextArea memoArea;
-	private JTextField yoilField;
 	
 	public static String StartOfWeekFormat;
 	public static String EndOfWeekFormat;
@@ -191,7 +191,7 @@ public class IntegrationUI extends JFrame {
 		
 		stHourBox = new JComboBox(new Object[]{});
 		stHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
-		stHourBox.setBounds(414, 184, 50, 25);
+		stHourBox.setBounds(412, 187, 50, 23);
 		Integration.getContentPane().add(stHourBox);
 		
 		JLabel stHourLabel = new JLabel("시");
@@ -200,7 +200,7 @@ public class IntegrationUI extends JFrame {
 		
 		edHourBox = new JComboBox(new Object[]{});
 		edHourBox.setModel(new DefaultComboBoxModel(new String[] {"09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"}));
-		edHourBox.setBounds(414, 229, 50, 25);
+		edHourBox.setBounds(412, 229, 50, 23);
 		Integration.getContentPane().add(edHourBox);
 		
 		JLabel edHourLabel = new JLabel("시");
@@ -329,7 +329,7 @@ public class IntegrationUI extends JFrame {
 							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
 								//yearField.setText((d.getYear()).toString());
 								enabled("1");
-								yoilField.setText(rs.getString("요일"));
+								weekBox.setSelectedIndex(getWeek(rs.getString("요일")));
 							}
 							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
 								Date date = rs.getDate("날짜");
@@ -405,7 +405,7 @@ public class IntegrationUI extends JFrame {
 					if(fixBox.isSelected()) {	//고정
 						FIX = "1";
 						date2 = null;
-						WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+						WEEK = weekBox.getSelectedItem().toString();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 					}
 					else {	//비고정
 						FIX = "0";
@@ -504,7 +504,7 @@ public class IntegrationUI extends JFrame {
 				if(fixBox.isSelected()) {	//고정
 					FIX = "1";
 					date2 = null;
-					WEEK = yoilField.getText();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
+					WEEK = weekBox.getSelectedItem().toString();	//고정 체크했을 땐 사용자가 입력한 요일이 들어가야됨.
 				}
 				else {	//비고정
 					FIX = "0";
@@ -565,16 +565,10 @@ public class IntegrationUI extends JFrame {
 		addBtn.setBounds(462, 366, 60, 25);
 		Integration.getContentPane().add(addBtn);
 		
-		JLabel yoilLabel = new JLabel("요일");
-		yoilLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		yoilLabel.setBounds(342, 156, 57, 15);
-		Integration.getContentPane().add(yoilLabel);
-		
-		yoilField = new JTextField();
-		yoilField.setEnabled(false);
-		yoilField.setBounds(412, 149, 50, 25);
-		Integration.getContentPane().add(yoilField);
-		yoilField.setColumns(10);
+		JLabel weekLabel = new JLabel("요일");
+		weekLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		weekLabel.setBounds(342, 151, 57, 25);
+		Integration.getContentPane().add(weekLabel);
 		//------------------------------새로고침 버튼 이벤트-------------------------------
 		JButton refreshBtn = new JButton("새로고침");
 		refreshBtn.addActionListener(new ActionListener() {
@@ -600,6 +594,11 @@ public class IntegrationUI extends JFrame {
 		dayBox.setBounds(550, 106, 50, 25);
 		Integration.getContentPane().add(dayBox);
 		
+		weekBox = new JComboBox();
+		weekBox.setModel(new DefaultComboBoxModel(new String[] {"일", "월", "화", "수", "목", "금", "토"}));
+		weekBox.setBounds(412, 151, 50, 23);
+		Integration.getContentPane().add(weekBox);
+		
 		Integration.setResizable(false);
 		Integration.setLocationRelativeTo(null);	//화면 중앙 배치
 		Integration.setTitle("통합 일정 관리");
@@ -609,7 +608,7 @@ public class IntegrationUI extends JFrame {
 		if(b.equals("0"))tf=false;
 		
 		fixBox.setSelected(tf);
-		yoilField.setEnabled(tf);
+		weekBox.setEnabled(tf);
 		yearField.setEnabled(!tf);
 		monthBox.setEnabled(!tf);
 		dayBox.setEnabled(!tf);
@@ -633,7 +632,7 @@ public class IntegrationUI extends JFrame {
 		integrationList.setModel(listModel);
 		
 		titleField.setText("");
-		yoilField.setText("");
+		weekBox.setSelectedIndex(0);
 		yearField.setText("2022");
 		monthBox.setSelectedIndex(0);
 		dayBox.setSelectedIndex(0);
@@ -642,5 +641,27 @@ public class IntegrationUI extends JFrame {
 		memoArea.setText("");
 		fixBox.setSelected(false);
 		enabled("0");
+	}
+	public int getWeek(String week) {
+		int w;
+		switch(week) {
+		case "일":
+			w=0;	break;
+		case "월":
+			w=1;	break;
+		case "화":
+			w=2;	break;
+		case "수":
+			w=3;	break;
+		case "목":
+			w=4;	break;
+		case "금":
+			w=5;	break;
+		case "토":
+			w=6;	break;
+		default:
+			return -1;
+		}
+		return w;
 	}
 }
