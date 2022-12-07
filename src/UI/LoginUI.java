@@ -154,7 +154,6 @@ public class LoginUI extends JFrame {
 		JButton createTeamBtn = new JButton("팀 만들기...");
 		createTeamBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MainFrame.frame.setVisible(false);
 				new AdminAuthUI();
 			}
 		});

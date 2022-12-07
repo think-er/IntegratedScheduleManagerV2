@@ -38,7 +38,6 @@ public class DB_Conn_Query {
 		try {
 			src = stmt.executeQuery(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			//e.printStackTrace();
 			System.out.println("SQL 실행 에러");
 			return null;
@@ -47,13 +46,15 @@ public class DB_Conn_Query {
 		return src;
 	}
 	
-	public void executeUpdate(String sql) {
+	public int executeUpdate(String sql) {
+		int n = 0;
 		try {
-			stmt.executeUpdate(sql);
+			n = stmt.executeUpdate(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			//e.printStackTrace();
 			System.out.println("SQL 실행 에러");
-			e.printStackTrace();
+			return -1;
 		}
+		return n;
 	}
 }

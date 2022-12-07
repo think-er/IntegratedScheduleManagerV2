@@ -54,11 +54,14 @@ public class CreateTeam extends JFrame {
 					}
 					String query = "INSERT INTO 팀 VALUES("+(count+1)+",'"+name+"',null)";
 					
-					db.executeUpdate(query);
-					
-					JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
-					setVisible(false);
-					new MainFrame();
+					int n = db.executeUpdate(query);
+					if(n<0) {
+						JOptionPane.showMessageDialog(null,"등록에 실패했습니다.");
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"등록에 성공했습니다.");
+						setVisible(false);
+					}
 				}
 			}
 		});
