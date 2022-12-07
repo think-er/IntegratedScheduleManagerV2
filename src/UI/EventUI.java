@@ -122,7 +122,10 @@ public class EventUI extends JPanel {
 				viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
 				viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
 				viewUI.stHourBox.setSelectedIndex(x);
-				viewUI.edHourBox.setSelectedIndex(x+1);
+				if(x+1 == 14)
+					viewUI.edHourBox.setSelectedIndex(x);
+				else
+					viewUI.edHourBox.setSelectedIndex(x+1);
 				
 			}
 		});

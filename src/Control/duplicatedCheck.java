@@ -2,6 +2,7 @@ package Control;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import DB.DB_Conn_Query;
@@ -10,14 +11,16 @@ public class duplicatedCheck {
 	DB_Conn_Query db = new DB_Conn_Query();
 	String ID, WEEK, FIX;
 	int START, END;
-	Date DATE;
+	String DATE;
 	public void getData(String id, Date date,String week, String fix, int start, int end) {
 		ID=id;
-		DATE=date;
 		WEEK=week;
 		FIX=fix;
 		START=start;
 		END=end;
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DATE = simpleDateFormat.format(date);
 	}
 	//개인 중복 : PersonalDC()
 	//-> 로그인한 id의 스케줄, 로그인한 id가 소속된 팀의 통합스케줄
@@ -29,7 +32,7 @@ public class duplicatedCheck {
 		
 		//비고정 : 날짜 중복 check -> 시간 중복 check
 		//비고정 일정들 : 날짜가 다르면 시간이 같아도 됨
-		s = dateCheck(ID, "0");
+		s = dateCheck(ID);
 		
 		if(success&&s)return true;
 		else return false;
@@ -52,7 +55,7 @@ public class duplicatedCheck {
 				n =src2.getInt(1);	//팀원수 가져오기
 			}
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		String []id = new String[n];	//id 배열
@@ -71,7 +74,7 @@ public class duplicatedCheck {
 				id[i++] = Integer.toString(src.getInt(1));
 			}
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		for(i=0;i<n;i++) {
@@ -79,7 +82,7 @@ public class duplicatedCheck {
 			
 			//비고정 : 날짜 중복 check -> 시간 중복 check
 			//비고정 일정들 : 날짜가 다르면 시간이 같아도 됨
-			s = dateCheck(id[i], "0");
+			s = dateCheck(id[i]);
 		}
 		
 		if(success&&s)return true;
@@ -103,51 +106,53 @@ public class duplicatedCheck {
 		ResultSet src = db.executeQuery(sql);
 		
 		int stTime, edTime;
-		
+		boolean s=true;
 		try {
 			while(src.next()) {
 				stTime = src.getInt(1);
 				edTime = src.getInt(2);
 				
 				if(edTime > START && stTime < END) {
-					return false;
+					s = false;
 				}
 			}
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
-		return true;
+		return s;
 	}
 	
-	public boolean dateCheck(String id, String fix) {
+	public boolean dateCheck(String id) {
 		boolean s=true;
-		if(fix=="0") {
-			String sql = "SELECT 날짜 "
-					+ "FROM 스케줄 "
-					+ "WHERE 유저_아이디 = " + id + " AND "
-					+ "고정여부 = '0' "
-					+ "UNION "
-					+ "SELECT 날짜 "
-					+ "FROM 통합스케줄, 소속, 팀 "
-					+ "WHERE 소속.유저_아이디 = " + id + " AND "
-					+ "팀.팀_번호 = 소속.팀_번호 AND "
-					+ "통합스케줄.팀_번호 = 소속.팀_번호 AND "
-					+ "고정여부 = '0'";
-			System.out.println(sql);
-			ResultSet src = db.executeQuery(sql);
-			
-			try {
-				while(src.next()) {
-					Date d = src.getDate(1);
-					//날짜가 같을 시 비고정 스케줄과 시간 비교
-					if(DATE == d)
-						s = timeCheck(id, "0");
-					if(!s)return false;
+		String sql = "SELECT 날짜 "
+				+ "FROM 스케줄 "
+				+ "WHERE 유저_아이디 = " + id + " AND "
+				+ "고정여부 = '0' "
+				+ "UNION "
+				+ "SELECT 날짜 "
+				+ "FROM 통합스케줄, 소속, 팀 "
+				+ "WHERE 소속.유저_아이디 = " + id + " AND "
+				+ "팀.팀_번호 = 소속.팀_번호 AND "
+				+ "통합스케줄.팀_번호 = 소속.팀_번호 AND "
+				+ "고정여부 = '0'";
+		System.out.println(sql);
+		ResultSet src = db.executeQuery(sql);
+		
+		try {
+			while(src.next()) {
+				String d = src.getDate(1).toString();
+				//날짜가 같을 시 비고정 스케줄과 시간 비교
+				System.out.println(DATE + " " + d);
+				if(DATE.equals(d)) {
+					if(!timeCheck(id, "0")) 
+						s=false;
+					System.out.println(s);
 				}
-			} catch (SQLException e1) {
-				e1.printStackTrace();
 			}
+			
+		} catch (SQLException e1) {
+			//e1.printStackTrace();
 		}
-		return true;
+		return s;
 	}
 }
