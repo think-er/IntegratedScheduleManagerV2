@@ -70,13 +70,13 @@ public class IntegrationUI extends JFrame {
 	protected static String selected = null;
 	JFrame Integration;
 	private JTextField titleField;
-	private JTextField yearField;
-	private JComboBox monthBox;
-	private JComboBox dayBox;
+	public JTextField yearField;
+	public JComboBox monthBox;
+	public JComboBox dayBox;
 	private JComboBox weekBox;
 	private JCheckBox fixBox;
-	private JComboBox stHourBox;
-	private JComboBox edHourBox;
+	public JComboBox stHourBox;
+	public JComboBox edHourBox;
 	private JTextArea memoArea;
 	
 	public static String StartOfWeekFormat;

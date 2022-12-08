@@ -20,8 +20,6 @@ import java.time.LocalDate;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import UI.PersonalUI;
-
 public class EventUI extends JPanel {
 	private int x;
 	private int y;
@@ -126,22 +124,39 @@ public class EventUI extends JPanel {
 		
 		eventAddBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PersonalUI viewUI = new PersonalUI(HomeUI.ID);
-				// 0 1 2 3 4 5 6
-				// ... 13 index
-				LocalDate calDate = HomeUI.startOfCurrentWeek;
-				calDate = calDate.plusDays(y);
-				viewUI.yearField.setText(Integer.toString(calDate.getYear()));
-				viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
-				viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
-				viewUI.stHourBox.setSelectedIndex(x);
-				if(x+1 == 14)
-					viewUI.edHourBox.setSelectedIndex(x);
-				else
-					viewUI.edHourBox.setSelectedIndex(x+1);
-				
-			}
-		});
+				if(HomeUI.viewCompEventMode == false) {
+					PersonalUI viewUI = new PersonalUI(HomeUI.ID);
+					// 0 1 2 3 4 5 6
+					// ... 13 index
+					LocalDate calDate = HomeUI.startOfCurrentWeek;
+					calDate = calDate.plusDays(y);
+					viewUI.yearField.setText(Integer.toString(calDate.getYear()));
+					viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
+					viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
+					viewUI.stHourBox.setSelectedIndex(x);
+					if(x+1 == 14)
+						viewUI.edHourBox.setSelectedIndex(x);
+					else
+						viewUI.edHourBox.setSelectedIndex(x+1);
+					}
+				else {
+					IntegrationUI viewUI = new IntegrationUI(HomeUI.ID);
+					viewUI.Integration.setVisible(true);
+					// 0 1 2 3 4 5 6
+					// ... 13 index
+					LocalDate calDate = HomeUI.startOfCurrentWeek;
+					calDate = calDate.plusDays(y);
+					viewUI.yearField.setText(Integer.toString(calDate.getYear()));
+					viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
+					viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
+					viewUI.stHourBox.setSelectedIndex(x);
+					if(x+1 == 14)
+						viewUI.edHourBox.setSelectedIndex(x);
+					else
+						viewUI.edHourBox.setSelectedIndex(x+1);
+					}
+				}
+			});
 		
 		
 		// 이벤트 보기
