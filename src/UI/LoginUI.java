@@ -83,6 +83,7 @@ public class LoginUI extends JFrame {
 		
 		
 		loginIdField = new JTextField();
+		loginIdField.setBackground(new Color(240, 240, 240));
 		loginIdField.setForeground(new Color(0, 0, 0));
 		loginIdField.setBounds(92, 186, 
 				234, 30);
@@ -95,12 +96,13 @@ public class LoginUI extends JFrame {
 		loginPanel.add(loginPwLabel);
 		
 		loginPwField = new JPasswordField();
+		loginPwField.setBackground(new Color(240, 240, 240));
 		loginPwField.setBounds(92, 226,
 				234, 30);
 		loginPanel.add(loginPwField);
 				
 		loginBtn = new JButton("로그인");
-		loginBtn.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		loginBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		
 		loginBtn.addActionListener(new ActionListener() {
 			
@@ -129,7 +131,7 @@ public class LoginUI extends JFrame {
 		loginPanel.add(loginBtn);
 		
 		toRegisterBtn = new JButton("회원가입");
-		toRegisterBtn.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+		toRegisterBtn.setFont(new Font("나눔고딕", Font.BOLD, 15));
 		
 		toRegisterBtn.setBounds(92, 276, 
 				111, 30);
@@ -151,14 +153,14 @@ public class LoginUI extends JFrame {
 		
 		//------------------------------------------ 팀 만들기 버튼
 		
-		JButton createTeamBtn = new JButton("팀 만들기...");
+		JButton createTeamBtn = new JButton("팀 만들기");
 		createTeamBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new AdminAuthUI();
 			}
 		});
 		
-		createTeamBtn.setBounds(161, 316, 97, 23);
+		createTeamBtn.setBounds(274, 328, 97, 23);
 		loginPanel.add(createTeamBtn);
 		MainFrame.frame.setTitle("로그인");
 		MainFrame.frame.setSize(LOGIN_FRAME_WIDTH, LOGIN_FRAME_WIDTH);
