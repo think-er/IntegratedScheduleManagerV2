@@ -6,12 +6,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 public class AdminAuthUI extends JFrame{
 	private JPasswordField AuthPadpwField;
 	public AdminAuthUI() {
-		setTitle("관리자 확인");
 		setVisible(true);
 		setSize(200,150);
 		setLocationRelativeTo(null);	//화면 중앙 배치
@@ -19,6 +19,7 @@ public class AdminAuthUI extends JFrame{
 		getContentPane().setLayout(null);
 		
 		JLabel AuthPadLabel = new JLabel("관리자 번호를 입력하세요.");
+		AuthPadLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		AuthPadLabel.setBounds(20, 23, 164, 15);
 		getContentPane().add(AuthPadLabel);
 		
@@ -27,6 +28,7 @@ public class AdminAuthUI extends JFrame{
 		getContentPane().add(AuthPadpwField);
 		
 		JButton OKbtn = new JButton("확인");
+		OKbtn.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		OKbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String pw = String.valueOf(AuthPadpwField.getPassword());
