@@ -34,7 +34,7 @@ public class EventUI extends JPanel {
 	
 	private String eventName;
 	private JButton eventAddBtn;
-	private JLabel eventNameLabel;
+	private JButton eventNameBtn;
 	
 	private JButton eventCompBtn;
 	
@@ -55,8 +55,8 @@ public class EventUI extends JPanel {
 	
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
-		String htmlText = "<HTML><body><center>"+ this.eventName + "</center></body></HTML>";
-		this.eventNameLabel.setText(htmlText);
+		String htmlText = "<HTML><body>"+ this.eventName + "</body></HTML>";
+		this.eventNameBtn.setText(htmlText);
 	}
 	
 	public void setEventMode(int Mode) {
@@ -72,7 +72,7 @@ public class EventUI extends JPanel {
 		if(this.eventMode == 0) {
 			eventAddBtn.setVisible(true);
 			// 이벤트 추가 버튼을 킨다. 
-			eventNameLabel.setVisible(false);
+			eventNameBtn.setVisible(false);
 			// 이벤트 이름을 끈다.
 		}
 		
@@ -80,23 +80,23 @@ public class EventUI extends JPanel {
 		else if(this.eventMode == 1) {
 			eventAddBtn.setVisible(false);
 			// 이벤트 추가 버튼을 끈다.
-			eventNameLabel.setVisible(true);
+			eventNameBtn.setVisible(true);
 			if(this.fixMode == false)
-				setBackground(Color.WHITE);
+				eventNameBtn.setBackground(Color.WHITE);
 			else 
-				setBackground(Color.LIGHT_GRAY);
+				eventNameBtn.setBackground(Color.LIGHT_GRAY);
 			// 이벤트 이름을 킨다.
 		}
 		
 		else if(this.eventMode == 2) {
 			eventAddBtn.setVisible(false);
 			// 이벤트 추가 버튼을 끈다.
-			eventNameLabel.setVisible(true);
+			eventNameBtn.setVisible(true);
 			// 이벤트 이름을 킨다.
 			if(this.fixMode == false)
-				setBackground(Color.CYAN);
+				eventNameBtn.setBackground(Color.CYAN);
 			else 
-				setBackground(Color.BLUE);
+				eventNameBtn.setBackground(Color.BLUE);
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class EventUI extends JPanel {
 		}
 		else {
 			eventAddBtn.setVisible(false);
-			eventNameLabel.setVisible(false);
+			eventNameBtn.setVisible(false);
 			eventCompBtn.setVisible(true);
 		}
 	}
@@ -177,9 +177,10 @@ public class EventUI extends JPanel {
 		
 		
 		// 이벤트 보기
-		eventNameLabel = new JLabel("", JLabel.CENTER);
-		eventNameLabel.setFont(new Font("나눔고딕", Font.BOLD, 10));
-		eventNameLabel.setBounds(0, 0, 90, 80);
+		eventNameBtn = new JButton();
+		eventNameBtn.setFont(new Font("나눔고딕", Font.BOLD, 11));
+		eventNameBtn.setBounds(0, 0, 90, 80);
+		eventNameBtn.setHorizontalAlignment(SwingConstants.CENTER); 
 		
 		// 통합 일정 겹쳐지는 칸 보기
 		eventCompBtn = new JButton();
@@ -189,7 +190,7 @@ public class EventUI extends JPanel {
 		eventCompBtn.setVisible(false);
 		
 		add(eventAddBtn);
-		add(eventNameLabel);
+		add(eventNameBtn);
 		add(eventCompBtn);
 		
 		setBorder(new LineBorder(new Color(0, 0, 0)));
