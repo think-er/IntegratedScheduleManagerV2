@@ -131,7 +131,7 @@ public class LoginUI extends JFrame {
 		loginPanel.add(loginBtn);
 		
 		toRegisterBtn = new JButton("회원가입");
-		toRegisterBtn.setFont(new Font("나눔고딕", Font.BOLD, 15));
+		toRegisterBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		
 		toRegisterBtn.setBounds(92, 276, 
 				111, 30);
