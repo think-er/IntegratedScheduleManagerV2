@@ -137,7 +137,7 @@ public class HomeUI extends JFrame{
 	private JLabel levelLabel;
 	
 	public static String ID;
-	private String LEVEL;
+	public static String LEVEL;
 	
 	private JPanel homeScheduleColumnPanel;
 	public static EventUI[][] event;

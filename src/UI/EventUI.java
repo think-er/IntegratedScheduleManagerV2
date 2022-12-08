@@ -124,7 +124,7 @@ public class EventUI extends JPanel {
 		
 		eventAddBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(HomeUI.viewCompEventMode == false) {
+				if(HomeUI.LEVEL.equals("일반")) {
 					PersonalUI viewUI = new PersonalUI(HomeUI.ID);
 					// 0 1 2 3 4 5 6
 					// ... 13 index
@@ -139,21 +139,38 @@ public class EventUI extends JPanel {
 					else
 						viewUI.edHourBox.setSelectedIndex(x+1);
 					}
-				else {
-					IntegrationUI viewUI = new IntegrationUI(HomeUI.ID);
-					viewUI.Integration.setVisible(true);
-					// 0 1 2 3 4 5 6
-					// ... 13 index
-					LocalDate calDate = HomeUI.startOfCurrentWeek;
-					calDate = calDate.plusDays(y);
-					viewUI.yearField.setText(Integer.toString(calDate.getYear()));
-					viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
-					viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
-					viewUI.stHourBox.setSelectedIndex(x);
-					if(x+1 == 14)
-						viewUI.edHourBox.setSelectedIndex(x);
-					else
-						viewUI.edHourBox.setSelectedIndex(x+1);
+				else if(HomeUI.LEVEL.equals("관리")) {
+					if(HomeUI.viewCompEventMode == false) {
+						PersonalUI viewUI = new PersonalUI(HomeUI.ID);
+						// 0 1 2 3 4 5 6
+						// ... 13 index
+						LocalDate calDate = HomeUI.startOfCurrentWeek;
+						calDate = calDate.plusDays(y);
+						viewUI.yearField.setText(Integer.toString(calDate.getYear()));
+						viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
+						viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
+						viewUI.stHourBox.setSelectedIndex(x);
+						if(x+1 == 14)
+							viewUI.edHourBox.setSelectedIndex(x);
+						else
+							viewUI.edHourBox.setSelectedIndex(x+1);
+						}
+					else {
+						IntegrationUI viewUI = new IntegrationUI(HomeUI.ID);
+						viewUI.Integration.setVisible(true);
+						// 0 1 2 3 4 5 6
+						// ... 13 index
+						LocalDate calDate = HomeUI.startOfCurrentWeek;
+						calDate = calDate.plusDays(y);
+						viewUI.yearField.setText(Integer.toString(calDate.getYear()));
+						viewUI.monthBox.setSelectedIndex(calDate.getMonthValue()-1);
+						viewUI.dayBox.setSelectedIndex(calDate.getDayOfMonth()-1);
+						viewUI.stHourBox.setSelectedIndex(x);
+						if(x+1 == 14)
+							viewUI.edHourBox.setSelectedIndex(x);
+						else
+							viewUI.edHourBox.setSelectedIndex(x+1);
+						}
 					}
 				}
 			});
