@@ -74,7 +74,7 @@ public class PersonalUI extends JFrame{
 	private JLabel edHourLabel;
 	private JLabel edMinuteLabel;
 	
-	private JTextField titleField;
+	public JTextField titleField;
 	public JTextField yearField;
 	public JComboBox monthBox;
 	public JComboBox dayBox;
@@ -82,7 +82,7 @@ public class PersonalUI extends JFrame{
 	private JCheckBox fixBox;
 	public JComboBox stHourBox;
 	public JComboBox edHourBox;
-	private JTextArea memoArea;
+	public JTextArea memoArea;
 	private JScrollPane memoScrollPane;
 	private JButton delBtn;
 	
