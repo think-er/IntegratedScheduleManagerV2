@@ -21,7 +21,7 @@ public class UpdateSchedule {
 		
 		// 데이터베이스에서 개인 시간표 가져오기
 		try {
-			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 FROM 스케줄 WHERE (유저_아이디="+HomeUI.viewUser +
+			String sql = "SELECT 스케줄_이름, 요일, 시작시간, 종료시간, 고정여부 FROM 스케줄 WHERE (유저_아이디="+HomeUI.viewUser +
 					"AND 날짜 BETWEEN TO_DATE('" + HomeUI.StartOfWeekFormat + "', 'YYYY-MM-DD') " +
 					"AND TO_DATE('" + HomeUI.EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
 					"OR (유저_아이디="+HomeUI.viewUser +
@@ -33,7 +33,6 @@ public class UpdateSchedule {
 				// 요일 문자가 아닌 숫자로 받기
 				String days = rs.getString(2);	
 				boolean fix = rs.getBoolean(5);
-				System.out.println(fix);
 				int days2 = 0;
 				
 				if (days.equals("일"))

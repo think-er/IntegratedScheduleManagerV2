@@ -646,6 +646,7 @@ public class HomeUI extends JFrame{
 				if(!e.getValueIsAdjusting()) {	//이거 없으면 mouse 눌릴때, 뗄때 각각 한번씩 호출되서 총 두번 호출
 					
 					viewUser = teamList.getSelectedValue();
+					viewUser = viewUser.substring(0, 8);
 					new UpdateSchedule();
 					// 만약 viewCompEventMode가 켜져있을 경우
 					new ViewCompSchedule();
