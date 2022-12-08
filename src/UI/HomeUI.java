@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -656,6 +657,17 @@ public class HomeUI extends JFrame{
 		
 		teamListScrollPane.setViewportView(teamList);
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
+		
+		JButton logoutBtn = new JButton("로그아웃");
+		logoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				homePanel.setVisible(false);
+				new LoginUI();
+				MainFrame.frame.setLocationRelativeTo(null);	//화면 중앙 배치
+			}
+		});
+		logoutBtn.setBounds(212, 30, 130, 30);
+		homePanel.add(logoutBtn);
 		
 	}
 }
