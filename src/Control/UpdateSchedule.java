@@ -32,7 +32,8 @@ public class UpdateSchedule {
 				String name = rs.getString(1);
 				// 요일 문자가 아닌 숫자로 받기
 				String days = rs.getString(2);	
-				
+				boolean fix = rs.getBoolean(5);
+				System.out.println(fix);
 				int days2 = 0;
 				
 				if (days.equals("일"))
@@ -55,6 +56,7 @@ public class UpdateSchedule {
 				for(int i=startTime - 9; i < endTime - 9; i++) {
 					HomeUI.event[i][days2].setEventName(name);
 					HomeUI.event[i][days2].setEventMode(1);
+					HomeUI.event[i][days2].setFixMode(fix);
 					HomeUI.event[i][days2].viewEventMode();
 				}
 			}
@@ -71,7 +73,7 @@ public class UpdateSchedule {
 				_teamNum = rs.getString(1);
 			}
 			
-			sql = "SELECT 통합스케줄_이름, 요일, 시작시간, 종료시간 FROM 통합스케줄 WHERE (팀_번호="+_teamNum +
+			sql = "SELECT 통합스케줄_이름, 요일, 시작시간, 종료시간, 고정여부 FROM 통합스케줄 WHERE (팀_번호="+_teamNum +
 					"AND 날짜 BETWEEN TO_DATE('" + HomeUI.StartOfWeekFormat + "', 'YYYY-MM-DD') "+ 
 					"AND TO_DATE('" + HomeUI.EndOfWeekFormat + "', 'YYYY-MM-DD'))" +
 					"OR (팀_번호=" + _teamNum +
@@ -94,6 +96,7 @@ public class UpdateSchedule {
 //				int yoil = dayOfWeek.getValue();
 //				
 				String days = rs.getString(2);	
+				boolean fix = rs.getBoolean(5);
 				
 				int days2 = 0;
 				
@@ -118,6 +121,7 @@ public class UpdateSchedule {
 				for(int i=startTime - 9; i < endTime - 9; i++) {
 					HomeUI.event[i][days2].setEventName(_teamName);
 					HomeUI.event[i][days2].setEventMode(2);
+					HomeUI.event[i][days2].setFixMode(fix);
 					HomeUI.event[i][days2].viewEventMode();
 				}
 			}

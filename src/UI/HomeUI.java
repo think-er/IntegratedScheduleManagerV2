@@ -248,7 +248,6 @@ public class HomeUI extends JFrame{
 		// 날짜 변경 패널
 		homeScheduleColumnPanel = new JPanel();
 		homeScheduleColumnPanel.setBounds(212, 86, 730, 50);
-		homeScheduleColumnPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 
 		homeScheduleColumnPanel.setLayout(new GridLayout(1, 8, 0, 0));
 		
@@ -522,8 +521,8 @@ public class HomeUI extends JFrame{
 		//----------------------------------- 캘린더에서 년 월 일 받아오는 코드----------------------------------------\\
 		
 		homeScheduleScrollPane = new JScrollPane(homeSchedulePanel);
-		homeScheduleScrollPane.setBorder(new LineBorder(new Color(0, 0, 0)));
-		homeScheduleScrollPane.setBounds(212, 136, 750, 407);
+		homeScheduleScrollPane.setBorder(null);
+		homeScheduleScrollPane.setBounds(211, 136, 750, 407);
 		homeScheduleScrollPane.getVerticalScrollBar().setUnitIncrement(30);
 		
 		homePanel.add(homeScheduleScrollPane);	
