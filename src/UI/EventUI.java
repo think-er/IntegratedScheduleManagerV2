@@ -40,6 +40,13 @@ public class EventUI extends JPanel {
 	
 	private JButton eventCompBtn;
 	
+	private boolean fixMode = false;
+	// 고정 여부
+	
+	public void setFixMode(boolean mode) {
+		this.fixMode = mode;
+	}
+	
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -76,7 +83,10 @@ public class EventUI extends JPanel {
 			eventAddBtn.setVisible(false);
 			// 이벤트 추가 버튼을 끈다.
 			eventNameLabel.setVisible(true);
-			setBackground(Color.CYAN);
+			if(this.fixMode == false)
+				setBackground(Color.WHITE);
+			else 
+				setBackground(Color.LIGHT_GRAY);
 			// 이벤트 이름을 킨다.
 		}
 		
@@ -85,7 +95,10 @@ public class EventUI extends JPanel {
 			// 이벤트 추가 버튼을 끈다.
 			eventNameLabel.setVisible(true);
 			// 이벤트 이름을 킨다.
-			setBackground(Color.BLUE);
+			if(this.fixMode == false)
+				setBackground(Color.CYAN);
+			else 
+				setBackground(Color.BLUE);
 		}
 	}
 	
