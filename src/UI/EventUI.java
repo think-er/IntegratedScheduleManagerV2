@@ -193,40 +193,83 @@ public class EventUI extends JPanel {
 		// 이벤트 이름 버튼 클릭시 정보 조회/수정/삭제
 		eventNameBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PersonalUI viewUI = new PersonalUI(HomeUI.ID);
-				DB_Conn_Query db = new DB_Conn_Query();
-				String sql = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
-						+ "FROM 스케줄 "
-						+ "WHERE 스케줄_이름 = '"+eventName+"' AND 유저_아이디 = "+HomeUI.viewUser;
-				ResultSet rs = db.executeQuery(sql);
-				viewUI.personalList.setSelectedValue(eventName, true);
-				try {
-					while(rs.next()) {
-						viewUI.titleField.setText(eventName);
-						if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
-							//yearField.setText((d.getYear()).toString());
-							viewUI.enabled("1");
-							viewUI.weekBox.setSelectedIndex(viewUI.getWeek(rs.getString("요일")));
+				if (eventMode == 1) {
+					PersonalUI viewUI = new PersonalUI(HomeUI.ID);
+					DB_Conn_Query db = new DB_Conn_Query();
+					String sql = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
+							+ "FROM 스케줄 "
+							+ "WHERE 스케줄_이름 = '"+eventName+"' AND 유저_아이디 = "+HomeUI.viewUser;
+					ResultSet rs = db.executeQuery(sql);
+					viewUI.personalList.setSelectedValue(eventName, true);
+					try {
+						while(rs.next()) {
+							viewUI.titleField.setText(eventName);
+							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
+								//yearField.setText((d.getYear()).toString());
+								viewUI.enabled("1");
+								viewUI.weekBox.setSelectedIndex(viewUI.getWeek(rs.getString("요일")));
+							}
+							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
+								Date date = rs.getDate("날짜");
+								viewUI.enabled("0");
+								SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
+								SimpleDateFormat m_date = new SimpleDateFormat("MM");
+								SimpleDateFormat d_date = new SimpleDateFormat("dd");
+								viewUI.yearField.setText(y_date.format(date));
+								viewUI.monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
+								viewUI.dayBox.setSelectedIndex(Integer.parseInt(d_date.format(date))-1);
+								
+							}
+							viewUI.stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
+							viewUI.edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
+							viewUI.memoArea.setText(rs.getString("메모"));
 						}
-						else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
-							Date date = rs.getDate("날짜");
-							viewUI.enabled("0");
-							SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
-							SimpleDateFormat m_date = new SimpleDateFormat("MM");
-							SimpleDateFormat d_date = new SimpleDateFormat("dd");
-							viewUI.yearField.setText(y_date.format(date));
-							viewUI.monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
-							viewUI.dayBox.setSelectedIndex(Integer.parseInt(d_date.format(date))-1);
-							
+						
+						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+				else if(eventMode == 2) {
+					IntegrationUI viewUI = new IntegrationUI(HomeUI.ID);
+					viewUI.Integration.setVisible(true);
+					DB_Conn_Query db = new DB_Conn_Query();
+					String query = "SELECT 요일, 시작시간, 종료시간, 고정여부, 날짜, 메모 "
+							+ "FROM 통합스케줄 "
+							+ "WHERE 통합스케줄_이름 = '"+eventName+"' AND "
+									+ "통합스케줄.팀_번호 = (SELECT 팀_번호 FROM 소속 WHERE 유저_아이디 = "+HomeUI.viewUser+")";
+					ResultSet rs = db.executeQuery(query);
+					viewUI.integrationList.setSelectedValue(eventName, true);
+					try {
+						while(rs.next()) {
+							viewUI.titleField.setText(eventName);
+							if(rs.getString("고정여부").equals("1")) {		//고정 : 날짜 입력 필요 x
+								//yearField.setText((d.getYear()).toString());
+								viewUI.enabled("1");
+								viewUI.weekBox.setSelectedIndex(viewUI.getWeek(rs.getString("요일")));
+							}
+							else {	//비고정 : 날짜 입력 필요, 요일 자동 표시
+								Date date = rs.getDate("날짜");
+								viewUI.enabled("0");
+								SimpleDateFormat y_date = new SimpleDateFormat("yyyy");
+								SimpleDateFormat m_date = new SimpleDateFormat("MM");
+								SimpleDateFormat d_date = new SimpleDateFormat("dd");
+								viewUI.yearField.setText(y_date.format(date));
+								viewUI.monthBox.setSelectedIndex(Integer.parseInt(m_date.format(date))-1);
+								viewUI.dayBox.setSelectedIndex(Integer.parseInt(d_date.format(date))-1);
+								
+							}
+							viewUI.stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
+							viewUI.edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
+							viewUI.memoArea.setText(rs.getString("메모"));
 						}
-						viewUI.stHourBox.setSelectedIndex(rs.getInt("시작시간")-9);
-						viewUI.edHourBox.setSelectedIndex(rs.getInt("종료시간")-9);
-						viewUI.memoArea.setText(rs.getString("메모"));
+					}
+					catch (SQLException e1) {
+						e1.printStackTrace();
 					}
 					
 					
-				} catch (SQLException e1) {
-					e1.printStackTrace();
 				}
 			}
 		});

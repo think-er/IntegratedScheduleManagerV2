@@ -69,20 +69,20 @@ public class IntegrationUI extends JFrame {
 	
 	protected static String selected = null;
 	JFrame Integration;
-	private JTextField titleField;
+	public JTextField titleField;
 	public JTextField yearField;
 	public JComboBox monthBox;
 	public JComboBox dayBox;
-	private JComboBox weekBox;
+	public JComboBox weekBox;
 	private JCheckBox fixBox;
 	public JComboBox stHourBox;
 	public JComboBox edHourBox;
-	private JTextArea memoArea;
+	public JTextArea memoArea;
 	
 	public static String StartOfWeekFormat;
 	public static String EndOfWeekFormat;
 	
-	JList<String> integrationList;
+	public JList<String> integrationList;
 	
 	DB_Conn_Query db = new DB_Conn_Query();
 	duplicatedCheck dc = new duplicatedCheck();
