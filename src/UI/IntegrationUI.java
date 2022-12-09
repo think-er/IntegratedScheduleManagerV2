@@ -31,6 +31,7 @@ import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Color;
 import java.awt.Component;
@@ -107,6 +108,9 @@ public class IntegrationUI extends JFrame {
 		Integration = new JFrame();
 		Integration.setBounds(100, 100, 700, 440);
 		Integration.getContentPane().setLayout(null);
+		
+		ImageIcon img = new ImageIcon("img/IntegratedScheduleManager.png");
+		Integration.setIconImage(img.getImage());
 		
 		JLabel titleLabel = new JLabel("일정 제목");
 		titleLabel.setBounds(342, 66, 60, 25);

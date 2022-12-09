@@ -16,6 +16,11 @@ import DB.DB_Conn_Query;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.DropMode;
+
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
+
+import java.awt.Image;
 public class LoginUI extends JFrame {
 	
 	public JPanel loginPanel;
@@ -70,6 +75,14 @@ public class LoginUI extends JFrame {
 		loginPanel.setLayout(null);
 		
 		loginPanel.setBackground(Color.WHITE);
+		
+		ImageIcon loginIcon = new ImageIcon("img/login.png");
+		Image loginImg = loginIcon.getImage();
+		Image changeImg = loginImg.getScaledInstance(150,90, Image.SCALE_AREA_AVERAGING);
+		ImageIcon changeIcon = new ImageIcon(changeImg);
+		JLabel la = new JLabel(changeIcon);
+		la.setBounds(100,25,200,100);
+		loginPanel.add(la);
 		
 //		loginTitleLabel = new JLabel("통합 일정 관리");
 //		loginTitleLabel.setBounds(150, 10, 100, 30);
@@ -154,6 +167,7 @@ public class LoginUI extends JFrame {
 		//------------------------------------------ 팀 만들기 버튼
 		
 		JButton createTeamBtn = new JButton("팀 만들기");
+		createTeamBtn.setFont(new Font("나눔고딕", Font.BOLD, 12));
 		createTeamBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new AdminAuthUI();

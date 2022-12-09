@@ -89,9 +89,9 @@ public class EventUI extends JPanel {
 			// 이벤트 추가 버튼을 끈다.
 			eventNameBtn.setVisible(true);
 			if(this.fixMode == false)
-				eventNameBtn.setBackground(Color.WHITE);
+				eventNameBtn.setBackground(Color.ORANGE);
 			else 
-				eventNameBtn.setBackground(Color.LIGHT_GRAY);
+				eventNameBtn.setBackground(Color.YELLOW);
 			// 이벤트 이름을 킨다.
 		}
 		

@@ -183,6 +183,7 @@ public class HomeUI extends JFrame{
 		
 		// 홈 패널: 학번
 		homeUserLabel = new JLabel("학번: ");
+		homeUserLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeUserLabel.setBounds(850, 30, 
 				49, 30);
 		homePanel.add(homeUserLabel);
@@ -221,6 +222,7 @@ public class HomeUI extends JFrame{
 		// 홈 패널: 권한
 		
 		homeManagerAuthLabel = new JLabel("등급: ");
+		homeManagerAuthLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homeManagerAuthLabel.setBounds(850, 50, 
 				49, 30);
 		homePanel.add(homeManagerAuthLabel);
@@ -228,10 +230,12 @@ public class HomeUI extends JFrame{
 		// -----------------------------------------------------------------
 		idLabel = new JLabel("");
 		idLabel.setBounds(901, 38, 73, 15);
+		idLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homePanel.add(idLabel);
 		
 		levelLabel = new JLabel("");
 		levelLabel.setBounds(901, 58, 73, 15);
+		levelLabel.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homePanel.add(levelLabel);
 		
 		idLabel.setText(ID);
@@ -532,6 +536,7 @@ public class HomeUI extends JFrame{
 		// 공통된 시간표들을 잠시 표현하는 버튼
 		viewCompEventBtn = new JButton("공통 시간 켜기");
 		viewCompEventBtn.setBounds(700, 30, 130, 30);
+		viewCompEventBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		homePanel.add(viewCompEventBtn);
 		viewCompEventMode = false;
 		viewCompEventBtn.addActionListener(new ActionListener() {
@@ -660,6 +665,7 @@ public class HomeUI extends JFrame{
 		homeIntegrationPanel.setLayout(gl_homeIntegrationPanel);
 		
 		JButton logoutBtn = new JButton("로그아웃");
+		logoutBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
 		logoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				homePanel.setVisible(false);

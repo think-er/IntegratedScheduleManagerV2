@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -19,6 +20,9 @@ public class CreateTeam extends JFrame {
 	private JTextField varField;
 	public CreateTeam() {
 		
+		ImageIcon img = new ImageIcon("img/IntegratedScheduleManager.png");
+		setIconImage(img.getImage());
+		
 		this.setTitle("팀 만들기");
 		this.setVisible(true);
 		this.setSize(278,199);
@@ -27,6 +31,7 @@ public class CreateTeam extends JFrame {
 		getContentPane().setLayout(null);
 		
 		JLabel teamNameLabel = new JLabel("생성할 팀명을 입력하세요.");
+		teamNameLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		teamNameLabel.setBounds(50, 38, 161, 15);
 		getContentPane().add(teamNameLabel);
 		
@@ -36,6 +41,7 @@ public class CreateTeam extends JFrame {
 		varField.setColumns(10);
 		
 		JButton OKBtn = new JButton("확인");
+		OKBtn.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		OKBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = varField.getText();

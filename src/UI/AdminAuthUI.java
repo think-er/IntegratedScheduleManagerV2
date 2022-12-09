@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.Font;
@@ -17,6 +18,9 @@ public class AdminAuthUI extends JFrame{
 		setLocationRelativeTo(null);	//화면 중앙 배치
 		setResizable(false);			// 화면 사이즈 고정
 		getContentPane().setLayout(null);
+		
+		ImageIcon img = new ImageIcon("img/IntegratedScheduleManager.png");
+		setIconImage(img.getImage());
 		
 		JLabel AuthPadLabel = new JLabel("관리자 번호를 입력하세요.");
 		AuthPadLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));

@@ -33,6 +33,8 @@ import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -114,6 +116,9 @@ public class PersonalUI extends JFrame{
 		setResizable(false);			// 화면 사이즈 고정
 		
 		subFrame = new JFrame();
+		
+		ImageIcon img = new ImageIcon("img/IntegratedScheduleManager.png");
+		subFrame.setIconImage(img.getImage());
 		
 		titleLabel = new JLabel("일정 제목");
 		dateLabel = new JLabel("일정 날짜");

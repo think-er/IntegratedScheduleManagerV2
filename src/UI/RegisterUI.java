@@ -3,6 +3,7 @@
 package UI;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
@@ -40,7 +41,7 @@ public class RegisterUI {
 	private JPasswordField registerPwField;
 	private JButton registerBtn;
 	private JLabel registerManagerAuthLabel;
-	private JTextField registerManagerAuthField;
+	private JPasswordField registerManagerAuthField;
 	private JCheckBox registerManagerAuthCheck;
 	private JButton toLoginBtn;
 	private JComboBox teamBox;
@@ -62,6 +63,7 @@ public class RegisterUI {
 
 	private void init() {
 		registerPanel = new JPanel();
+		registerPanel.setBackground(new Color(255, 255, 255));
 		registerPanel.setBounds(LoginUI.LOGIN_FRAME_X, LoginUI.LOGIN_FRAME_Y, 
 				LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_HEIGHT);
 		registerPanel.setLayout(null);
@@ -72,33 +74,38 @@ public class RegisterUI {
 //		registerPanel.add(registerTitle);
 		
 		registerIdLabel = new JLabel("학번");
+		registerIdLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerIdLabel.setBounds(12, 50,
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerIdLabel);
 		registerPanel.setVisible(true);
 		
 		registerIdField = new JTextField();
+		registerIdField.setBackground(new Color(240, 240, 240));
 		registerIdField.setBounds(67, 51,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerIdField.setColumns(10);
 		registerPanel.add(registerIdField);
 		
 		registerPwLabel = new JLabel("비밀번호");
+		registerPwLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerPwLabel.setBounds(12, 90, 
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerPwLabel);
 			
 		registerPwField = new JPasswordField();
+		registerPwField.setBackground(new Color(240, 240, 240));
 		registerPwField.setBounds(67, 90,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerPanel.add(registerPwField);
 		
 		registerManagerAuthLabel = new JLabel("인증번호");
+		registerManagerAuthLabel.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerManagerAuthLabel.setBounds(12, 303, 
 				LoginUI.LOGIN_LABEL_WIDTH, LoginUI.LOGIN_LABEL_HEIGHT);
 		registerPanel.add(registerManagerAuthLabel);
 		
-		registerManagerAuthField = new JTextField();
+		registerManagerAuthField = new JPasswordField();
 		registerManagerAuthField.setBounds(67, 304,
 				LoginUI.LOGIN_FIELD_WIDTH, LoginUI.LOGIN_FIELD_HEIGHT);
 		registerManagerAuthField.setEnabled(false);
@@ -125,6 +132,8 @@ public class RegisterUI {
 	        }
 		
 		registerBtn = new JButton("회원가입");
+		registerBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
+		
 		registerBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ID = registerIdField.getText();
@@ -198,6 +207,8 @@ public class RegisterUI {
 		toLoginBtn = new JButton("뒤로");
 		toLoginBtn.setBounds(LoginUI.BACK_BTN_X, LoginUI.BACK_BTN_Y,
 				LoginUI.BACK_BTN_WIDTH, LoginUI.BACK_BTN_HEIGHT);
+		toLoginBtn.setFont(new Font("나눔고딕", Font.BOLD, 13));
+		
 		toLoginBtn.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			LoginUI loginPanel = new LoginUI();
@@ -208,6 +219,7 @@ public class RegisterUI {
 		registerPanel.add(toLoginBtn);
 		
 		registerManagerAuthCheck = new JCheckBox("관리자");
+		registerManagerAuthCheck.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerManagerAuthCheck.setBounds(289, 250,
 				REGISTER_MANAGERAUTH_CHECK_WIDTH, REGISTER_MANAGERAUTH_CHECK_HEIGHT);
 		registerManagerAuthCheck.addActionListener(new ActionListener() {
@@ -225,36 +237,43 @@ public class RegisterUI {
 		
 		registerLabel2 = new JLabel("이름");
 		registerLabel2.setBounds(12, 130, 60, 30);
+		registerLabel2.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerPanel.add(registerLabel2);
 		
 		registerNameField = new JTextField();
+		registerNameField.setBackground(new Color(240, 240, 240));
 		registerNameField.setColumns(10);
 		registerNameField.setBounds(67, 130, 200, 30);
 		registerPanel.add(registerNameField);
 		
 		JLabel registerLabel3 = new JLabel("전화번호");
+		registerLabel3.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerLabel3.setBounds(12, 170, 60, 30);
 		registerPanel.add(registerLabel3);
 		
 		JLabel registerLabel4 = new JLabel("학년");
+		registerLabel4.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerLabel4.setBounds(12, 210, 60, 30);
 		registerPanel.add(registerLabel4);
 		
 		registerTellField = new JTextField();
+		registerTellField.setBackground(new Color(240, 240, 240));
 		registerTellField.setColumns(10);
 		registerTellField.setBounds(67, 170, 200, 30);
 		registerPanel.add(registerTellField);
 		
 		registerGradeField = new JTextField();
+		registerGradeField.setBackground(new Color(240, 240, 240));
 		registerGradeField.setColumns(10);
 		registerGradeField.setBounds(67, 210, 200, 30);
 		registerPanel.add(registerGradeField);
 		
 		JLabel registerLabel5 = new JLabel("팀명");
 		registerLabel5.setBounds(12, 250, 60, 30);
+		registerLabel5.setFont(new Font("나눔고딕", Font.PLAIN, 13));
 		registerPanel.add(registerLabel5);
 			
-		MainFrame.frame.setTitle("로그인");
+		MainFrame.frame.setTitle("회원가입");
 		MainFrame.frame.setSize(LoginUI.LOGIN_FRAME_WIDTH, LoginUI.LOGIN_FRAME_WIDTH);
 		MainFrame.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainFrame.frame.setResizable(false);
